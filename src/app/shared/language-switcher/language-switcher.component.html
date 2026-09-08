@@ -1,0 +1,17 @@
+<button
+  mat-stroked-button
+  type="button"
+  class="language-switcher__trigger"
+  [matMenuTriggerFor]="langMenu"
+  [attr.aria-label]="('nav.language' | translate) + ': ' + labels[languageService.currentLang()]"
+>
+  <mat-icon aria-hidden="true">language</mat-icon>
+  <span>{{ labels[languageService.currentLang()] }}</span>
+</button>
+<mat-menu #langMenu="matMenu" xPosition="before">
+  @for (lang of langs; track lang) {
+    <button mat-menu-item type="button" (click)="select(lang)" [attr.aria-current]="languageService.currentLang() === lang ? 'true' : null">
+      {{ labels[lang] }}
+    </button>
+  }
+</mat-menu>

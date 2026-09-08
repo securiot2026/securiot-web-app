@@ -1,0 +1,79 @@
+<div class="login-page">
+  <div class="login-page__lang">
+    <app-language-switcher></app-language-switcher>
+  </div>
+
+  <main class="login-page__content" id="main-content">
+    <mat-card class="login-card">
+      <div class="login-card__brand">
+        <mat-icon aria-hidden="true" class="login-card__brand-icon">shield</mat-icon>
+        <span class="login-card__brand-name">{{ 'app.name' | translate }}</span>
+      </div>
+
+      <h1 class="login-card__title">{{ 'login.title' | translate }}</h1>
+      <p class="login-card__subtitle">{{ 'login.subtitle' | translate }}</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <mat-form-field appearance="outline" class="login-card__field">
+          <mat-label>{{ 'login.email' | translate }}</mat-label>
+          <input
+            matInput
+            type="email"
+            id="login-email"
+            formControlName="email"
+            autocomplete="username"
+            required
+            [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+          />
+          @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+            <mat-error>{{ 'login.emailRequired' | translate }}</mat-error>
+          }
+          @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+            <mat-error>{{ 'login.emailInvalid' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="login-card__field">
+          <mat-label>{{ 'login.password' | translate }}</mat-label>
+          <input
+            matInput
+            [type]="passwordVisible() ? 'text' : 'password'"
+            id="login-password"
+            formControlName="password"
+            autocomplete="current-password"
+            required
+            [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | translate"
+            [attr.aria-pressed]="passwordVisible()"
+            (click)="togglePasswordVisibility()"
+          >
+            <mat-icon aria-hidden="true">{{ passwordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+            <mat-error>{{ 'login.passwordRequired' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="login-card__error" role="alert" aria-live="assertive">
+          @if (errorKey(); as key) {
+            <p>{{ key | translate }}</p>
+          }
+        </div>
+
+        <button mat-flat-button color="primary" type="submit" class="login-card__submit" [disabled]="submitting()">
+          @if (submitting()) {
+            <mat-progress-spinner diameter="20" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+            <span>{{ 'login.submitting' | translate }}</span>
+          } @else {
+            <span>{{ 'login.submit' | translate }}</span>
+          }
+        </button>
+      </form>
+    </mat-card>
+  </main>
+</div>
