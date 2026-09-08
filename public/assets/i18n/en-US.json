@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "SecurIoT",
+    "skipToContent": "Skip to main content"
+  },
+  "nav": {
+    "zones": "Zones",
+    "devices": "Devices",
+    "alerts": "Alerts",
+    "logout": "Log out",
+    "language": "Language selector",
+    "mainNavigation": "Dashboard navigation"
+  },
+  "login": {
+    "title": "Sign in to SecurIoT",
+    "subtitle": "Monitor zones, devices and alerts across your facilities.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "emailRequired": "Enter your email address.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Enter your password.",
+    "invalidCredentials": "Incorrect email or password.",
+    "genericError": "We couldn't sign you in. Please try again.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "sessionExpired": "Your session expired. Sign in again to continue."
+  },
+  "zones": {
+    "title": "Zones",
+    "emptyTitle": "No zones yet",
+    "emptyBody": "Zones you register will show up here with their devices and status.",
+    "location": "Location",
+    "noLocation": "No location set",
+    "createdAt": "Added",
+    "loading": "Loading zones…",
+    "resultsAnnounce": "Zones: {{count}}"
+  },
+  "devices": {
+    "title": "Devices",
+    "emptyTitle": "No devices yet",
+    "emptyBody": "Register a device and assign it to a zone to see its status here.",
+    "name": "Device",
+    "zone": "Zone",
+    "status": "Status",
+    "online": "Online",
+    "offline": "Offline",
+    "lastReading": "Last reading",
+    "noReading": "No readings yet",
+    "loading": "Loading devices…",
+    "filterByZone": "Filter by zone",
+    "allZones": "All zones",
+    "resultsAnnounce": "Devices: {{count}}"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "emptyTitle": "No alerts to show",
+    "emptyBody": "Alerts triggered by your zones and devices will appear here.",
+    "emptyFiltered": "No alerts match these filters.",
+    "severity": "Severity",
+    "status": "Status",
+    "zone": "Zone",
+    "device": "Device",
+    "rule": "Rule",
+    "message": "Message",
+    "createdAt": "Reported",
+    "filterByZone": "Filter by zone",
+    "filterByDevice": "Filter by device",
+    "filterByStatus": "Filter by status",
+    "allZones": "All zones",
+    "allDevices": "All devices",
+    "allStatuses": "All statuses",
+    "severity.low": "Low",
+    "severity.medium": "Medium",
+    "severity.high": "High",
+    "severity.critical": "Critical",
+    "status.active": "Active",
+    "status.resolved": "Resolved",
+    "loading": "Loading alerts…",
+    "resultsAnnounce": "Alerts: {{count}}",
+    "clearFilters": "Clear filters"
+  },
+  "common": {
+    "loadError": "We couldn't load this. Check your connection and try again.",
+    "retry": "Try again",
+    "close": "Close"
+  }
+}

@@ -1,0 +1,76 @@
+<h1 class="page-title">{{ 'devices.title' | translate }}</h1>
+
+<div class="filters-bar">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'devices.filterByZone' | translate }}</mat-label>
+    <mat-select [value]="selectedZoneId()" (selectionChange)="onZoneFilterChange($event.value)">
+      <mat-option value="">{{ 'devices.allZones' | translate }}</mat-option>
+      @for (zone of zones(); track zone.id) {
+        <mat-option [value]="zone.id">{{ zone.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="visually-hidden" role="status" aria-live="polite">
+  @if (!loading() && !error()) {
+    {{ 'devices.resultsAnnounce' | translate: { count: devices().length } }}
+  }
+</div>
+
+@if (loading()) {
+  <div class="state-panel" role="status">
+    <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+    <p>{{ 'devices.loading' | translate }}</p>
+  </div>
+} @else if (error()) {
+  <div class="state-panel state-panel--error" role="alert">
+    <mat-icon aria-hidden="true">error_outline</mat-icon>
+    <p>{{ 'common.loadError' | translate }}</p>
+    <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </div>
+} @else if (devices().length === 0) {
+  <div class="state-panel">
+    <mat-icon aria-hidden="true">sensors</mat-icon>
+    <h2>{{ 'devices.emptyTitle' | translate }}</h2>
+    <p>{{ 'devices.emptyBody' | translate }}</p>
+  </div>
+} @else {
+  <div class="table-scroll">
+    <table mat-table [dataSource]="devices()" class="data-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.name' | translate }}</th>
+        <td mat-cell *matCellDef="let device">{{ device.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="zone">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.zone' | translate }}</th>
+        <td mat-cell *matCellDef="let device">{{ zoneName(device.zoneId) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.status' | translate }}</th>
+        <td mat-cell *matCellDef="let device">
+          <span class="status-chip" [class.status-chip--online]="device.isOnline" [class.status-chip--offline]="!device.isOnline">
+            <mat-icon aria-hidden="true">{{ device.isOnline ? 'check_circle' : 'cancel' }}</mat-icon>
+            {{ (device.isOnline ? 'devices.online' : 'devices.offline') | translate }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastReading">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.lastReading' | translate }}</th>
+        <td mat-cell *matCellDef="let device">
+          @if (device.lastReading) {
+            {{ device.lastReading.recordedAt | date: 'medium' }}
+          } @else {
+            {{ 'devices.noReading' | translate }}
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+}

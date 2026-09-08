@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "SecurIoT",
+    "skipToContent": "Saltar al contenido principal"
+  },
+  "nav": {
+    "zones": "Zonas",
+    "devices": "Dispositivos",
+    "alerts": "Alertas",
+    "logout": "Cerrar sesión",
+    "language": "Selector de idioma",
+    "mainNavigation": "Navegación del panel"
+  },
+  "login": {
+    "title": "Inicia sesión en SecurIoT",
+    "subtitle": "Supervisa zonas, dispositivos y alertas de tus instalaciones.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "submitting": "Iniciando sesión…",
+    "emailRequired": "Ingresa tu correo electrónico.",
+    "emailInvalid": "Ingresa un correo electrónico válido.",
+    "passwordRequired": "Ingresa tu contraseña.",
+    "invalidCredentials": "Correo o contraseña incorrectos.",
+    "genericError": "No pudimos iniciar tu sesión. Intenta de nuevo.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "sessionExpired": "Tu sesión expiró. Inicia sesión de nuevo para continuar."
+  },
+  "zones": {
+    "title": "Zonas",
+    "emptyTitle": "Aún no hay zonas",
+    "emptyBody": "Las zonas que registres aparecerán aquí con sus dispositivos y estado.",
+    "location": "Ubicación",
+    "noLocation": "Sin ubicación registrada",
+    "createdAt": "Fecha de registro",
+    "loading": "Cargando zonas…",
+    "resultsAnnounce": "Zonas: {{count}}"
+  },
+  "devices": {
+    "title": "Dispositivos",
+    "emptyTitle": "Aún no hay dispositivos",
+    "emptyBody": "Registra un dispositivo y asígnalo a una zona para ver su estado aquí.",
+    "name": "Dispositivo",
+    "zone": "Zona",
+    "status": "Estado",
+    "online": "En línea",
+    "offline": "Sin conexión",
+    "lastReading": "Última lectura",
+    "noReading": "Sin lecturas todavía",
+    "loading": "Cargando dispositivos…",
+    "filterByZone": "Filtrar por zona",
+    "allZones": "Todas las zonas",
+    "resultsAnnounce": "Dispositivos: {{count}}"
+  },
+  "alerts": {
+    "title": "Alertas",
+    "emptyTitle": "No hay alertas para mostrar",
+    "emptyBody": "Las alertas de tus zonas y dispositivos aparecerán aquí.",
+    "emptyFiltered": "Ningún resultado coincide con estos filtros.",
+    "severity": "Severidad",
+    "status": "Estado",
+    "zone": "Zona",
+    "device": "Dispositivo",
+    "rule": "Regla",
+    "message": "Mensaje",
+    "createdAt": "Reportada",
+    "filterByZone": "Filtrar por zona",
+    "filterByDevice": "Filtrar por dispositivo",
+    "filterByStatus": "Filtrar por estado",
+    "allZones": "Todas las zonas",
+    "allDevices": "Todos los dispositivos",
+    "allStatuses": "Todos los estados",
+    "severity.low": "Baja",
+    "severity.medium": "Media",
+    "severity.high": "Alta",
+    "severity.critical": "Crítica",
+    "status.active": "Activa",
+    "status.resolved": "Resuelta",
+    "loading": "Cargando alertas…",
+    "resultsAnnounce": "Alertas: {{count}}",
+    "clearFilters": "Limpiar filtros"
+  },
+  "common": {
+    "loadError": "No pudimos cargar esta información. Revisa tu conexión e inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "close": "Cerrar"
+  }
+}

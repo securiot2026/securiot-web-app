@@ -1,0 +1,259 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the theme object.
+$securiot-web-app-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$cyan-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+:root {
+  @include mat.all-component-themes($securiot-web-app-theme);
+}
+
+// Comment out the line below if you want to use the pre-defined typography utility classes.
+// For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
+// @include mat.typography-hierarchy($securiot-web-app-theme);
+
+// Comment out the line below if you want to use the deprecated `color` inputs.
+// @include mat.color-variants-backwards-compatibility($securiot-web-app-theme);
+/* You can add global styles to this file, and also import other style files */
+
+// ---------------------------------------------------------------------------
+// Shared brand tokens (UI-SPEC.md, phase 03 — kept identical to the Landing
+// Page surface for cross-surface visual consistency).
+// ---------------------------------------------------------------------------
+:root {
+  // Color — 60/30/10 palette
+  --brand-bg: #F5F7FA;        // dominant 60%
+  --brand-navy: #101B33;      // secondary 30% — toolbar, sidenav
+  --brand-teal: #0E7C86;      // accent 10% — primary CTA, active nav, focus, links
+  --brand-destructive: #B3261E;
+
+  // Semantic status colors (never used without icon + text)
+  --status-online: #1E7B34;
+  --status-offline: #5F6368;
+  --status-low: #1A56B3;
+  --status-medium: #B36A00;
+  --status-high: #B3261E;
+
+  // Spacing scale (8pt)
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  // Type scale (Roboto, 4 sizes / 2 weights)
+  --type-body-size: 16px;
+  --type-label-size: 14px;
+  --type-heading-size: 20px;
+  --type-display-size: 28px;
+
+  // Buttons: filled/protected use the teal accent, never Material's default primary
+  --mdc-filled-button-container-color: var(--brand-teal);
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-protected-button-container-color: var(--brand-teal);
+  --mdc-protected-button-label-text-color: #ffffff;
+  --mdc-text-button-label-text-color: var(--brand-teal);
+  --mdc-outlined-button-label-text-color: var(--brand-teal);
+  --mdc-outlined-button-outline-color: var(--brand-teal);
+
+  // Inputs: teal focus state
+  --mdc-outlined-text-field-caret-color: var(--brand-teal);
+  --mdc-outlined-text-field-focus-outline-color: var(--brand-teal);
+  --mdc-outlined-text-field-focus-label-text-color: var(--brand-teal);
+  --mat-select-focused-arrow-color: var(--brand-teal);
+
+  // Validation stays in the destructive family, matching the shared palette
+  --mdc-outlined-text-field-error-outline-color: var(--brand-destructive);
+  --mdc-outlined-text-field-error-focus-outline-color: var(--brand-destructive);
+  --mdc-outlined-text-field-error-label-text-color: var(--brand-destructive);
+  --mdc-outlined-text-field-error-focus-label-text-color: var(--brand-destructive);
+  --mdc-outlined-text-field-error-hover-outline-color: var(--brand-destructive);
+  --mdc-outlined-text-field-error-hover-label-text-color: var(--brand-destructive);
+
+  // Toolbar / sidenav: navy secondary surface, white text
+  --mat-toolbar-container-background-color: var(--brand-navy);
+  --mat-toolbar-container-text-color: #ffffff;
+  --mat-sidenav-container-background-color: var(--brand-navy);
+  --mat-sidenav-container-text-color: #ffffff;
+  --mat-sidenav-content-background-color: var(--brand-bg);
+  --mat-sidenav-content-text-color: var(--brand-navy);
+  --mat-list-active-indicator-color: var(--brand-teal);
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--brand-bg);
+  color: var(--brand-navy);
+  font-size: var(--type-body-size);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--brand-teal);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.page-title {
+  font-size: var(--type-display-size);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 var(--space-lg);
+  color: var(--brand-navy);
+}
+
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 27, 51, 0.12);
+  max-width: 32rem;
+
+  h2 {
+    margin: 0;
+    font-size: var(--type-heading-size);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--brand-navy);
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--brand-navy);
+  }
+
+  &--error {
+    border-color: rgba(179, 38, 30, 0.35);
+
+    mat-icon {
+      color: var(--brand-destructive);
+    }
+
+    h2, p {
+      color: var(--brand-destructive);
+    }
+  }
+}
+
+.table-scroll {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 27, 51, 0.12);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 640px;
+}
+
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+
+  mat-form-field {
+    min-width: 12rem;
+  }
+}
+
+// Status chips: icon + text + color, per A11Y.md "no color alone" rule.
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 999px;
+  font-size: var(--type-label-size);
+  font-weight: 600;
+  line-height: 1.4;
+
+  mat-icon {
+    font-size: 1.05rem;
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  &--online {
+    background: #e4f2e6;
+    color: var(--status-online);
+  }
+
+  &--offline {
+    background: #eceef0;
+    color: var(--status-offline);
+  }
+
+  &--low {
+    background: #e2eaf9;
+    color: var(--status-low);
+  }
+
+  &--medium, &--active {
+    background: #fbedd9;
+    color: var(--status-medium);
+  }
+
+  &--high, &--critical {
+    background: #fbe4e2;
+    color: var(--status-high);
+  }
+
+  &--resolved {
+    background: #e4f2e6;
+    color: var(--status-online);
+  }
+}
