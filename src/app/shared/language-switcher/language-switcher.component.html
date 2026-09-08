@@ -1,17 +1,10 @@
-<button
-  mat-stroked-button
-  type="button"
-  class="language-switcher__trigger"
-  [matMenuTriggerFor]="langMenu"
-  [attr.aria-label]="('nav.language' | translate) + ': ' + labels[languageService.currentLang()]"
+<mat-button-toggle-group
+  class="language-switcher"
+  [attr.aria-label]="'nav.language' | translate"
+  [value]="languageService.currentLang()"
+  (change)="select($event.value)"
 >
-  <mat-icon aria-hidden="true">language</mat-icon>
-  <span>{{ labels[languageService.currentLang()] }}</span>
-</button>
-<mat-menu #langMenu="matMenu" xPosition="before">
   @for (lang of langs; track lang) {
-    <button mat-menu-item type="button" (click)="select(lang)" [attr.aria-current]="languageService.currentLang() === lang ? 'true' : null">
-      {{ labels[lang] }}
-    </button>
+    <mat-button-toggle [value]="lang">{{ lang === 'en-US' ? 'EN' : 'ES' }}</mat-button-toggle>
   }
-</mat-menu>
+</mat-button-toggle-group>

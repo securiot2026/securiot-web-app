@@ -8,8 +8,8 @@
     "devices": "Devices",
     "alerts": "Alerts",
     "logout": "Log out",
-    "language": "Language",
-    "mainNavigation": "Main navigation"
+    "language": "Language selector",
+    "mainNavigation": "Dashboard navigation"
   },
   "login": {
     "title": "Sign in to SecurIoT",
@@ -24,25 +24,23 @@
     "invalidCredentials": "Incorrect email or password.",
     "genericError": "We couldn't sign you in. Please try again.",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "sessionExpired": "Your session expired. Sign in again to continue."
   },
   "zones": {
     "title": "Zones",
-    "empty": "No zones yet. Zones you're responsible for will appear here.",
+    "emptyTitle": "No zones yet",
+    "emptyBody": "Zones you register will show up here with their devices and status.",
     "location": "Location",
     "noLocation": "No location set",
-    "devicesCount": "{{count}} device",
-    "devicesCount_plural": "{{count}} devices",
     "createdAt": "Added",
-    "loadError": "We couldn't load your zones. Please try again.",
-    "retry": "Retry",
     "loading": "Loading zones…",
-    "resultsAnnounce": "{{count}} zone shown",
-    "resultsAnnounce_plural": "{{count}} zones shown"
+    "resultsAnnounce": "Zones: {{count}}"
   },
   "devices": {
     "title": "Devices",
-    "empty": "No devices registered yet.",
+    "emptyTitle": "No devices yet",
+    "emptyBody": "Register a device and assign it to a zone to see its status here.",
     "name": "Device",
     "zone": "Zone",
     "status": "Status",
@@ -50,16 +48,16 @@
     "offline": "Offline",
     "lastReading": "Last reading",
     "noReading": "No readings yet",
-    "loadError": "We couldn't load your devices. Please try again.",
     "loading": "Loading devices…",
     "filterByZone": "Filter by zone",
     "allZones": "All zones",
-    "resultsAnnounce": "{{count}} device shown",
-    "resultsAnnounce_plural": "{{count}} devices shown"
+    "resultsAnnounce": "Devices: {{count}}"
   },
   "alerts": {
     "title": "Alerts",
-    "empty": "No alerts match these filters.",
+    "emptyTitle": "No alerts to show",
+    "emptyBody": "Alerts triggered by your zones and devices will appear here.",
+    "emptyFiltered": "No alerts match these filters.",
     "severity": "Severity",
     "status": "Status",
     "zone": "Zone",
@@ -79,14 +77,13 @@
     "severity.critical": "Critical",
     "status.active": "Active",
     "status.resolved": "Resolved",
-    "loadError": "We couldn't load alerts. Please try again.",
     "loading": "Loading alerts…",
-    "resultsAnnounce": "{{count}} alert shown",
-    "resultsAnnounce_plural": "{{count}} alerts shown",
+    "resultsAnnounce": "Alerts: {{count}}",
     "clearFilters": "Clear filters"
   },
   "common": {
-    "retry": "Retry",
+    "loadError": "We couldn't load this. Check your connection and try again.",
+    "retry": "Try again",
     "close": "Close"
   }
 }

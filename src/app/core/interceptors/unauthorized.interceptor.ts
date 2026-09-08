@@ -11,8 +11,9 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error) => {
       if (error.status === 401) {
+        const hadSession = !!authService.getToken();
         authService.logout();
-        router.navigate(['/login']);
+        router.navigate(['/login'], { queryParams: hadSession ? { sessionExpired: '1' } : {} });
       }
       return throwError(() => error);
     })

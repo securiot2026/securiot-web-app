@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,15 +42,18 @@ export class LoginComponent implements OnInit {
   readonly submitting = signal(false);
   readonly errorKey = signal<string | null>(null);
   readonly passwordVisible = signal(false);
+  readonly sessionExpired = signal(false);
 
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly pageTitle: PageTitleService
   ) {}
 
   ngOnInit(): void {
     this.pageTitle.set('login.title');
+    this.sessionExpired.set(this.route.snapshot.queryParamMap.get('sessionExpired') === '1');
   }
 
   togglePasswordVisibility(): void {

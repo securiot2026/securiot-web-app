@@ -46,6 +46,10 @@ export class AlertsListComponent implements OnInit {
   readonly deviceFilter = signal<string>('');
   readonly statusFilter = signal<string>('');
 
+  get hasActiveFilters(): boolean {
+    return !!(this.zoneFilter() || this.deviceFilter() || this.statusFilter());
+  }
+
   readonly displayedColumns = ['createdAt', 'zone', 'device', 'rule', 'severity', 'status', 'message'];
 
   constructor(

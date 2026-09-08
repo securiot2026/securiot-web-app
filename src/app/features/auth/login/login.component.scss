@@ -60,6 +60,16 @@
     max-width: 65ch;
   }
 
+  &__notice {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: #fbedd9;
+    color: var(--status-medium, #8a5300);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
   &__field {
     width: 100%;
   }

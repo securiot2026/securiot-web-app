@@ -14,13 +14,14 @@
 } @else if (error()) {
   <div class="state-panel state-panel--error" role="alert">
     <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'zones.loadError' | translate }}</p>
-    <button mat-stroked-button type="button" (click)="load()">{{ 'zones.retry' | translate }}</button>
+    <p>{{ 'common.loadError' | translate }}</p>
+    <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </div>
 } @else if (zones().length === 0) {
   <div class="state-panel">
     <mat-icon aria-hidden="true">place</mat-icon>
-    <p>{{ 'zones.empty' | translate }}</p>
+    <h2>{{ 'zones.emptyTitle' | translate }}</h2>
+    <p>{{ 'zones.emptyBody' | translate }}</p>
   </div>
 } @else {
   <div class="table-scroll">

@@ -26,13 +26,14 @@
 } @else if (error()) {
   <div class="state-panel state-panel--error" role="alert">
     <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'devices.loadError' | translate }}</p>
-    <button mat-stroked-button type="button" (click)="load()">{{ 'zones.retry' | translate }}</button>
+    <p>{{ 'common.loadError' | translate }}</p>
+    <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </div>
 } @else if (devices().length === 0) {
   <div class="state-panel">
     <mat-icon aria-hidden="true">sensors</mat-icon>
-    <p>{{ 'devices.empty' | translate }}</p>
+    <h2>{{ 'devices.emptyTitle' | translate }}</h2>
+    <p>{{ 'devices.emptyBody' | translate }}</p>
   </div>
 } @else {
   <div class="table-scroll">

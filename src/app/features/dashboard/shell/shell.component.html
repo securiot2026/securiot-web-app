@@ -1,6 +1,6 @@
 <a class="skip-link" href="#main-content">{{ 'app.skipToContent' | translate }}</a>
 
-<mat-toolbar color="primary" class="shell-toolbar">
+<mat-toolbar class="shell-toolbar">
   <mat-icon aria-hidden="true">shield</mat-icon>
   <span class="shell-toolbar__brand">{{ 'app.name' | translate }}</span>
   <span class="shell-toolbar__spacer"></span>
@@ -32,7 +32,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <main id="main-content" class="shell-main" tabindex="-1">
+    <main id="main-content" #mainContent class="shell-main" tabindex="-1">
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>

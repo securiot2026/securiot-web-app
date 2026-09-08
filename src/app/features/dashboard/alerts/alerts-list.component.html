@@ -47,13 +47,18 @@
 } @else if (error()) {
   <div class="state-panel state-panel--error" role="alert">
     <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'alerts.loadError' | translate }}</p>
-    <button mat-stroked-button type="button" (click)="load()">{{ 'zones.retry' | translate }}</button>
+    <p>{{ 'common.loadError' | translate }}</p>
+    <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </div>
 } @else if (alerts().length === 0) {
   <div class="state-panel">
     <mat-icon aria-hidden="true">notifications_active</mat-icon>
-    <p>{{ 'alerts.empty' | translate }}</p>
+    @if (hasActiveFilters) {
+      <p>{{ 'alerts.emptyFiltered' | translate }}</p>
+    } @else {
+      <h2>{{ 'alerts.emptyTitle' | translate }}</h2>
+      <p>{{ 'alerts.emptyBody' | translate }}</p>
+    }
   </div>
 } @else {
   <div class="table-scroll">
