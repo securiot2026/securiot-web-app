@@ -1,0 +1,10 @@
+<mat-button-toggle-group
+  class="language-switcher"
+  [attr.aria-label]="'nav.language' | translate"
+  [value]="languageService.currentLang()"
+  (change)="select($event.value)"
+>
+  @for (lang of langs; track lang) {
+    <mat-button-toggle [value]="lang">{{ lang === 'en-US' ? 'EN' : 'ES' }}</mat-button-toggle>
+  }
+</mat-button-toggle-group>
