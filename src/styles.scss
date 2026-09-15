@@ -12,9 +12,13 @@
 // Define the theme object.
 $securiot-web-app-theme: mat.define-theme((
   color: (
-    theme-type: light,
+    theme-type: dark,
     primary: mat.$cyan-palette,
     tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    brand-family: 'Sora, sans-serif',
+    plain-family: 'Schibsted Grotesk, sans-serif',
   ),
   density: (
     scale: 0,
@@ -37,24 +41,21 @@ $securiot-web-app-theme: mat.define-theme((
 /* You can add global styles to this file, and also import other style files */
 
 // ---------------------------------------------------------------------------
-// Shared brand tokens (UI-SPEC.md, phase 03 — kept identical to the Landing
-// Page surface for cross-surface visual consistency).
+// Shared brand tokens (SecurIOT Visual Direction — dark retheme, kept
+// identical to the Landing Page / Mobile surfaces for cross-surface
+// consistency). Seven tokens total; see DESIGN.md "Color".
 // ---------------------------------------------------------------------------
 :root {
-  // Color — 60/30/10 palette
-  --brand-bg: #F5F7FA;        // dominant 60%
-  --brand-navy: #101B33;      // secondary 30% — toolbar, sidenav
-  --brand-teal: #0E7C86;      // accent 10% — primary CTA, active nav, focus, links
-  --brand-destructive: #B3261E;
+  // Color — 7-token brand system
+  --marca: #1FD3C4;      // primary buttons, active nav, focus ring, links — never a status
+  --senal: #6C7CE8;      // status: validating
+  --verificado: #22DD66; // status: authorized / online
+  --alerta: #FF5C6C;     // status: intrusion / alert (any severity)
+  --noche: #0B0E14;      // scaffold background
+  --texto: #EEF0F4;      // primary text — never pure #FFFFFF
+  --texto-mute: #8B93A3; // secondary text, captions, disabled, offline
 
-  // Semantic status colors (never used without icon + text)
-  --status-online: #1E7B34;
-  --status-offline: #5F6368;
-  --status-low: #1A56B3;
-  --status-medium: #B36A00;
-  --status-high: #B3261E;
-
-  // Spacing scale (8pt)
+  // Spacing scale (8pt) — unchanged from prior contract
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -63,61 +64,66 @@ $securiot-web-app-theme: mat.define-theme((
   --space-2xl: 48px;
   --space-3xl: 64px;
 
-  // Type scale (Roboto, 4 sizes / 2 weights)
+  // Type scale — Operate-mode sizes per DESIGN.md "Type"
   --type-body-size: 16px;
   --type-label-size: 14px;
   --type-heading-size: 20px;
   --type-display-size: 28px;
+  --type-mono-size: 15px;
 
-  // Buttons: filled/protected use the teal accent, never Material's default primary
-  --mdc-filled-button-container-color: var(--brand-teal);
-  --mdc-filled-button-label-text-color: #ffffff;
-  --mdc-protected-button-container-color: var(--brand-teal);
-  --mdc-protected-button-label-text-color: #ffffff;
-  --mdc-text-button-label-text-color: var(--brand-teal);
-  --mdc-outlined-button-label-text-color: var(--brand-teal);
-  --mdc-outlined-button-outline-color: var(--brand-teal);
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'Schibsted Grotesk', sans-serif;
+  --font-mono: 'Martian Mono', monospace;
+
+  // Buttons: filled/protected use the brand teal, never Material's default primary
+  --mdc-filled-button-container-color: var(--marca);
+  --mdc-filled-button-label-text-color: var(--noche);
+  --mdc-protected-button-container-color: var(--marca);
+  --mdc-protected-button-label-text-color: var(--noche);
+  --mdc-text-button-label-text-color: var(--marca);
+  --mdc-outlined-button-label-text-color: var(--marca);
+  --mdc-outlined-button-outline-color: var(--marca);
 
   // Inputs: teal focus state
-  --mdc-outlined-text-field-caret-color: var(--brand-teal);
-  --mdc-outlined-text-field-focus-outline-color: var(--brand-teal);
-  --mdc-outlined-text-field-focus-label-text-color: var(--brand-teal);
-  --mat-select-focused-arrow-color: var(--brand-teal);
+  --mdc-outlined-text-field-caret-color: var(--marca);
+  --mdc-outlined-text-field-focus-outline-color: var(--marca);
+  --mdc-outlined-text-field-focus-label-text-color: var(--marca);
+  --mat-select-focused-arrow-color: var(--marca);
 
-  // Validation stays in the destructive family, matching the shared palette
-  --mdc-outlined-text-field-error-outline-color: var(--brand-destructive);
-  --mdc-outlined-text-field-error-focus-outline-color: var(--brand-destructive);
-  --mdc-outlined-text-field-error-label-text-color: var(--brand-destructive);
-  --mdc-outlined-text-field-error-focus-label-text-color: var(--brand-destructive);
-  --mdc-outlined-text-field-error-hover-outline-color: var(--brand-destructive);
-  --mdc-outlined-text-field-error-hover-label-text-color: var(--brand-destructive);
+  // Validation stays in the alert family, matching the shared palette
+  --mdc-outlined-text-field-error-outline-color: var(--alerta);
+  --mdc-outlined-text-field-error-focus-outline-color: var(--alerta);
+  --mdc-outlined-text-field-error-label-text-color: var(--alerta);
+  --mdc-outlined-text-field-error-focus-label-text-color: var(--alerta);
+  --mdc-outlined-text-field-error-hover-outline-color: var(--alerta);
+  --mdc-outlined-text-field-error-hover-label-text-color: var(--alerta);
 
-  // Toolbar / sidenav: navy secondary surface, white text
-  --mat-toolbar-container-background-color: var(--brand-navy);
-  --mat-toolbar-container-text-color: #ffffff;
-  --mat-sidenav-container-background-color: var(--brand-navy);
-  --mat-sidenav-container-text-color: #ffffff;
-  --mat-sidenav-content-background-color: var(--brand-bg);
-  --mat-sidenav-content-text-color: var(--brand-navy);
-  --mat-list-active-indicator-color: var(--brand-teal);
+  // Toolbar / sidenav: noche surface, primary text
+  --mat-toolbar-container-background-color: var(--noche);
+  --mat-toolbar-container-text-color: var(--texto);
+  --mat-sidenav-container-background-color: var(--noche);
+  --mat-sidenav-container-text-color: var(--texto);
+  --mat-sidenav-content-background-color: var(--noche);
+  --mat-sidenav-content-text-color: var(--texto);
+  --mat-list-active-indicator-color: var(--marca);
 }
 
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: var(--brand-bg);
-  color: var(--brand-navy);
+  font-family: var(--font-body);
+  background: var(--noche);
+  color: var(--texto);
   font-size: var(--type-body-size);
   line-height: 1.5;
 }
 
 a {
-  color: var(--brand-teal);
+  color: var(--marca);
 }
 
 *:focus-visible {
-  outline: 2px solid var(--brand-teal);
+  outline: 2px solid var(--marca);
   outline-offset: 2px;
 }
 
@@ -142,11 +148,12 @@ a {
 }
 
 .page-title {
+  font-family: var(--font-display);
   font-size: var(--type-display-size);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
   margin: 0 0 var(--space-lg);
-  color: var(--brand-navy);
+  color: var(--texto);
 }
 
 .state-panel {
@@ -155,48 +162,56 @@ a {
   align-items: flex-start;
   gap: var(--space-sm);
   padding: var(--space-lg) var(--space-md);
-  background: #fff;
+  background: #10141d;
   border-radius: 12px;
-  border: 1px solid rgba(16, 27, 51, 0.12);
+  border: 1px solid rgba(238, 240, 244, 0.12);
   max-width: 32rem;
 
   h2 {
+    font-family: var(--font-display);
     margin: 0;
     font-size: var(--type-heading-size);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
-    color: var(--brand-navy);
+    color: var(--texto);
   }
 
   p {
     margin: 0;
     line-height: 1.5;
-    color: var(--brand-navy);
+    color: var(--texto);
   }
 
   &--error {
-    border-color: rgba(179, 38, 30, 0.35);
+    border-color: rgba(255, 92, 108, 0.35);
 
     mat-icon {
-      color: var(--brand-destructive);
+      color: var(--alerta);
     }
 
     h2, p {
-      color: var(--brand-destructive);
+      color: var(--alerta);
     }
   }
 }
 
 .table-scroll {
   overflow-x: auto;
-  background: #fff;
+  background: #10141d;
   border-radius: 12px;
-  border: 1px solid rgba(16, 27, 51, 0.12);
+  border: 1px solid rgba(238, 240, 244, 0.12);
 }
 
 .data-table {
   width: 100%;
   min-width: 640px;
+
+  // Data/telemetry cells (timestamps, zone/device codes, log rows) use the
+  // mono face per DESIGN.md "Type" — headers stay in the body face as labels.
+  td.mat-mdc-cell {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono-size);
+  }
 }
 
 .filters-bar {
@@ -217,6 +232,7 @@ a {
   gap: var(--space-xs);
   padding: var(--space-xs) var(--space-sm);
   border-radius: 999px;
+  font-family: var(--font-body);
   font-size: var(--type-label-size);
   font-weight: 600;
   line-height: 1.4;
@@ -227,33 +243,27 @@ a {
     height: 1.05rem;
   }
 
-  &--online {
-    background: #e4f2e6;
-    color: var(--status-online);
-  }
-
-  &--offline {
-    background: #eceef0;
-    color: var(--status-offline);
-  }
-
-  &--low {
-    background: #e2eaf9;
-    color: var(--status-low);
-  }
-
-  &--medium, &--active {
-    background: #fbedd9;
-    color: var(--status-medium);
-  }
-
-  &--high, &--critical {
-    background: #fbe4e2;
-    color: var(--status-high);
-  }
-
+  // Online / authorized / resolved — verificado
+  &--online,
   &--resolved {
-    background: #e4f2e6;
-    color: var(--status-online);
+    background: rgba(34, 221, 102, 0.16);
+    color: var(--verificado);
+  }
+
+  // Offline — neutral, not a brand status color
+  &--offline {
+    background: rgba(139, 147, 163, 0.16);
+    color: var(--texto-mute);
+  }
+
+  // Alert severity tiers and active alerts — single alerta red,
+  // differentiated by icon and label, never by a second red shade.
+  &--low,
+  &--medium,
+  &--high,
+  &--active,
+  &--critical {
+    background: rgba(255, 92, 108, 0.16);
+    color: var(--alerta);
   }
 }

@@ -8,8 +8,8 @@
   top: -3rem;
   left: 0.5rem;
   z-index: 1000;
-  background: #fff;
-  color: #1a1c1e;
+  background: var(--texto);
+  color: var(--noche);
   padding: 0.75rem 1.25rem;
   border-radius: 0 0 8px 8px;
   font-weight: 600;
@@ -17,7 +17,7 @@
 
   &:focus {
     top: 0;
-    outline: 2px solid #325aab;
+    outline: 2px solid var(--marca);
     outline-offset: 2px;
   }
 }
@@ -46,10 +46,10 @@
 
 .shell-sidenav {
   width: 15rem;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(238, 240, 244, 0.08);
 
   .active-link {
-    --mdc-list-list-item-label-text-color: var(--mat-sys-primary, #325aab);
+    --mdc-list-list-item-label-text-color: var(--marca);
     font-weight: 600;
   }
 }
