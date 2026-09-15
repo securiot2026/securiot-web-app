@@ -2,29 +2,65 @@
 
 ## Direction contract
 
-**THESIS**: An Operate-mode security dashboard where status is legible before it is beautiful — Material Design's own component vocabulary carries the app so a security administrator never has to learn a bespoke affordance to check a zone, a device, or an alert.
+**Superseded.** This replaces the near-white/navy/teal Material 3 direction below with the dark direction locked by Centinela Labs' `SecurIOT Visual Direction.pdf`. Page 4 of that PDF ("En pantalla — móvil") explicitly frames the Operate surfaces (this dashboard and the mobile app) as "pantallas flotando en marcos de dispositivo, mismo material de fondo, componentes de estado planos y sin grano" — dark ground, flat un-grained state components, same seven brand tokens as Landing. This file records the target; the app itself still ships the prior light theme (see "Known open item").
 
-**OWN-WORLD**: Angular Material 3 (M3), theme-type light, density scale 0, Roboto throughout (one family, per Operate guidance). Colors and type scale are pinned to the shared `UI-SPEC.md` contract (phase 03) so this dashboard and the Landing Page read as the same product: 60% `#F5F7FA` (dominant surface), 30% `#101B33` navy (toolbar/sidenav), 10% `#0E7C86` teal (primary CTAs, active nav, focus, links), `#B3261E` destructive/error. Type scale: body 16px/400, label 14px/400, heading 20px/600, display 28px/600. Spacing on an 8pt scale (4/8/16/24/32/48/64). Semantic status colors from the same contract: online `#1E7B34`, offline `#5F6368`, alert low `#1A56B3`, medium `#B36A00`, high/critical `#B3261E` — every status chip pairs that color with an icon and a text label, never color alone.
+**THESIS**: An Operate-mode security dashboard where status is legible before it is beautiful — Material Design's own component vocabulary still carries the app (Angular Material stays, per rubric mandate), but retheme onto the SecurIoT brand's dark ground and functional-state palette instead of a generic light Material scheme.
 
-**STORY**: The administrator lands on Zones (the top-level "where"), can jump to that zone's Devices, and separately reviews Alerts filtered by zone/device/status. Every list explains itself before any data loads (skeleton/spinner), explains itself when data fails (retry action), and explains itself when there's nothing to show (empty state copy naming what will appear there).
+**OWN-WORLD**: Angular Material 3 (M3), **theme-type dark**, density scale 0, type per brand (Sora / Schibsted Grotesk / Martian Mono — see Type below, replacing the previous single-family Roboto). Colors pinned to the seven-token brand system in `SecurIOT Visual Direction.pdf` (see Color below), not the old 60/30/10 UI-SPEC contract. Brand teal (`--marca #1FD3C4`) is reserved for logo, primary CTA, and the sidenav/toolbar accent — never repurposed as a status color, per the brief's explicit ban ("Profundidad usada como color de estado" is a listed anti-pattern).
 
-**FIRST VIEWPORT**: Persistent top toolbar (brand + language switcher + logout) above a fixed side nav (Zones / Devices / Alerts) and a content area capped at 1200px so dense tables stay readable. Login is a single centered card on a neutral ground, no sidebar, with the language switcher available before authentication.
+**STORY**: Unchanged from the prior contract — administrator lands on Zones, drills into Devices, reviews Alerts filtered by zone/device/status. Every list still explains itself before data loads, on failure, and when empty.
 
-**FORM**: Standard Material list-and-detail dashboard shell, chosen directly (code-led, no concept-seed roll) because Angular Material is a rubric-mandated, already-decided design system for this Operate surface — running the full new-world concept tournament against a fixed component library would have manufactured a choice that was not actually open. This is a disclosed deviation from `new-work.md`'s direction-roll step.
+**FIRST VIEWPORT**: Persistent top toolbar (brand + language switcher + logout) over a fixed side nav (Zones / Devices / Alerts), content capped at 1200px, now on `--noche` ground instead of `#F5F7FA`. Login is a single centered card, brand mark lockup above the form, same neutral-ground treatment as the rest of the shell (no bloom behind a form the user needs to read precisely — blooms are for marketing/hero moments, not task surfaces).
 
-**FINISH**: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance. No raster assets ship in this surface (icons are Material Icons font glyphs, not produced images), so the asset-provenance clause has nothing to discharge.
+**FORM**: Same Material list-and-detail shell as before, retheme only. Angular Material's own dark M3 theming (`color-scheme: dark`, `matTheme` dark palette generation) does the mechanical work; brand tokens override the generated tonal palette for exact hex values, same pattern as the previous CSS-custom-property override approach.
+
+**FINISH**: Unreviewed and undocumented is unfinished — unchanged principle. This retheme still owes a finish review once applied to code.
+
+## Color
+
+Seven tokens total (brand system, shared verbatim with Landing and Mobile — see those DESIGN.md files):
+
+| Token | Value | Usage here |
+|---|---|---|
+| `--marca` | `#1FD3C4` | Primary buttons, active nav indicator, focus ring, links, brand mark — never a status |
+| `--senal` | `#6C7CE8` | Status: validating (in-progress checks, pending device handshake) |
+| `--verificado` | `#22DD66` | Status: authorized / device online |
+| `--alerta` | `#FF5C6C` | Status: intrusion / alert of any severity |
+| `--noche` | `#0B0E14` | Scaffold background (toolbar, sidenav, content ground) |
+| `--texto` | `#EEF0F4` | Primary text — never `#FFFFFF` inside the product |
+| `--texto-mute` | `#8B93A3` | Secondary text, captions, disabled states |
+
+**Extending the brief for states it doesn't name** (disclosed, not silently invented): the brand system defines exactly three functional states — validando/autorizado/intrusión — but this dashboard also needs *offline* (a device simply not reporting, not itself an alert) and *alert severity tiers* (low/medium/high). Rather than inventing new hues, which the brief explicitly forbids ("son solo tres y nunca decoran nada más"):
+- **Offline** uses `--texto-mute` + a distinct icon (`remove_circle_outline`), staying neutral rather than colored — offline is an absence of signal, not a state the brand palette models.
+- **Alert severity** stays on the single `--alerta` red for color; severity is differentiated by icon (`info_outline` low / `error_outline` medium / `warning_amber_rounded` high) and by an explicit text label ("Alerta baja/media/alta"), never by a second red shade. This is a deliberate constraint, not a gap — it keeps the system at seven tokens.
+
+Status chips: icon + label + tinted background always together, never color alone (A11Y.md Perceivable rule, unchanged).
+
+## Type
+
+Per brand, replacing Roboto:
+
+| Role | Font | Size / Weight |
+|---|---|---|
+| Display / page headings | Sora | 700, 20–28px (Operate scale, smaller than marketing's 40–52px H1) |
+| Body | Schibsted Grotesk | 400, 16px |
+| Data / telemetry (timestamps, zone codes, device IDs, log rows) | Martian Mono | 400, 15px |
+
+Angular Material's `mat.define-typography-config` remapped to these three families in place of Roboto; `mat-table` cell content that is data (not a label) uses the mono face — this is the dashboard's biggest legibility win from the brand system, since Operate-mode data currently has no typographic distinction from prose.
 
 ## Tokens
 
-Sourced from `.planning/phases/03-web-dashboard-landing-page/UI-SPEC.md`, shared with the Landing Page surface, applied as CSS custom properties in `src/styles.scss` (`--brand-*`, `--status-*`, `--space-*`, `--type-*`) that override Angular Material's M3 component tokens (`--mdc-filled-button-container-color`, `--mat-toolbar-container-background-color`, `--mat-sidenav-container-background-color`, `--mdc-outlined-text-field-focus-outline-color`, etc.) rather than fighting M3's tonal-palette generation for exact brand hex values:
-- Color: `#F5F7FA` / `#101B33` / `#0E7C86` / `#B3261E`, plus the five semantic status colors — see Color section above.
-- Type: Roboto, 4 sizes / 2 weights (16/400, 14/400, 20/600, 28/600).
-- Spacing: 8pt scale (4/8/16/24/32/48/64).
-- Components: Angular Material only — `mat-table`, `mat-form-field`/`mat-select` for filters, `mat-sidenav`/`mat-toolbar`/`mat-nav-list` for the shell, `mat-card` for login, `mat-button-toggle-group` for the language switcher (per UI-SPEC's i18n contract — visible EN/ES labels, group `aria-label` = the translated "Language selector" string). No custom-built form controls, dropdowns, or modals.
+Implementation: replace `src/styles.scss`'s CSS custom properties (`--brand-*`, `--status-*`) with the seven brand tokens above, and flip Angular Material's theme mixin from light to dark palette generation. Spacing stays on the existing 8pt scale (4/8/16/24/32/48/64) — the brief doesn't specify spacing, so the prior system's spacing decision carries forward unchanged.
 
 ## Patterns
 
-- **Status chip**: icon + label + tinted background, used for device online/offline and alert severity/status. Never color alone (A11Y.md Perceivable rule).
-- **List page skeleton**: every list (`zones`, `devices`, `alerts`) follows loading → error-with-retry → empty → data, with an `aria-live="polite"` visually-hidden result-count announcement and a native `<table>` with `scope="col"` headers.
-- **Skip link**: visible-on-focus skip-to-content link in the dashboard shell, ahead of the toolbar in DOM order.
-- **Page titles**: `PageTitleService` sets a translated, unique `<title>` per route and re-applies it on language change.
+Unchanged from the prior contract except color/type sourcing:
+- **Status chip**: icon + label + tinted background (online/offline, alert severity) — see Color above for the extended vocabulary.
+- **List page skeleton**: loading → error-with-retry → empty → data, `aria-live="polite"` result-count announcement, native `<table>` with `scope="col"` headers.
+- **Skip link**: visible-on-focus, ahead of toolbar in DOM order.
+- **Page titles**: `PageTitleService`, translated and unique per route.
+- **Live indicator**: the brief's one permitted loop animation — a pulsing dot next to "en vivo" zone status, gated behind `prefers-reduced-motion: no-preference`.
+
+## Known open item
+
+This file records the target dark/brand retheme; the app still ships the light navy/teal M3 theme from the original UI-SPEC. Applying this is a retheme (Material palette + typography swap), not a structural redesign, and is separate follow-up work — not done in this pass. Once applied, re-verify contrast computationally (not eyeballed) for `--texto`/`--texto-mute` against `--noche` and against each status tint, the same discipline the prior light-theme build used.
