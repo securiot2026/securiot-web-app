@@ -80,6 +80,20 @@ export class AlertsListComponent implements OnInit {
     return this.devices().find((device) => device.id === deviceId)?.name ?? deviceId;
   }
 
+  severityIcon(severity: string): string {
+    switch (severity) {
+      case 'low':
+        return 'info_outline';
+      case 'medium':
+        return 'error_outline';
+      case 'high':
+      case 'critical':
+        return 'warning_amber_rounded';
+      default:
+        return 'warning_amber_rounded';
+    }
+  }
+
   onFilterChange(kind: 'zone' | 'device' | 'status', value: string): void {
     if (kind === 'zone') {
       this.zoneFilter.set(value);
