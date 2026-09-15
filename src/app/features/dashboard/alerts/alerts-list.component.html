@@ -87,7 +87,7 @@
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.severity' | translate }}</th>
         <td mat-cell *matCellDef="let alert">
           <span class="status-chip" [class]="'status-chip--' + alert.severity">
-            <mat-icon aria-hidden="true">warning</mat-icon>
+            <mat-icon aria-hidden="true">{{ severityIcon(alert.severity) }}</mat-icon>
             {{ ('alerts.severity.' + alert.severity) | translate }}
           </span>
         </td>

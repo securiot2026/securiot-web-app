@@ -7,7 +7,7 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--mat-sys-surface-container-low, #eef1f6);
+  background: var(--noche);
 
   &__lang {
     display: flex;
@@ -38,24 +38,26 @@
   }
 
   &__brand-icon {
-    color: var(--mat-sys-primary, #325aab);
+    color: var(--marca);
   }
 
   &__brand-name {
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-weight: 700;
     font-size: 1.05rem;
     letter-spacing: 0.02em;
   }
 
   &__title {
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 700;
     margin: 0 0 0.5rem;
   }
 
   &__subtitle {
     margin: 0 0 1.75rem;
-    color: var(--mat-sys-on-surface-variant, #49454f);
+    color: var(--texto-mute);
     line-height: 1.5;
     max-width: 65ch;
   }
@@ -64,8 +66,8 @@
     margin: 0 0 1.25rem;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    background: #fbedd9;
-    color: var(--status-medium, #8a5300);
+    background: rgba(255, 92, 108, 0.16);
+    color: var(--alerta);
     font-size: 0.875rem;
     line-height: 1.5;
   }
