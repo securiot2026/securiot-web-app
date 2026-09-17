@@ -2,7 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Device, DeviceStatus, FaceEnrollmentResult, FaceRecognitionStatus } from '../models/device.model';
+import {
+  Device,
+  DeviceStatus,
+  FaceEnrollmentResult,
+  FaceRecognitionStatus,
+  LatestFrame,
+  Rule,
+  RuleDryRunResult,
+  RuleFormValue
+} from '../models/device.model';
 
 @Injectable({ providedIn: 'root' })
 export class DevicesService {
@@ -41,5 +50,29 @@ export class DevicesService {
 
   setFaceRecognitionEnabled(id: string, enabled: boolean): Observable<FaceRecognitionStatus> {
     return this.http.patch<FaceRecognitionStatus>(`${this.baseUrl}/${id}/face-recognition`, { enabled });
+  }
+
+  listRules(id: string): Observable<Rule[]> {
+    return this.http.get<Rule[]>(`${this.baseUrl}/${id}/rules`);
+  }
+
+  createRule(id: string, rule: RuleFormValue): Observable<Rule> {
+    return this.http.post<Rule>(`${this.baseUrl}/${id}/rules`, rule);
+  }
+
+  updateRule(id: string, ruleId: number, rule: Partial<RuleFormValue>): Observable<Rule> {
+    return this.http.patch<Rule>(`${this.baseUrl}/${id}/rules/${ruleId}`, rule);
+  }
+
+  deleteRule(id: string, ruleId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}/rules/${ruleId}`);
+  }
+
+  dryRunRule(id: string, ruleId: number): Observable<RuleDryRunResult> {
+    return this.http.post<RuleDryRunResult>(`${this.baseUrl}/${id}/rules/${ruleId}/dry-run`, {});
+  }
+
+  getLatestFrame(id: string): Observable<LatestFrame> {
+    return this.http.get<LatestFrame>(`${this.baseUrl}/${id}/frame`);
   }
 }

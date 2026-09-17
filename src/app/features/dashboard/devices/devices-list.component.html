@@ -71,11 +71,17 @@
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef scope="col">
-          <span class="visually-hidden">{{ 'devices.faceRecognition' | translate }}</span>
+          <span class="visually-hidden">{{ 'devices.operations' | translate }}</span>
         </th>
         <td mat-cell *matCellDef="let device">
           <a mat-button color="primary" [routerLink]="['/devices', device.id, 'face-recognition']">
             {{ 'devices.faceRecognition' | translate }}
+          </a>
+          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'rules']">
+            {{ 'devices.rules' | translate }}
+          </a>
+          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'live-feed']">
+            {{ 'devices.liveFeed' | translate }}
           </a>
         </td>
       </ng-container>
