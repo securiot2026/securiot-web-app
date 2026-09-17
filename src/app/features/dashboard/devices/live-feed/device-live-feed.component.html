@@ -26,4 +26,10 @@
       </figcaption>
     </figure>
   }
+
+  @if (occupancy(); as count) {
+    <p class="feed-occupancy" role="status" aria-live="polite">
+      {{ 'liveFeed.occupancyCount' | translate: { count: count.count } }}
+    </p>
+  }
 }

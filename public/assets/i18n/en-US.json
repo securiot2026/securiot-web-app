@@ -145,7 +145,8 @@
     "loading": "Loading feed…",
     "loadError": "Could not load the latest frame. Retrying…",
     "imageAlt": "Latest camera frame from this device",
-    "capturedAt": "Captured at"
+    "capturedAt": "Captured at",
+    "occupancyCount": "Zone occupancy today: {{count}}"
   },
   "alerts": {
     "title": "Alerts",

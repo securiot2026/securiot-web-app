@@ -85,3 +85,11 @@ export interface LatestFrame {
   captured_at: string;
   frame: string;
 }
+
+// Snake_case matches Cloud's proxy response verbatim (mirrored from the
+// edge-api's JSON body) — no mapping layer, this phase does not need one.
+export interface Occupancy {
+  device_id: string;
+  count: number;
+  date: string;
+}

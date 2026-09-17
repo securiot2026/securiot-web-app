@@ -8,6 +8,7 @@ import {
   FaceEnrollmentResult,
   FaceRecognitionStatus,
   LatestFrame,
+  Occupancy,
   Rule,
   RuleDryRunResult,
   RuleFormValue
@@ -74,5 +75,9 @@ export class DevicesService {
 
   getLatestFrame(id: string): Observable<LatestFrame> {
     return this.http.get<LatestFrame>(`${this.baseUrl}/${id}/frame`);
+  }
+
+  getOccupancy(id: string): Observable<Occupancy> {
+    return this.http.get<Occupancy>(`${this.baseUrl}/${id}/occupancy`);
   }
 }
