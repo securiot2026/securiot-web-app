@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Device, DeviceStatus } from '../models/device.model';
+import { Device, DeviceStatus, FaceEnrollmentResult, FaceRecognitionStatus } from '../models/device.model';
 
 @Injectable({ providedIn: 'root' })
 export class DevicesService {
@@ -20,5 +20,26 @@ export class DevicesService {
 
   get(id: string): Observable<DeviceStatus> {
     return this.http.get<DeviceStatus>(`${this.baseUrl}/${id}`);
+  }
+
+  updateEdgeUrl(id: string, edgeUrl: string): Observable<DeviceStatus> {
+    return this.http.patch<DeviceStatus>(`${this.baseUrl}/${id}`, { edgeUrl });
+  }
+
+  enrollFace(id: string, name: string, images: File[]): Observable<FaceEnrollmentResult> {
+    const formData = new FormData();
+    formData.append('name', name);
+    for (const image of images) {
+      formData.append('images', image, image.name);
+    }
+    return this.http.post<FaceEnrollmentResult>(`${this.baseUrl}/${id}/faces`, formData);
+  }
+
+  getFaceRecognitionStatus(id: string): Observable<FaceRecognitionStatus> {
+    return this.http.get<FaceRecognitionStatus>(`${this.baseUrl}/${id}/face-recognition`);
+  }
+
+  setFaceRecognitionEnabled(id: string, enabled: boolean): Observable<FaceRecognitionStatus> {
+    return this.http.patch<FaceRecognitionStatus>(`${this.baseUrl}/${id}/face-recognition`, { enabled });
   }
 }

@@ -11,6 +11,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'zones', pathMatch: 'full' },
       { path: 'zones', loadComponent: () => import('./features/dashboard/zones/zones-list.component').then((m) => m.ZonesListComponent) },
       { path: 'devices', loadComponent: () => import('./features/dashboard/devices/devices-list.component').then((m) => m.DevicesListComponent) },
+      { path: 'devices/:id/face-recognition', loadComponent: () => import('./features/dashboard/devices/face-recognition/device-face-recognition.component').then((m) => m.DeviceFaceRecognitionComponent) },
       { path: 'alerts', loadComponent: () => import('./features/dashboard/alerts/alerts-list.component').then((m) => m.AlertsListComponent) }
     ]
   },

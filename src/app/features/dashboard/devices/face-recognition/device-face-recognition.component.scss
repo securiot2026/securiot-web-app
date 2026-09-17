@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+
+.fr-section {
+  margin-block-end: 2rem;
+}
+
+.fr-field {
+  display: block;
+  max-width: 32rem;
+}
+
+.fr-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fr-toggle-state {
+  font-weight: 600;
+}
+
+.fr-hint {
+  color: var(--mat-app-text-secondary, #666);
+}
+
+.fr-message {
+  margin-block: 0.5rem;
+
+  &--success {
+    color: var(--pino, #2e7d32);
+  }
+
+  &--error {
+    color: var(--sangre, #c62828);
+  }
+}
+
+.fr-file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-block: 1rem;
+  max-width: 32rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  input[type='file'] {
+    padding: 0.5rem 0;
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+}
