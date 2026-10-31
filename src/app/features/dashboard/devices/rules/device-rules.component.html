@@ -18,7 +18,14 @@
 
   <div role="status" aria-live="polite">
     @if (dryRunResultKey(); as key) {
-      <p class="rules-message rules-message--success">{{ key | translate }}</p>
+      <p
+        class="rules-message"
+        [class.rules-message--success]="key === 'rules.dryRunExecuted'"
+        [class.rules-message--info]="key !== 'rules.dryRunExecuted'"
+      >
+        <mat-icon aria-hidden="true">{{ dryRunResultIcon() }}</mat-icon>
+        <span>{{ key | translate }}</span>
+      </p>
     }
     @if (dryRunErrorKey(); as key) {
       <p class="rules-message rules-message--error">{{ key | translate }}</p>
@@ -41,6 +48,7 @@
     @if (rules().length === 0) {
       <p class="rules-hint">{{ 'rules.emptyBody' | translate }}</p>
     } @else {
+      <p class="rules-hint" id="rules-execute-hint">{{ 'rules.executeHint' | translate }}</p>
       <div class="rules-table-wrapper">
         <table mat-table [dataSource]="rules()" [attr.aria-label]="'rules.title' | translate">
           <ng-container matColumnDef="name">
@@ -94,35 +102,45 @@
               <span class="visually-hidden">{{ 'rules.operations' | translate }}</span>
             </th>
             <td mat-cell *matCellDef="let rule">
-              <button
-                mat-button
-                type="button"
-                [disabled]="!rule.enabled || dryRunningId() === rule.id"
-                [attr.aria-label]="('rules.dryRunButton' | translate) + ' — ' + rule.name"
-                (click)="dryRun(rule)"
-              >
-                @if (dryRunningId() === rule.id) {
-                  <mat-progress-spinner diameter="16" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
-                }
-                {{ 'rules.dryRunButton' | translate }}
-              </button>
-              <button
-                mat-button
-                type="button"
-                [attr.aria-label]="('rules.editButton' | translate) + ' — ' + rule.name"
-                (click)="openEditForm(rule)"
-              >
-                {{ 'rules.editButton' | translate }}
-              </button>
-              <button
-                mat-button
-                color="warn"
-                type="button"
-                [attr.aria-label]="('rules.deleteButton' | translate) + ' — ' + rule.name"
-                (click)="deleteRule(rule)"
-              >
-                {{ 'rules.deleteButton' | translate }}
-              </button>
+              <div class="rules-ops">
+                <mat-checkbox
+                  class="rules-execute"
+                  [checked]="isExecuteChecked(rule.id)"
+                  [disabled]="!rule.enabled || dryRunningId() === rule.id"
+                  [aria-label]="('rules.executeLabel' | translate) + ': ' + rule.name"
+                  [aria-describedby]="'rules-execute-hint'"
+                  (change)="setExecute(rule.id, $event.checked)"
+                >{{ 'rules.executeLabel' | translate }}</mat-checkbox>
+                <button
+                  mat-button
+                  type="button"
+                  [disabled]="!rule.enabled || dryRunningId() === rule.id"
+                  [attr.aria-label]="('rules.dryRunButton' | translate) + ' — ' + rule.name"
+                  (click)="dryRun(rule)"
+                >
+                  @if (dryRunningId() === rule.id) {
+                    <mat-progress-spinner diameter="16" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+                  }
+                  {{ 'rules.dryRunButton' | translate }}
+                </button>
+                <button
+                  mat-button
+                  type="button"
+                  [attr.aria-label]="('rules.editButton' | translate) + ' — ' + rule.name"
+                  (click)="openEditForm(rule)"
+                >
+                  {{ 'rules.editButton' | translate }}
+                </button>
+                <button
+                  mat-button
+                  color="warn"
+                  type="button"
+                  [attr.aria-label]="('rules.deleteButton' | translate) + ' — ' + rule.name"
+                  (click)="deleteRule(rule)"
+                >
+                  {{ 'rules.deleteButton' | translate }}
+                </button>
+              </div>
             </td>
           </ng-container>
 

@@ -78,6 +78,11 @@ export interface RuleDryRunResult {
     door_action: string | null;
     rule_command: { actuator: string; action: Record<string, unknown>; rule: string } | null;
   };
+  dry_run?: boolean;
+  device_id?: string;
+  zone_id?: string;
+  executed?: boolean;
+  queued?: string[];
 }
 
 export interface LatestFrame {

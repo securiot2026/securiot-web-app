@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
@@ -13,10 +14,30 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { DevicesService } from '../../../../core/services/devices.service';
 import { PageTitleService } from '../../../../core/services/page-title.service';
-import { DeviceStatus, Rule, RuleActionType, RuleConditionType, RuleFormValue } from '../../../../core/models/device.model';
+import {
+  DeviceStatus,
+  Rule,
+  RuleActionType,
+  RuleConditionType,
+  RuleDryRunResult,
+  RuleFormValue
+} from '../../../../core/models/device.model';
 
 const CONDITION_TYPES: RuleConditionType[] = ['object_class', 'weapon', 'fire', 'occupancy', 'sensor_threshold'];
 const ACTION_TYPES: RuleActionType[] = ['door_lock', 'light', 'buzzer', 'alert'];
+
+/**
+ * Resolves the translation key for a dry-run outcome. The response is the source of
+ * truth: the UI never claims a device action ran unless the response says executed === true.
+ */
+export function resolveDryRunResultKey(requestedExecute: boolean, response: RuleDryRunResult | null | undefined): string {
+  if (response?.executed === true) {
+    return Array.isArray(response.queued) && response.queued.length === 0
+      ? 'rules.dryRunExecutedNoAction'
+      : 'rules.dryRunExecuted';
+  }
+  return requestedExecute ? 'rules.dryRunNotConfirmed' : 'rules.dryRunSimulated';
+}
 
 @Component({
   selector: 'app-device-rules',
@@ -30,6 +51,7 @@ const ACTION_TYPES: RuleActionType[] = ['door_lock', 'light', 'buzzer', 'alert']
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatCheckboxModule,
     MatIconModule,
     MatSlideToggleModule,
     MatTableModule,
@@ -61,6 +83,19 @@ export class DeviceRulesComponent implements OnInit {
   readonly dryRunResultKey = signal<string | null>(null);
   readonly dryRunErrorKey = signal<string | null>(null);
   readonly dryRunningId = signal<number | null>(null);
+  private readonly executeOnDevice = signal<Record<number, boolean>>({});
+  readonly dryRunResultIcon = computed(() => {
+    switch (this.dryRunResultKey()) {
+      case null:
+        return null;
+      case 'rules.dryRunExecuted':
+        return 'check_circle';
+      case 'rules.dryRunNotConfirmed':
+        return 'warning';
+      default:
+        return 'info';
+    }
+  });
 
   readonly deleteErrorKey = signal<string | null>(null);
 
@@ -237,16 +272,26 @@ export class DeviceRulesComponent implements OnInit {
     });
   }
 
+  isExecuteChecked(ruleId: number): boolean {
+    return this.executeOnDevice()[ruleId] === true;
+  }
+
+  setExecute(ruleId: number, checked: boolean): void {
+    this.executeOnDevice.update((state) => ({ ...state, [ruleId]: checked }));
+    this.dryRunResultKey.set(null);
+    this.dryRunErrorKey.set(null);
+  }
+
   dryRun(rule: Rule): void {
     this.dryRunErrorKey.set(null);
     this.dryRunResultKey.set(null);
     this.dryRunningId.set(rule.id);
+    const execute = this.isExecuteChecked(rule.id);
 
-    this.devicesService.dryRunRule(this.deviceId, rule.id).subscribe({
-      next: () => {
+    this.devicesService.dryRunRule(this.deviceId, rule.id, execute).subscribe({
+      next: (response) => {
         this.dryRunningId.set(null);
-        this.dryRunResultKey.set('rules.dryRunSuccess');
-        this.load();
+        this.dryRunResultKey.set(resolveDryRunResultKey(execute, response));
       },
       error: () => {
         this.dryRunningId.set(null);

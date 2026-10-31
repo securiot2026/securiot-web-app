@@ -11,7 +11,14 @@
 }
 
 .rules-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-block: 0.5rem;
+
+  &--info {
+    color: inherit;
+  }
 
   &--success {
     color: var(--pino, #2e7d32);
@@ -20,6 +27,19 @@
   &--error {
     color: var(--sangre, #c62828);
   }
+}
+
+.rules-ops {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rules-execute:has(input:focus-visible) {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .rules-loading {

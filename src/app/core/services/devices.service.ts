@@ -69,8 +69,8 @@ export class DevicesService {
     return this.http.delete<void>(`${this.baseUrl}/${id}/rules/${ruleId}`);
   }
 
-  dryRunRule(id: string, ruleId: number): Observable<RuleDryRunResult> {
-    return this.http.post<RuleDryRunResult>(`${this.baseUrl}/${id}/rules/${ruleId}/dry-run`, {});
+  dryRunRule(id: string, ruleId: number, execute = false): Observable<RuleDryRunResult> {
+    return this.http.post<RuleDryRunResult>(`${this.baseUrl}/${id}/rules/${ruleId}/dry-run`, { execute });
   }
 
   getLatestFrame(id: string): Observable<LatestFrame> {
