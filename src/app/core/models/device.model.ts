@@ -29,6 +29,16 @@ export interface FaceEnrollmentResult {
   skipped_images: string[];
 }
 
+// camelCase exactly as Cloud returns it from GET /devices/:id/setup-payload,
+// unlike the Edge snake_case proxies above. deviceKey is a secret: keep it
+// in memory only, never log it or persist it.
+export interface DeviceSetupPayload {
+  edgeApiUrl: string;
+  deviceKey: string;
+  deviceId: string;
+  zoneId: string;
+}
+
 export interface DeviceCreated extends Device {
   apiKey: string;
 }

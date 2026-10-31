@@ -55,7 +55,8 @@
     "faceRecognition": "Face recognition",
     "rules": "Rules",
     "liveFeed": "Live feed",
-    "operations": "Device actions"
+    "operations": "Device actions",
+    "setup": "Configure device"
   },
   "faceRecognition": {
     "title": "Face recognition",
@@ -180,6 +181,37 @@
     "loading": "Loading alerts…",
     "resultsAnnounce": "Alerts: {{count}}",
     "clearFilters": "Clear filters"
+  },
+  "setup": {
+    "title": "Configure device",
+    "deviceLabel": "Device: {{name}}",
+    "backToDevices": "Back to devices",
+    "intro": "Show a setup QR so the device form is filled in for you and you only type your WiFi.",
+    "stepsTitle": "How to configure the device",
+    "step1": "Power on the device and join the WiFi network named SecurIoT-Setup-XXXX from your phone. The last four characters are different for each device.",
+    "step2": "Press Show setup QR on this page.",
+    "step3": "Scan the QR code with your phone camera and open the link.",
+    "step4": "Type the name and password of your WiFi network when the setup page asks for them.",
+    "step5": "Check the filled-in fields and press Save and connect. The device restarts by itself.",
+    "warningTitle": "Keep this QR private.",
+    "warningBody": "It contains the secret key of the device. Do not share it, post it or take a screenshot of it, and open the link only while your phone is connected to the SecurIoT-Setup network.",
+    "showButton": "Show setup QR",
+    "generating": "Preparing the QR code…",
+    "qrAlt": "QR code with the setup link for this device. The same link is written as text below the code.",
+    "qrCaption": "Scan it with the phone that is connected to the SecurIoT-Setup network. It hides itself after about 2 minutes.",
+    "linkLabel": "Setup link",
+    "copyButton": "Copy link",
+    "copied": "Link copied to the clipboard.",
+    "copyFailed": "The link could not be copied. Select the text in the field and copy it by hand.",
+    "hideButton": "Hide QR code",
+    "hiddenMessage": "QR code hidden. Press Show setup QR to display it again.",
+    "expiredMessage": "The QR code was hidden to protect the device key. Press Show setup QR to display it again.",
+    "needsEdgeUrl": "Save the device's Edge API URL (in Face recognition) before configuring it.",
+    "goToFaceRecognition": "Open Face recognition",
+    "errorNotFound": "We could not find this device in your account.",
+    "errorNotConfigured": "The server is not ready to configure devices. Ask the administrator to set the device setup secret on the Cloud API.",
+    "errorGeneric": "We could not prepare the setup QR. Check your connection and try again.",
+    "errorQr": "The QR code could not be drawn. Copy the link below instead."
   },
   "common": {
     "loadError": "We couldn't load this. Check your connection and try again.",

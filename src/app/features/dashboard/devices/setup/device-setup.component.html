@@ -1,0 +1,88 @@
+<h1 class="page-title">{{ 'setup.title' | translate }}</h1>
+
+@if (device(); as dev) {
+  <p>
+    {{ 'setup.deviceLabel' | translate: { name: dev.name } }}
+    <a routerLink="/devices">{{ 'setup.backToDevices' | translate }}</a>
+  </p>
+}
+
+<p>{{ 'setup.intro' | translate }}</p>
+
+<section>
+  <h2>{{ 'setup.stepsTitle' | translate }}</h2>
+  <ol>
+    <li>{{ 'setup.step1' | translate }}</li>
+    <li>{{ 'setup.step2' | translate }}</li>
+    <li>{{ 'setup.step3' | translate }}</li>
+    <li>{{ 'setup.step4' | translate }}</li>
+    <li>{{ 'setup.step5' | translate }}</li>
+  </ol>
+</section>
+
+<p id="setup-warning" class="setup-warning">
+  <mat-icon aria-hidden="true">warning</mat-icon>
+  <span>
+    <strong>{{ 'setup.warningTitle' | translate }}</strong>
+    {{ 'setup.warningBody' | translate }}
+  </span>
+</p>
+
+<button
+  #showButton
+  mat-flat-button
+  color="primary"
+  type="button"
+  aria-describedby="setup-warning"
+  [disabled]="loading() || edgeUrlMissing()"
+  (click)="configure()"
+>
+  @if (loading()) {
+    <mat-progress-spinner diameter="20" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+    <span>{{ 'setup.generating' | translate }}</span>
+  } @else {
+    <span>{{ 'setup.showButton' | translate }}</span>
+  }
+</button>
+
+@if (edgeUrlMissing()) {
+  <p role="status" class="setup-message">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>
+      {{ 'setup.needsEdgeUrl' | translate }}
+      <a [routerLink]="['/devices', deviceId, 'face-recognition']">{{ 'setup.goToFaceRecognition' | translate }}</a>
+    </span>
+  </p>
+}
+
+<div role="status" aria-live="polite">
+  @if (statusKey(); as key) {
+    <p class="setup-message">{{ key | translate }}</p>
+  }
+</div>
+<div role="alert" aria-live="assertive">
+  @if (errorKey(); as key) {
+    <p class="setup-message setup-message--error">
+      <mat-icon aria-hidden="true">error_outline</mat-icon>
+      <span>{{ key | translate }}</span>
+    </p>
+  }
+</div>
+
+@if (qrDataUrl(); as dataUrl) {
+  <figure class="setup-qr">
+    <img [src]="dataUrl" [alt]="'setup.qrAlt' | translate" width="280" height="280" />
+    <figcaption>{{ 'setup.qrCaption' | translate }}</figcaption>
+  </figure>
+}
+
+@if (portalUrl(); as url) {
+  <div class="setup-link">
+    <label for="setup-link">{{ 'setup.linkLabel' | translate }}</label>
+    <input id="setup-link" type="text" readonly spellcheck="false" autocomplete="off" [value]="url" />
+  </div>
+  <div class="setup-actions">
+    <button mat-stroked-button type="button" (click)="copyLink()">{{ 'setup.copyButton' | translate }}</button>
+    <button mat-stroked-button type="button" (click)="hide()">{{ 'setup.hideButton' | translate }}</button>
+  </div>
+}

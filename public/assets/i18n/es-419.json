@@ -55,7 +55,8 @@
     "faceRecognition": "Reconocimiento facial",
     "rules": "Reglas",
     "liveFeed": "Feed en vivo",
-    "operations": "Acciones del dispositivo"
+    "operations": "Acciones del dispositivo",
+    "setup": "Configurar dispositivo"
   },
   "faceRecognition": {
     "title": "Reconocimiento facial",
@@ -180,6 +181,37 @@
     "loading": "Cargando alertas…",
     "resultsAnnounce": "Alertas: {{count}}",
     "clearFilters": "Limpiar filtros"
+  },
+  "setup": {
+    "title": "Configurar dispositivo",
+    "deviceLabel": "Dispositivo: {{name}}",
+    "backToDevices": "Volver a dispositivos",
+    "intro": "Muestra un QR de configuración para que el formulario del dispositivo se llene solo y únicamente tengas que escribir tu WiFi.",
+    "stepsTitle": "Cómo configurar el dispositivo",
+    "step1": "Enciende el dispositivo y conecta tu teléfono a la red WiFi llamada SecurIoT-Setup-XXXX. Los últimos cuatro caracteres son distintos en cada dispositivo.",
+    "step2": "Pulsa Mostrar QR de configuración en esta página.",
+    "step3": "Escanea el código QR con la cámara de tu teléfono y abre el enlace.",
+    "step4": "Escribe el nombre y la contraseña de tu red WiFi cuando la página de configuración te los pida.",
+    "step5": "Revisa los campos ya completados y pulsa Save and connect. El dispositivo se reinicia solo.",
+    "warningTitle": "Mantén este QR en privado.",
+    "warningBody": "Contiene la clave secreta del dispositivo. No lo compartas, no lo publiques ni le tomes una captura de pantalla, y abre el enlace solo mientras tu teléfono esté conectado a la red SecurIoT-Setup.",
+    "showButton": "Mostrar QR de configuración",
+    "generating": "Preparando el código QR…",
+    "qrAlt": "Código QR con el enlace de configuración de este dispositivo. El mismo enlace aparece escrito como texto debajo del código.",
+    "qrCaption": "Escanéalo con el teléfono conectado a la red SecurIoT-Setup. Se oculta solo después de unos 2 minutos.",
+    "linkLabel": "Enlace de configuración",
+    "copyButton": "Copiar enlace",
+    "copied": "Enlace copiado al portapapeles.",
+    "copyFailed": "No se pudo copiar el enlace. Selecciona el texto del campo y cópialo a mano.",
+    "hideButton": "Ocultar código QR",
+    "hiddenMessage": "Código QR oculto. Pulsa Mostrar QR de configuración para verlo de nuevo.",
+    "expiredMessage": "Ocultamos el código QR para proteger la clave del dispositivo. Pulsa Mostrar QR de configuración para verlo de nuevo.",
+    "needsEdgeUrl": "Guarda la URL del Edge API del dispositivo (en Reconocimiento facial) antes de configurarlo.",
+    "goToFaceRecognition": "Abrir Reconocimiento facial",
+    "errorNotFound": "No encontramos este dispositivo en tu cuenta.",
+    "errorNotConfigured": "El servidor aún no está listo para configurar dispositivos. Pide al administrador que defina el secreto de configuración de dispositivos en la Cloud API.",
+    "errorGeneric": "No pudimos preparar el QR de configuración. Revisa tu conexión e inténtalo de nuevo.",
+    "errorQr": "No se pudo dibujar el código QR. Copia el enlace de abajo en su lugar."
   },
   "common": {
     "loadError": "No pudimos cargar esta información. Revisa tu conexión e inténtalo de nuevo.",

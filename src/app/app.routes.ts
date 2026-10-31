@@ -14,6 +14,7 @@ export const routes: Routes = [
       { path: 'devices/:id/face-recognition', loadComponent: () => import('./features/dashboard/devices/face-recognition/device-face-recognition.component').then((m) => m.DeviceFaceRecognitionComponent) },
       { path: 'devices/:id/rules', loadComponent: () => import('./features/dashboard/devices/rules/device-rules.component').then((m) => m.DeviceRulesComponent) },
       { path: 'devices/:id/live-feed', loadComponent: () => import('./features/dashboard/devices/live-feed/device-live-feed.component').then((m) => m.DeviceLiveFeedComponent) },
+      { path: 'devices/:id/setup', loadComponent: () => import('./features/dashboard/devices/setup/device-setup.component').then((m) => m.DeviceSetupComponent) },
       { path: 'alerts', loadComponent: () => import('./features/dashboard/alerts/alerts-list.component').then((m) => m.AlertsListComponent) }
     ]
   },

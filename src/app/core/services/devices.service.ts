@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   Device,
+  DeviceSetupPayload,
   DeviceStatus,
   FaceEnrollmentResult,
   FaceRecognitionStatus,
@@ -79,5 +80,9 @@ export class DevicesService {
 
   getOccupancy(id: string): Observable<Occupancy> {
     return this.http.get<Occupancy>(`${this.baseUrl}/${id}/occupancy`);
+  }
+
+  getSetupPayload(id: string): Observable<DeviceSetupPayload> {
+    return this.http.get<DeviceSetupPayload>(`${this.baseUrl}/${id}/setup-payload`);
   }
 }
