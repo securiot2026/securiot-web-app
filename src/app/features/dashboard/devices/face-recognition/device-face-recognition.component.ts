@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -55,6 +56,7 @@ export class DeviceFaceRecognitionComponent implements OnInit {
   readonly photosRequiredError = signal(false);
   readonly enrollErrorKey = signal<string | null>(null);
   readonly enrollResult = signal<FaceEnrollmentResult | null>(null);
+  readonly enrollSkippedReasons = signal<string[]>([]);
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -137,6 +139,7 @@ export class DeviceFaceRecognitionComponent implements OnInit {
     this.photosRequiredError.set(false);
     this.enrollErrorKey.set(null);
     this.enrollResult.set(null);
+    this.enrollSkippedReasons.set([]);
     this.submitting.set(true);
 
     this.devicesService
@@ -144,12 +147,26 @@ export class DeviceFaceRecognitionComponent implements OnInit {
       .subscribe({
         next: (result) => {
           this.submitting.set(false);
+          this.enrollSkippedReasons.set([]);
           this.enrollResult.set(result);
         },
-        error: () => {
+        error: (error: HttpErrorResponse) => {
           this.submitting.set(false);
+          this.enrollSkippedReasons.set(this.extractSkippedReasons(error));
           this.enrollErrorKey.set('faceRecognition.enrollError');
         }
       });
+  }
+
+  private extractSkippedReasons(error: HttpErrorResponse): string[] {
+    const body: unknown = error?.error;
+    if (body === null || typeof body !== 'object') {
+      return [];
+    }
+    const reasons = (body as { skipped_images?: unknown }).skipped_images;
+    if (!Array.isArray(reasons)) {
+      return [];
+    }
+    return reasons.filter((reason): reason is string => typeof reason === 'string');
   }
 }

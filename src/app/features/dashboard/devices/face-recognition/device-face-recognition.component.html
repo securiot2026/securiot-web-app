@@ -113,6 +113,14 @@
       <div role="alert" aria-live="assertive">
         @if (enrollErrorKey(); as key) {
           <p class="fr-message fr-message--error">{{ key | translate }}</p>
+          @if (enrollSkippedReasons().length > 0) {
+            <p>{{ 'faceRecognition.skippedPhotos' | translate }}</p>
+            <ul>
+              @for (reason of enrollSkippedReasons(); track $index) {
+                <li>{{ reason }}</li>
+              }
+            </ul>
+          }
         }
       </div>
 
