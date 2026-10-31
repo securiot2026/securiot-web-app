@@ -3,6 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent) },
+  { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password/forgot-password.component').then((m) => m.ForgotPasswordComponent) },
   {
     path: '',
     canActivate: [authGuard],

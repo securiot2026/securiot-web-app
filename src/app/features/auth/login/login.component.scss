@@ -88,6 +88,16 @@
     }
   }
 
+  &__forgot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 44px;
+    color: var(--marca);
+    text-decoration: underline;
+    font-size: 0.875rem;
+  }
+
   &__submit {
     width: 100%;
     height: 44px;

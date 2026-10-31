@@ -25,7 +25,22 @@
     "genericError": "No pudimos iniciar tu sesión. Intenta de nuevo.",
     "showPassword": "Mostrar contraseña",
     "hidePassword": "Ocultar contraseña",
-    "sessionExpired": "Tu sesión expiró. Inicia sesión de nuevo para continuar."
+    "sessionExpired": "Tu sesión expiró. Inicia sesión de nuevo para continuar.",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "forgot": {
+    "title": "Restablece tu contraseña",
+    "intro": "Ingresa tu correo electrónico. Si existe una cuenta, enviamos el enlace de restablecimiento al administrador de SecurIoT, quien te lo compartirá.",
+    "email": "Correo electrónico",
+    "emailRequired": "Ingresa tu correo electrónico.",
+    "emailInvalid": "Ingresa un correo electrónico válido.",
+    "submit": "Solicitar enlace",
+    "submitting": "Enviando…",
+    "successTitle": "Solicitud recibida",
+    "successBody": "Si existe una cuenta con ese correo, enviamos el enlace al administrador. Pídeselo. El enlace vence en 30 minutos y solo funciona una vez.",
+    "backToLogin": "Volver a iniciar sesión",
+    "rateLimited": "Hiciste demasiados intentos. Prueba de nuevo en unos minutos.",
+    "genericError": "No pudimos enviar tu solicitud. Intenta de nuevo."
   },
   "zones": {
     "title": "Zonas",

@@ -25,7 +25,22 @@
     "genericError": "We couldn't sign you in. Please try again.",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "sessionExpired": "Your session expired. Sign in again to continue."
+    "sessionExpired": "Your session expired. Sign in again to continue.",
+    "forgotPassword": "Forgot your password?"
+  },
+  "forgot": {
+    "title": "Reset your password",
+    "intro": "Enter your email. If an account exists, we send the reset link to the SecurIoT administrator, who will share it with you.",
+    "email": "Email",
+    "emailRequired": "Enter your email address.",
+    "emailInvalid": "Enter a valid email address.",
+    "submit": "Request reset link",
+    "submitting": "Sending…",
+    "successTitle": "Request received",
+    "successBody": "If an account exists for that email, we sent the reset link to the administrator. Ask them for it. The link expires in 30 minutes and works only once.",
+    "backToLogin": "Back to sign in",
+    "rateLimited": "Too many attempts. Try again in a few minutes.",
+    "genericError": "We couldn't send your request. Please try again."
   },
   "zones": {
     "title": "Zones",
