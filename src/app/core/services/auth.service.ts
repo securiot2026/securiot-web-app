@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ForgotPasswordRequest, LoginRequest, LoginResponse, MessageResponse } from '../models/auth.model';
+import { ForgotPasswordRequest, LoginRequest, LoginResponse, MessageResponse, ResetPasswordRequest } from '../models/auth.model';
 
 const TOKEN_KEY = 'securiot.access_token';
 
@@ -28,6 +28,11 @@ export class AuthService {
   forgotPassword(email: string): Observable<MessageResponse> {
     const body: ForgotPasswordRequest = { email };
     return this.http.post<MessageResponse>(`${environment.apiBaseUrl}/auth/forgot-password`, body);
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<MessageResponse> {
+    const body: ResetPasswordRequest = { token, newPassword };
+    return this.http.post<MessageResponse>(`${environment.apiBaseUrl}/auth/reset-password`, body);
   }
 
   logout(): void {
