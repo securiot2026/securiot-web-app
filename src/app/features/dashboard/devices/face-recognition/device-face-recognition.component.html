@@ -52,7 +52,7 @@
     <mat-slide-toggle
       [checked]="faceRecognitionEnabled() === true"
       [disabled]="toggleDisabled()"
-      (change)="toggleFaceRecognition($event.checked)"
+      (change)="toggleFaceRecognition($event)"
     >
       {{ 'faceRecognition.toggleLabel' | translate }}
     </mat-slide-toggle>
@@ -124,7 +124,7 @@
           @if (result.skipped_images.length > 0) {
             <p>{{ 'faceRecognition.skippedPhotos' | translate }}</p>
             <ul>
-              @for (reason of result.skipped_images; track reason) {
+              @for (reason of result.skipped_images; track $index) {
                 <li>{{ reason }}</li>
               }
             </ul>

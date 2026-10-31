@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { DevicesService } from '../../../../core/services/devices.service';
@@ -103,12 +103,19 @@ export class DeviceFaceRecognitionComponent implements OnInit {
     });
   }
 
-  toggleFaceRecognition(checked: boolean): void {
+  toggleFaceRecognition(change: MatSlideToggleChange): void {
     this.toggleErrorKey.set(null);
 
-    this.devicesService.setFaceRecognitionEnabled(this.deviceId, checked).subscribe({
-      next: (status) => this.faceRecognitionEnabled.set(status.face_recognition_enabled),
-      error: () => this.toggleErrorKey.set('faceRecognition.toggleError')
+    this.devicesService.setFaceRecognitionEnabled(this.deviceId, change.checked).subscribe({
+      next: (status) => {
+        this.faceRecognitionEnabled.set(status.face_recognition_enabled);
+        change.source.checked = status.face_recognition_enabled;
+      },
+      error: () => {
+        // The control flips on click; restore the last confirmed value.
+        change.source.checked = this.faceRecognitionEnabled() === true;
+        this.toggleErrorKey.set('faceRecognition.toggleError');
+      }
     });
   }
 
