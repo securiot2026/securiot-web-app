@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.feed-nav {
+  margin-block-end: 1rem;
+}
+
+.feed-hint {
+  color: var(--mat-app-text-secondary, #666);
+}
+
+.feed-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.feed-message {
+  margin-block: 0.5rem;
+
+  &--error {
+    color: var(--sangre, #c62828);
+  }
+}
+
+.feed-figure {
+  margin: 0;
+  max-width: 40rem;
+}
+
+.feed-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.feed-caption {
+  margin-block-start: 0.5rem;
+  color: var(--mat-app-text-secondary, #666);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+}

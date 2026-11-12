@@ -1,0 +1,87 @@
+:host {
+  display: block;
+}
+
+.rules-nav {
+  margin-block-end: 1rem;
+}
+
+.rules-hint {
+  color: var(--mat-app-text-secondary, #666);
+}
+
+.rules-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block: 0.5rem;
+
+  &--info {
+    color: inherit;
+  }
+
+  &--success {
+    color: var(--pino, #2e7d32);
+  }
+
+  &--error {
+    color: var(--sangre, #c62828);
+  }
+}
+
+.rules-ops {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rules-execute:has(input:focus-visible) {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.rules-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rules-table-wrapper {
+  overflow-x: auto;
+  margin-block: 1rem;
+}
+
+.rules-form-section {
+  margin-block-start: 1.5rem;
+  max-width: 40rem;
+}
+
+.rules-field {
+  display: block;
+  max-width: 32rem;
+
+  &--small {
+    max-width: 12rem;
+    display: inline-block;
+    margin-inline-end: 1rem;
+  }
+}
+
+.rules-enabled-row {
+  margin-block: 1rem;
+}
+
+.rules-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-block-start: 1rem;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+}

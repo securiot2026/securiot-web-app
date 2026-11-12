@@ -1,0 +1,153 @@
+<h1 class="page-title">{{ 'faceRecognition.title' | translate }}</h1>
+
+<section class="fr-section">
+  <h2>{{ 'faceRecognition.edgeUrlLabel' | translate }}</h2>
+
+  <form [formGroup]="edgeUrlForm" (ngSubmit)="saveEdgeUrl()" novalidate>
+    <mat-form-field appearance="outline" class="fr-field">
+      <mat-label>{{ 'faceRecognition.edgeUrlLabel' | translate }}</mat-label>
+      <input
+        matInput
+        type="url"
+        id="edge-url"
+        formControlName="edgeUrl"
+        placeholder="http://edge-api.local:5000"
+        [attr.aria-invalid]="edgeUrlForm.controls.edgeUrl.invalid && edgeUrlForm.controls.edgeUrl.touched"
+      />
+      <mat-hint>{{ 'faceRecognition.edgeUrlHelp' | translate }}</mat-hint>
+      @if (edgeUrlForm.controls.edgeUrl.touched && edgeUrlForm.controls.edgeUrl.hasError('required')) {
+        <mat-error>{{ 'faceRecognition.edgeUrlRequired' | translate }}</mat-error>
+      }
+      @if (edgeUrlForm.controls.edgeUrl.touched && edgeUrlForm.controls.edgeUrl.hasError('pattern')) {
+        <mat-error>{{ 'faceRecognition.edgeUrlInvalid' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div role="status" aria-live="polite">
+      @if (savedMessage(); as key) {
+        <p class="fr-message fr-message--success">{{ key | translate }}</p>
+      }
+    </div>
+    <div role="alert" aria-live="assertive">
+      @if (edgeUrlErrorKey(); as key) {
+        <p class="fr-message fr-message--error">{{ key | translate }}</p>
+      }
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="savingEdgeUrl()">
+      @if (savingEdgeUrl()) {
+        <mat-progress-spinner diameter="20" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+        <span>{{ 'faceRecognition.saveButton' | translate }}</span>
+      } @else {
+        <span>{{ 'faceRecognition.saveButton' | translate }}</span>
+      }
+    </button>
+  </form>
+</section>
+
+<section class="fr-section">
+  <h2>{{ 'faceRecognition.toggleLabel' | translate }}</h2>
+
+  <div class="fr-toggle-row">
+    <mat-slide-toggle
+      [checked]="faceRecognitionEnabled() === true"
+      [disabled]="toggleDisabled()"
+      (change)="toggleFaceRecognition($event)"
+    >
+      {{ 'faceRecognition.toggleLabel' | translate }}
+    </mat-slide-toggle>
+    <span class="fr-toggle-state">
+      {{ (faceRecognitionEnabled() === true ? 'faceRecognition.toggleOn' : 'faceRecognition.toggleOff') | translate }}
+    </span>
+  </div>
+
+  @if (toggleDisabled()) {
+    <p class="fr-hint">{{ 'faceRecognition.toggleNeedsEdgeUrl' | translate }}</p>
+  }
+
+  <div role="alert" aria-live="assertive">
+    @if (toggleErrorKey(); as key) {
+      <p class="fr-message fr-message--error">{{ key | translate }}</p>
+    }
+  </div>
+</section>
+
+<section class="fr-section">
+  <h2>{{ 'faceRecognition.enrollTitle' | translate }}</h2>
+
+  @if (toggleDisabled()) {
+    <p class="fr-hint">{{ 'faceRecognition.needsEdgeUrl' | translate }}</p>
+  } @else {
+    <form [formGroup]="enrollForm" (ngSubmit)="submitEnrollment()" novalidate>
+      <mat-form-field appearance="outline" class="fr-field">
+        <mat-label>{{ 'faceRecognition.nameLabel' | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          id="enroll-name"
+          formControlName="name"
+          [attr.aria-invalid]="enrollForm.controls.name.invalid && enrollForm.controls.name.touched"
+        />
+        @if (enrollForm.controls.name.touched && enrollForm.controls.name.hasError('required')) {
+          <mat-error>{{ 'faceRecognition.nameRequired' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="fr-file-field">
+        <label for="enroll-photos">{{ 'faceRecognition.photosLabel' | translate }}</label>
+        <input
+          type="file"
+          id="enroll-photos"
+          multiple
+          accept="image/*"
+          (change)="onFilesSelected($event)"
+        />
+        <p class="fr-hint">{{ 'faceRecognition.photosHelp' | translate }}</p>
+        <div role="alert" aria-live="assertive">
+          @if (photosRequiredError()) {
+            <p class="fr-message fr-message--error">{{ 'faceRecognition.photosRequired' | translate }}</p>
+          }
+        </div>
+      </div>
+
+      <div role="alert" aria-live="assertive">
+        @if (enrollErrorKey(); as key) {
+          <p class="fr-message fr-message--error">{{ key | translate }}</p>
+          @if (enrollSkippedReasons().length > 0) {
+            <p>{{ 'faceRecognition.skippedPhotos' | translate }}</p>
+            <ul>
+              @for (reason of enrollSkippedReasons(); track $index) {
+                <li>{{ reason }}</li>
+              }
+            </ul>
+          }
+        }
+      </div>
+
+      <div role="status" aria-live="polite">
+        @if (enrollResult(); as result) {
+          <p class="fr-message fr-message--success">
+            {{ 'faceRecognition.enrollSuccess' | translate: { accepted: result.accepted_images } }}
+          </p>
+          @if (result.skipped_images.length > 0) {
+            <p>{{ 'faceRecognition.skippedPhotos' | translate }}</p>
+            <ul>
+              @for (reason of result.skipped_images; track $index) {
+                <li>{{ reason }}</li>
+              }
+            </ul>
+          }
+        }
+      </div>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+        @if (submitting()) {
+          <mat-progress-spinner diameter="20" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+          <span>{{ 'faceRecognition.submitting' | translate }}</span>
+        } @else {
+          <span>{{ 'faceRecognition.submitButton' | translate }}</span>
+        }
+      </button>
+    </form>
+  }
+</section>

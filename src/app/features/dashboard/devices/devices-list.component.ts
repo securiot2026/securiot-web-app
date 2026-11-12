@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,6 +22,7 @@ import { Zone } from '../../../core/models/zone.model';
   imports: [
     CommonModule,
     DatePipe,
+    RouterLink,
     FormsModule,
     MatTableModule,
     MatFormFieldModule,
@@ -40,7 +41,7 @@ export class DevicesListComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal(false);
   readonly selectedZoneId = signal<string>('');
-  readonly displayedColumns = ['name', 'zone', 'status', 'lastReading'];
+  readonly displayedColumns = ['name', 'zone', 'status', 'lastReading', 'actions'];
 
   constructor(
     private readonly devicesService: DevicesService,

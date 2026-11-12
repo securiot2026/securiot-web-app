@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+.setup-warning,
+.setup-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-block: 0.75rem;
+}
+
+.setup-warning {
+  max-width: 40rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+}
+
+.setup-message--error {
+  font-weight: 600;
+}
+
+.setup-qr {
+  margin: 1rem 0;
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    max-width: 280px;
+    margin-block-start: 0.5rem;
+  }
+}
+
+.setup-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 40rem;
+  margin-block: 1rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+}
+
+.setup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline-offset: 2px;
+}

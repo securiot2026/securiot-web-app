@@ -1,0 +1,35 @@
+<h1 class="page-title">{{ 'liveFeed.title' | translate }}</h1>
+
+<p class="feed-nav">
+  <a [routerLink]="['/devices', device()?.id, 'rules']">{{ 'liveFeed.viewRules' | translate }}</a>
+</p>
+
+@if (edgeUrlMissing()) {
+  <p class="feed-hint" role="status">{{ 'liveFeed.needsEdgeUrl' | translate }}</p>
+} @else if (loading()) {
+  <div class="feed-loading">
+    <mat-progress-spinner diameter="32" mode="indeterminate"></mat-progress-spinner>
+    <span>{{ 'liveFeed.loading' | translate }}</span>
+  </div>
+} @else {
+  <div role="alert" aria-live="assertive">
+    @if (errorKey(); as key) {
+      <p class="feed-message feed-message--error">{{ key | translate }}</p>
+    }
+  </div>
+
+  @if (frameSrc(); as src) {
+    <figure class="feed-figure">
+      <img [src]="src" [alt]="'liveFeed.imageAlt' | translate" class="feed-image" />
+      <figcaption role="status" aria-live="polite" class="feed-caption">
+        {{ 'liveFeed.capturedAt' | translate }} {{ frame()?.captured_at | date: 'medium' }}
+      </figcaption>
+    </figure>
+  }
+
+  @if (occupancy(); as count) {
+    <p class="feed-occupancy" role="status" aria-live="polite">
+      {{ 'liveFeed.occupancyCount' | translate: { count: count.count } }}
+    </p>
+  }
+}
