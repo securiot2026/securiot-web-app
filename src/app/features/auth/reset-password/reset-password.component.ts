@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { PageTitleService } from '../../../core/services/page-title.service';
+import { BrandPanelComponent } from '../../../shared/brand-panel/brand-panel.component';
 import { LanguageSwitcherComponent } from '../../../shared/language-switcher/language-switcher.component';
 
 export const PASSWORD_MIN_LENGTH = 10;
@@ -47,7 +48,8 @@ const confirmMatches: ValidatorFn = (control: AbstractControl): ValidationErrors
     MatProgressSpinnerModule,
     TranslateModule,
     RouterLink,
-    LanguageSwitcherComponent
+    LanguageSwitcherComponent,
+    BrandPanelComponent
   ],
   templateUrl: './reset-password.component.html',
   styleUrls: ['../login/login.component.scss', '../auth-extras.scss']
