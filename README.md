@@ -30,6 +30,10 @@ The Cloud API (`repos/securiot-cloud-api`) must be running and seeded (`npm run 
 npm run build
 ```
 
+## Operations
+
+GitFlow, CI/CD, board pairing with the Setup QR and live feed troubleshooting are in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+
 ## Tests
 
 ```bash
