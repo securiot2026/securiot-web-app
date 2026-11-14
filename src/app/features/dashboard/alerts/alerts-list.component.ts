@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AppDatePipe } from '../../../shared/pipes/app-date.pipe';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
 import { FilterBarComponent } from '../../../shared/filter-bar/filter-bar.component';
 import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
@@ -26,7 +27,7 @@ import { Device } from '../../../core/models/device.model';
   standalone: true,
   imports: [
     CommonModule,
-    DatePipe,
+    AppDatePipe,
     FormsModule,
     MatTableModule,
     MatFormFieldModule,
@@ -74,13 +75,14 @@ export class AlertsListComponent implements OnInit {
     });
   });
 
-  readonly displayedColumns = ['createdAt', 'zone', 'device', 'rule', 'severity', 'status', 'message'];
+  readonly displayedColumns = ['severity', 'message', 'location', 'status', 'createdAt'];
 
   constructor(
     private readonly alertsService: AlertsService,
     private readonly zonesService: ZonesService,
     private readonly devicesService: DevicesService,
-    private readonly pageTitle: PageTitleService
+    private readonly pageTitle: PageTitleService,
+    private readonly translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,34 @@ export class AlertsListComponent implements OnInit {
     });
 
     this.load();
+  }
+
+  /** Known rule types get a translated name; anything else is shown readable instead of as a code. */
+  ruleLabel(ruleType: string): string {
+    const key = `alerts.rules.${ruleType}`;
+    const label = this.translate.instant(key);
+    return label !== key ? label : ruleType.replace(/_/g, ' ');
+  }
+
+  statusLabel(status: string): string {
+    const key = `alerts.status.${status}`;
+    const label = this.translate.instant(key);
+    return label !== key ? label : status;
+  }
+
+  statusClass(status: string): string {
+    return status === 'active' ? 'status-active' : status;
+  }
+
+  statusIcon(status: string): string {
+    switch (status) {
+      case 'active':
+        return 'notifications_active';
+      case 'resolved':
+        return 'check_circle';
+      default:
+        return 'visibility';
+    }
   }
 
   zoneName(zoneId: string): string {
@@ -111,10 +141,11 @@ export class AlertsListComponent implements OnInit {
       case 'medium':
         return 'error_outline';
       case 'high':
+        return 'warning_amber';
       case 'critical':
-        return 'warning_amber_rounded';
+        return 'report';
       default:
-        return 'warning_amber_rounded';
+        return 'warning_amber';
     }
   }
 

@@ -95,13 +95,23 @@ $securiot-web-app-theme: mat.define-theme((
   --mdc-protected-button-container-color: var(--marca);
   --mdc-protected-button-label-text-color: var(--noche);
   --mdc-text-button-label-text-color: var(--marca);
-  --mdc-outlined-button-label-text-color: var(--marca);
-  --mdc-outlined-button-outline-color: var(--marca);
+  // Secondary buttons stay neutral so the one filled teal button per view reads as the main action
+  --mdc-outlined-button-label-text-color: var(--texto);
+  --mdc-outlined-button-outline-color: color-mix(in srgb, var(--texto) 32%, transparent);
+  --mdc-dialog-container-color: color-mix(in srgb, var(--texto) 8%, var(--noche));
+  --mdc-dialog-subhead-color: var(--texto);
+  --mdc-dialog-supporting-text-color: var(--texto);
+  --mdc-dialog-container-shape: 16px;
+  --mat-menu-container-color: color-mix(in srgb, var(--texto) 8%, var(--noche));
 
   // 44px minimum targets (A11Y.md)
   --mdc-text-button-container-height: var(--target-size);
   --mdc-outlined-button-container-height: var(--target-size);
   --mdc-filled-button-container-height: var(--target-size);
+  --mdc-filled-button-label-text-size: 1rem;
+  --mdc-outlined-button-label-text-size: 0.9375rem;
+  --mat-standard-button-toggle-selected-state-background-color: color-mix(in srgb, var(--marca) 28%, transparent);
+  --mat-standard-button-toggle-selected-state-text-color: var(--texto);
   --mdc-protected-button-container-height: var(--target-size);
   --mat-standard-button-toggle-height: var(--target-size);
 
@@ -146,6 +156,22 @@ a {
 *:focus-visible {
   outline: 2px solid var(--marca);
   outline-offset: 2px;
+}
+
+// Headings and the main region take focus from code after navigation; they are not controls, so no ring.
+h1[tabindex='-1']:focus,
+h2[tabindex='-1']:focus,
+h3[tabindex='-1']:focus,
+main[tabindex='-1']:focus {
+  outline: none;
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(5, 7, 11, 0.74);
+}
+
+.mat-mdc-dialog-container {
+  border: 1px solid var(--linea);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -220,8 +246,7 @@ a {
 // Table wrapper: scrolls both ways, header row sticks while the body scrolls.
 .table-scroll {
   overflow: auto;
-  max-height: calc(100dvh - 22rem);
-  min-height: 12rem;
+  min-height: 6rem;
   background: var(--superficie);
   border-radius: 12px;
   border: 1px solid var(--linea);
@@ -258,15 +283,94 @@ a {
     background-color: var(--superficie);
   }
 
-  // Data/telemetry cells (timestamps, zone/device codes, log rows) use the
-  // mono face per DESIGN.md "Type" — headers stay in the body face as labels.
+  // Names and sentences stay in the body face so they scan; only timestamps
+  // and codes (cells marked .cell-mono) use the mono face.
   td.mat-mdc-cell {
-    font-family: var(--font-mono);
-    font-size: var(--type-mono-size);
-    line-height: 1.35;
+    font-family: var(--font-body);
+    font-size: var(--type-body-size);
+    line-height: 1.4;
     padding-block: var(--space-sm);
     border-bottom-color: var(--linea);
+    color: var(--texto);
   }
+
+  td.cell-mono {
+    font-family: var(--font-mono);
+    font-size: var(--type-mono-size);
+    white-space: nowrap;
+  }
+
+  td.cell-muted { color: var(--texto-mute); }
+
+  // Two line cell: main text over a muted detail line
+  td.cell-message {
+    min-width: 12rem;
+    .cell-sub { display: block; color: var(--texto-mute); font-size: var(--type-label-size); }
+  }
+  td.cell-actions { text-align: right; white-space: nowrap; width: 1%; }
+  td.cell-nowrap, th.cell-nowrap { white-space: nowrap; }
+}
+
+// Under 56rem rows become cards: each cell shows its column name, so nothing
+// hides behind a horizontal scroll.
+@media (max-width: 56rem) {
+  .table-scroll {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+  }
+
+  .data-table {
+    min-width: 0;
+    display: block;
+
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+    tbody { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+    tr.mat-mdc-row {
+      display: block;
+      height: auto;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--superficie);
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+    }
+
+    td.mat-mdc-cell {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: var(--space-sm);
+      align-items: center;
+      padding: var(--space-xs) 0;
+      border: 0;
+      white-space: normal;
+      overflow-wrap: anywhere;
+
+      &::before {
+        content: attr(data-label);
+        color: var(--texto-mute);
+        font-size: var(--type-label-size);
+      }
+
+      &.cell-title { display: block; font-size: var(--type-heading-size); &::before { content: none; } }
+      .status-chip { justify-self: start; }
+      &.cell-message { display: block; &::before { display: block; margin-bottom: 2px; } }
+      &.cell-actions { display: flex; justify-content: flex-end; width: auto; padding-top: var(--space-sm); }
+      &.cell-actions::before, &.cell-label-none::before { content: none; }
+    }
+
+    tr.mat-mdc-row:hover td.mat-mdc-cell { background: transparent; }
+  }
+}
+
+.filter-select { width: 14rem; max-width: 100%; }
+
+// Destructive confirmation: the one place a filled alerta button is right
+.confirm-danger {
+  --mdc-filled-button-container-color: var(--alerta);
+  --mdc-filled-button-label-text-color: var(--noche);
 }
 
 .filters-bar {
@@ -324,15 +428,36 @@ a {
     color: var(--texto-mute);
   }
 
-  // Alert severity tiers and active alerts — single alerta red,
-  // differentiated by icon and label, never by a second red shade.
-  &--low,
+  // Severity climbs from muted (low) through tinted (medium, high) to a solid
+  // alerta fill (critical). One red, told apart by weight, icon and label.
+  &--low {
+    background: var(--mute-suave);
+    color: var(--texto-mute);
+  }
+
   &--medium,
   &--high,
-  &--active,
-  &--critical {
+  &--active {
     background: var(--alerta-suave);
     color: var(--alerta);
+  }
+
+  &--high { box-shadow: inset 0 0 0 1px var(--alerta); }
+
+  &--critical {
+    background: var(--alerta);
+    color: var(--noche);
+  }
+
+  &--status-active {
+    background: transparent;
+    color: var(--texto);
+    box-shadow: inset 0 0 0 1px var(--linea);
+  }
+
+  &--acknowledged {
+    background: var(--senal-suave);
+    color: color-mix(in srgb, var(--senal) 55%, var(--texto));
   }
 }
 
@@ -370,4 +495,25 @@ a {
   mat-icon { width: 1.05rem; height: 1.05rem; font-size: 1.05rem; }
   &--ok mat-icon { color: var(--verificado); }
   &--fail mat-icon { color: var(--alerta); }
+}
+
+// Small screens: the card sits near the top instead of floating mid-screen.
+@media (max-width: 40rem) {
+  .login-page__lang { padding: var(--space-sm) var(--space-md); }
+  .login-page .login-page__content.login-page__content {
+    align-items: flex-start;
+    padding: var(--space-sm) var(--space-md) var(--space-lg);
+  }
+  .login-page .login-card.login-card { padding: var(--space-lg) var(--space-md); }
+}
+
+
+// Setup: the action comes first on narrow screens, instructions after.
+.setup-wizard .setup-panel { order: -1; }
+@media (min-width: 56rem) {
+  .setup-wizard .setup-panel { order: 0; }
+}
+
+@media (max-width: 40rem) {
+  .filter-select { width: 100%; }
 }

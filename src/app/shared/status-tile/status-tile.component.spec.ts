@@ -49,4 +49,11 @@ describe('StatusTileComponent', () => {
     expect(svg.getAttribute('aria-label')).toBe('Lecturas de las últimas horas');
     expect(svg.hasAttribute('aria-hidden')).toBeFalse();
   });
+
+  it('moves the icon into the label row when there is no status pill', () => {
+    fixture.componentRef.setInput('statusText', '');
+    fixture.detectChanges();
+    expect(el().querySelector('.tile__status')).toBeNull();
+    expect(el().querySelector('.tile__label mat-icon')!.textContent!.trim()).toBe('check_circle');
+  });
 });

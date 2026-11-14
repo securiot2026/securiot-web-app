@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
+import { AppDatePipe } from '../../../shared/pipes/app-date.pipe';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -27,7 +28,7 @@ export const TEST_CARDS = [
   standalone: true,
   imports: [
     CurrencyPipe,
-    DatePipe,
+    AppDatePipe,
     FormsModule,
     MatSelectModule,
     MatFormFieldModule,

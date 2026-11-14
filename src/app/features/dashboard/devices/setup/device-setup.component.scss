@@ -17,9 +17,10 @@
 
 .setup-warning {
   max-width: 40rem;
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--alerta);
-  border-radius: 4px;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid color-mix(in srgb, var(--alerta) 55%, transparent);
+  border-radius: 8px;
+  background: var(--alerta-suave);
 }
 
 .setup-message--error {
@@ -74,8 +75,6 @@
 
 .setup-intro { max-width: 65ch; color: var(--texto-mute); }
 
-// Astryx "Vertical Wizard": a fixed rail of steps beside the action panel.
-// Under 56rem the panel drops below the rail.
 .setup-wizard {
   display: grid;
   grid-template-columns: 1fr;
@@ -112,7 +111,6 @@
 
   &:last-child { padding-bottom: 0; }
 
-  // Connector between badges
   &:not(:last-child)::before {
     content: '';
     position: absolute;

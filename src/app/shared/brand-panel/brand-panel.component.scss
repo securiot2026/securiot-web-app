@@ -14,9 +14,7 @@
   padding: var(--space-2xl);
   box-sizing: border-box;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 40%, var(--marca-suave), transparent 60%),
-    var(--superficie);
+  background: var(--superficie);
   border-left: 1px solid var(--linea);
 
   &__mark {
