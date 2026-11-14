@@ -110,7 +110,7 @@ $securiot-web-app-theme: mat.define-theme((
   --mdc-filled-button-container-height: var(--target-size);
   --mdc-filled-button-label-text-size: 1rem;
   --mdc-outlined-button-label-text-size: 0.9375rem;
-  --mat-standard-button-toggle-selected-state-background-color: var(--marca-suave);
+  --mat-standard-button-toggle-selected-state-background-color: color-mix(in srgb, var(--marca) 28%, transparent);
   --mat-standard-button-toggle-selected-state-text-color: var(--texto);
   --mdc-protected-button-container-height: var(--target-size);
   --mat-standard-button-toggle-height: var(--target-size);
@@ -246,8 +246,7 @@ main[tabindex='-1']:focus {
 // Table wrapper: scrolls both ways, header row sticks while the body scrolls.
 .table-scroll {
   overflow: auto;
-  max-height: calc(100dvh - 22rem);
-  min-height: 12rem;
+  min-height: 6rem;
   background: var(--superficie);
   border-radius: 12px;
   border: 1px solid var(--linea);
@@ -355,6 +354,8 @@ main[tabindex='-1']:focus {
         font-size: var(--type-label-size);
       }
 
+      &.cell-title { display: block; font-size: var(--type-heading-size); &::before { content: none; } }
+      .status-chip { justify-self: start; }
       &.cell-message { display: block; &::before { display: block; margin-bottom: 2px; } }
       &.cell-actions { display: flex; justify-content: flex-end; width: auto; padding-top: var(--space-sm); }
       &.cell-actions::before, &.cell-label-none::before { content: none; }
@@ -364,7 +365,7 @@ main[tabindex='-1']:focus {
   }
 }
 
-.filter-select { width: 13rem; }
+.filter-select { width: 14rem; max-width: 100%; }
 
 // Destructive confirmation: the one place a filled alerta button is right
 .confirm-danger {
@@ -511,4 +512,8 @@ main[tabindex='-1']:focus {
 .setup-wizard .setup-panel { order: -1; }
 @media (min-width: 56rem) {
   .setup-wizard .setup-panel { order: 0; }
+}
+
+@media (max-width: 40rem) {
+  .filter-select { width: 100%; }
 }

@@ -4,7 +4,7 @@
   <h2>{{ 'faceRecognition.edgeUrlLabel' | translate }}</h2>
 
   <form [formGroup]="edgeUrlForm" (ngSubmit)="saveEdgeUrl()" novalidate>
-    <mat-form-field appearance="outline" class="fr-field">
+    <mat-form-field appearance="outline" class="fr-field" subscriptSizing="dynamic">
       <mat-label>{{ 'faceRecognition.edgeUrlLabel' | translate }}</mat-label>
       <input
         matInput

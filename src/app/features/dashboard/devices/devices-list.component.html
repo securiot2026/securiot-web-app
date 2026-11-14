@@ -96,7 +96,7 @@
     <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.name' | translate }}</th>
-        <td mat-cell *matCellDef="let device" [attr.data-label]="'devices.name' | translate"><strong>{{ device.name }}</strong></td>
+        <td mat-cell *matCellDef="let device" class="cell-title" [attr.data-label]="'devices.name' | translate"><strong>{{ device.name }}</strong></td>
       </ng-container>
 
       <ng-container matColumnDef="zone">
