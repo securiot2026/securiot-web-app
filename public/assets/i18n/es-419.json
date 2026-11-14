@@ -10,7 +10,15 @@
     "logout": "Cerrar sesión",
     "language": "Selector de idioma",
     "mainNavigation": "Navegación del panel",
-    "billing": "Plan y facturación"
+    "billing": "Plan y facturación",
+    "groups": {
+      "monitoring": "Monitoreo",
+      "account": "Cuenta"
+    },
+    "collapse": "Contraer menú lateral",
+    "expand": "Expandir menú lateral",
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación"
   },
   "login": {
     "title": "Inicia sesión en SecurIoT",
@@ -75,7 +83,8 @@
     "noLocation": "Sin ubicación registrada",
     "createdAt": "Fecha de registro",
     "loading": "Cargando zonas…",
-    "resultsAnnounce": "Zonas: {{count}}"
+    "search": "Buscar zonas por nombre o ubicación",
+    "count": "{{count}} zonas"
   },
   "devices": {
     "title": "Dispositivos",
@@ -91,12 +100,24 @@
     "loading": "Cargando dispositivos…",
     "filterByZone": "Filtrar por zona",
     "allZones": "Todas las zonas",
-    "resultsAnnounce": "Dispositivos: {{count}}",
     "faceRecognition": "Reconocimiento facial",
     "rules": "Reglas",
     "liveFeed": "Feed en vivo",
     "operations": "Acciones del dispositivo",
-    "setup": "Configurar dispositivo"
+    "setup": "Configurar dispositivo",
+    "search": "Buscar dispositivos por nombre o zona",
+    "count": "{{count}} dispositivos",
+    "statusFilter": "Filtrar por estado",
+    "tiles": {
+      "label": "Resumen de dispositivos",
+      "online": "En línea",
+      "offline": "Sin conexión",
+      "lastReading": "Última lectura",
+      "ofTotal": "de {{total}} dispositivos",
+      "none": "Sin lecturas",
+      "recent": "Lectura reciente",
+      "noReadings": "Ningún dispositivo ha reportado"
+    }
   },
   "faceRecognition": {
     "title": "Reconocimiento facial",
@@ -219,8 +240,10 @@
     "status.active": "Activa",
     "status.resolved": "Resuelta",
     "loading": "Cargando alertas…",
-    "resultsAnnounce": "Alertas: {{count}}",
-    "clearFilters": "Limpiar filtros"
+    "clearFilters": "Limpiar filtros",
+    "search": "Buscar alertas por mensaje, regla, zona o dispositivo",
+    "count": "{{count}} alertas",
+    "severityFilter": "Filtrar por severidad"
   },
   "setup": {
     "title": "Configurar dispositivo",
@@ -251,13 +274,24 @@
     "errorNotFound": "No encontramos este dispositivo en tu cuenta.",
     "errorNotConfigured": "El servidor aún no está listo para configurar dispositivos. Pide al administrador que defina el secreto de configuración de dispositivos en la Cloud API.",
     "errorGeneric": "No pudimos preparar el QR de configuración. Revisa tu conexión e inténtalo de nuevo.",
-    "errorQr": "No se pudo dibujar el código QR. Copia el enlace de abajo en su lugar."
+    "errorQr": "No se pudo dibujar el código QR. Copia el enlace de abajo en su lugar.",
+    "stepsRail": "Pasos de configuración",
+    "stepLabel": "Paso {{n}}",
+    "guidanceTitle": "Antes de empezar"
   },
   "common": {
     "loadError": "No pudimos cargar esta información. Revisa tu conexión e inténtalo de nuevo.",
     "retry": "Reintentar",
     "close": "Cerrar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "clearFilters": "Limpiar filtros",
+    "resultCount": "Mostrando {{shown}} de {{total}}",
+    "noMatches": "Ningún resultado coincide con la búsqueda o los filtros.",
+    "noMatchesTitle": "Sin coincidencias",
+    "all": "Todos",
+    "filterChips": "Filtros rápidos",
+    "step": "Paso"
   },
   "billing": {
     "title": "Plan y facturación",
@@ -363,6 +397,28 @@
       "status": "Estado",
       "approved": "Aprobado",
       "declined": "Rechazado"
+    },
+    "steps": {
+      "label": "Pasos del pago",
+      "plan": "Plan",
+      "payment": "Pago",
+      "receipt": "Recibo",
+      "done": "completado",
+      "current": "paso actual",
+      "pending": "pendiente",
+      "failed": "con problema"
+    },
+    "summary": {
+      "title": "Resumen del pedido",
+      "status": "Estado",
+      "pending": "Pendiente de pago",
+      "processing": "Procesando pago",
+      "paid": "Pagado",
+      "declined": "Pago rechazado",
+      "failed": "Pago no completado"
     }
+  },
+  "brand": {
+    "tagline": "Seguridad perimetral e industrial, verificada en tiempo real."
   }
 }

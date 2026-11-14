@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
@@ -6,6 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
+import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
+import { FilterBarComponent } from '../../../shared/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
 import { ZonesService } from '../../../core/services/zones.service';
 import { PageTitleService } from '../../../core/services/page-title.service';
 import { Zone } from '../../../core/models/zone.model';
@@ -21,7 +24,10 @@ import { Zone } from '../../../core/models/zone.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslateModule,
+    EmptyStateComponent,
+    FilterBarComponent,
+    PageHeaderComponent
   ],
   templateUrl: './zones-list.component.html',
   styleUrl: './zones-list.component.scss'
@@ -30,6 +36,13 @@ export class ZonesListComponent implements OnInit {
   readonly zones = signal<Zone[]>([]);
   readonly loading = signal(true);
   readonly error = signal(false);
+  readonly query = signal('');
+  readonly filtered = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    return q
+      ? this.zones().filter((zone) => `${zone.name} ${zone.location ?? ''}`.toLowerCase().includes(q))
+      : this.zones();
+  });
   readonly displayedColumns = ['name', 'location', 'createdAt', 'actions'];
 
   constructor(
@@ -40,6 +53,10 @@ export class ZonesListComponent implements OnInit {
   ngOnInit(): void {
     this.pageTitle.set('zones.title');
     this.load();
+  }
+
+  clearFilters(): void {
+    this.query.set('');
   }
 
   load(): void {

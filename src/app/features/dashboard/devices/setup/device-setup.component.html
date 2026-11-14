@@ -1,26 +1,30 @@
 <h1 class="page-title">{{ 'setup.title' | translate }}</h1>
 
 @if (device(); as dev) {
-  <p>
+  <p class="setup-device">
     {{ 'setup.deviceLabel' | translate: { name: dev.name } }}
     <a routerLink="/devices">{{ 'setup.backToDevices' | translate }}</a>
   </p>
 }
 
-<p>{{ 'setup.intro' | translate }}</p>
+<p class="setup-intro">{{ 'setup.intro' | translate }}</p>
 
-<section>
-  <h2>{{ 'setup.stepsTitle' | translate }}</h2>
-  <ol>
-    <li>{{ 'setup.step1' | translate }}</li>
-    <li>{{ 'setup.step2' | translate }}</li>
-    <li>{{ 'setup.step3' | translate }}</li>
-    <li>{{ 'setup.step4' | translate }}</li>
-    <li>{{ 'setup.step5' | translate }}</li>
-  </ol>
-</section>
+<div class="setup-wizard">
+  <section class="setup-rail" aria-labelledby="setup-steps-title">
+    <h2 id="setup-steps-title">{{ 'setup.stepsTitle' | translate }}</h2>
+    <ol class="setup-rail__list">
+      @for (n of [1, 2, 3, 4, 5]; track n) {
+        <li class="setup-rail__item">
+          <span class="setup-rail__badge" aria-hidden="true">{{ n }}</span>
+          <span class="setup-rail__text">{{ 'setup.step' + n | translate }}</span>
+        </li>
+      }
+    </ol>
+  </section>
 
-<p id="setup-warning" class="setup-warning">
+  <section class="setup-panel" aria-labelledby="setup-panel-title">
+    <h2 id="setup-panel-title">{{ 'setup.guidanceTitle' | translate }}</h2>
+    <p id="setup-warning" class="setup-warning">
   <mat-icon aria-hidden="true">warning</mat-icon>
   <span>
     <strong>{{ 'setup.warningTitle' | translate }}</strong>
@@ -86,3 +90,5 @@
     <button mat-stroked-button type="button" (click)="hide()">{{ 'setup.hideButton' | translate }}</button>
   </div>
 }
+  </section>
+</div>

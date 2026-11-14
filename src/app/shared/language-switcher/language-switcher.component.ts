@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService, SUPPORTED_LANGS, SupportedLang } from '../../core/services/language.service';
@@ -10,6 +10,8 @@ import { LanguageService, SUPPORTED_LANGS, SupportedLang } from '../../core/serv
   templateUrl: './language-switcher.component.html'
 })
 export class LanguageSwitcherComponent {
+  /** Stack the toggles vertically, used by the collapsed rail. */
+  @Input() vertical = false;
   readonly langs = SUPPORTED_LANGS;
 
   constructor(readonly languageService: LanguageService) {}

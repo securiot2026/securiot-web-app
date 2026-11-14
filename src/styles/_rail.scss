@@ -1,0 +1,181 @@
+// Side rail of the dashboard shell. Global partial so the component stays inside its style budget.
+// Collapsible rail (Astryx "Side Nav" pattern): grouped links, active
+// indicator in marca, user and language area at the bottom.
+.rail {
+  --mat-sidenav-container-width: 16rem;
+  width: 16rem;
+  background: var(--noche);
+  border-right: 1px solid var(--linea);
+  transition: width 180ms ease-out;
+
+  &--collapsed {
+    --mat-sidenav-container-width: 5rem;
+    width: 5rem;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-md) var(--space-sm);
+    box-sizing: border-box;
+    gap: var(--space-md);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 0 var(--space-sm);
+    min-height: var(--target-size);
+  }
+
+  &__mark {
+    flex: none;
+  }
+
+  &__brand {
+    flex: 1 1 auto;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--type-heading-size);
+    letter-spacing: 0.02em;
+  }
+
+  &__close {
+    width: var(--target-size);
+    height: var(--target-size);
+  }
+
+  &__nav {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+
+  &__group {
+    margin-bottom: var(--space-md);
+  }
+
+  &__group-title {
+    margin: 0 0 var(--space-xs);
+    padding: 0 var(--space-md);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-mute);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    min-height: var(--target-size);
+    padding: 0 var(--space-md);
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: var(--texto);
+    text-decoration: none;
+    font-weight: 500;
+
+    mat-icon {
+      flex: none;
+      color: var(--texto-mute);
+    }
+
+    &:hover {
+      background: var(--marca-suave);
+    }
+
+    &--active {
+      background: var(--marca-suave);
+      font-weight: 700;
+
+      mat-icon {
+        color: var(--marca);
+      }
+
+      // Active indicator: a marca bar, together with bold text and aria-current.
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: var(--space-sm);
+        bottom: var(--space-sm);
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: var(--marca);
+      }
+    }
+  }
+
+  &--collapsed &__link {
+    justify-content: center;
+    padding: 0;
+  }
+
+  &--collapsed &__head,
+  &--collapsed &__foot {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  &__foot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--linea);
+  }
+
+  &__logout,
+  &__toggle {
+    min-height: var(--target-size);
+  }
+
+  &__toggle {
+    align-self: flex-end;
+    width: var(--target-size);
+  }
+
+  &--collapsed &__logout {
+    min-width: var(--target-size);
+    padding: 0;
+  }
+
+  &--collapsed &__logout mat-icon {
+    margin: 0;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    transition: none;
+  }
+}
+
+// Vertical language toggle must fit the 5rem rail.
+.rail--collapsed .language-switcher {
+  width: 100%;
+
+  .mat-button-toggle-label-content {
+    padding: 0 var(--space-sm);
+  }
+
+  .mat-pseudo-checkbox {
+    margin-right: var(--space-xs);
+  }
+}

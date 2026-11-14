@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+.tile {
+  --tile-accent: var(--texto-mute);
+  --tile-tint: var(--mute-suave);
+  --tile-text: var(--tile-accent);
+  height: 100%;
+  box-sizing: border-box;
+  padding: var(--space-md);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-left: 4px solid var(--tile-accent);
+  border-radius: 12px;
+
+  &--online { --tile-accent: var(--verificado); --tile-tint: var(--verificado-suave); }
+  &--alert { --tile-accent: var(--alerta); --tile-tint: var(--alerta-suave); }
+  // senal text on its own tint is 4.1:1, so the text is lifted toward texto
+  &--validating { --tile-accent: var(--senal); --tile-tint: var(--senal-suave); --tile-text: color-mix(in srgb, var(--senal) 55%, var(--texto)); }
+
+  p {
+    margin: 0;
+  }
+
+  &__label {
+    font-size: var(--type-label-size);
+    color: var(--texto-mute);
+  }
+
+  &__value {
+    margin-top: var(--space-xs);
+    font-family: var(--font-display);
+    font-size: var(--type-display-size);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--texto);
+    overflow-wrap: anywhere;
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 999px;
+    background: var(--tile-tint);
+    color: var(--tile-text);
+    font-size: var(--type-label-size);
+    font-weight: 600;
+
+    mat-icon {
+      width: 1.05rem;
+      height: 1.05rem;
+      font-size: 1.05rem;
+    }
+  }
+
+  &__hint {
+    margin-top: var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-size);
+    color: var(--texto-mute);
+    overflow-wrap: anywhere;
+  }
+
+  &__spark {
+    display: block;
+    width: 100%;
+    height: 24px;
+    margin-top: var(--space-sm);
+    color: var(--tile-accent);
+  }
+}

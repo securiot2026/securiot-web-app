@@ -139,7 +139,7 @@ export class BillingComponent implements OnInit {
     this.dialog
       .open<CheckoutDialogComponent, CheckoutDialogData, 'approved' | undefined>(CheckoutDialogComponent, {
         data,
-        width: '32rem',
+        width: '46rem',
         maxWidth: '95vw',
         autoFocus: 'first-tabbable',
         restoreFocus: true,

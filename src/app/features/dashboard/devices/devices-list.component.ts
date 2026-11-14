@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
+import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
+import { FilterBarComponent } from '../../../shared/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
+import { StatusTileComponent } from '../../../shared/status-tile/status-tile.component';
 import { forkJoin } from 'rxjs';
 import { DevicesService } from '../../../core/services/devices.service';
 import { ZonesService } from '../../../core/services/zones.service';
@@ -30,7 +35,12 @@ import { Zone } from '../../../core/models/zone.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatButtonModule,
-    TranslateModule
+    MatChipsModule,
+    TranslateModule,
+    EmptyStateComponent,
+    FilterBarComponent,
+    PageHeaderComponent,
+    StatusTileComponent
   ],
   templateUrl: './devices-list.component.html',
   styleUrl: './devices-list.component.scss'
@@ -41,6 +51,32 @@ export class DevicesListComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal(false);
   readonly selectedZoneId = signal<string>('');
+  readonly query = signal('');
+  readonly statusFilter = signal<'all' | 'online' | 'offline'>('all');
+
+  readonly onlineCount = computed(() => this.devices().filter((d) => d.isOnline).length);
+  readonly offlineCount = computed(() => this.devices().length - this.onlineCount());
+  /** Device with the most recent reading, if any device has reported. */
+  readonly latest = computed(() => {
+    let best: DeviceStatus | null = null;
+    for (const device of this.devices()) {
+      if (device.lastReading && (!best || device.lastReading.recordedAt > best.lastReading!.recordedAt)) {
+        best = device;
+      }
+    }
+    return best;
+  });
+
+  readonly filtered = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    const status = this.statusFilter();
+    return this.devices().filter((device) => {
+      if (status === 'online' && !device.isOnline) return false;
+      if (status === 'offline' && device.isOnline) return false;
+      return !q || `${device.name} ${this.zoneName(device.zoneId)}`.toLowerCase().includes(q);
+    });
+  });
+
   readonly displayedColumns = ['name', 'zone', 'status', 'lastReading', 'actions'];
 
   constructor(
@@ -57,6 +93,15 @@ export class DevicesListComponent implements OnInit {
       this.selectedZoneId.set(zoneFromQuery);
     }
     this.load();
+  }
+
+  setStatus(value: 'all' | 'online' | 'offline' | undefined): void {
+    this.statusFilter.set(value ?? 'all');
+  }
+
+  clearFilters(): void {
+    this.query.set('');
+    this.statusFilter.set('all');
   }
 
   zoneName(zoneId: string): string {

@@ -1,31 +1,34 @@
-<h1 class="page-title">{{ 'zones.title' | translate }}</h1>
+<app-page-header
+  [title]="'zones.title' | translate"
+  [countLabel]="!loading() && !error() ? ('zones.count' | translate: { count: zones().length }) : ''"
+></app-page-header>
 
-<div class="visually-hidden" role="status" aria-live="polite">
-  @if (!loading() && !error()) {
-    {{ 'zones.resultsAnnounce' | translate: { count: zones().length } }}
-  }
-</div>
+@if (!loading() && !error() && zones().length > 0) {
+  <app-filter-bar
+    [searchLabel]="'zones.search' | translate"
+    [clearLabel]="'common.clearFilters' | translate"
+    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: zones().length }"
+    [showClear]="query() !== ''"
+    [(query)]="query"
+    (clear)="clearFilters()"
+  ></app-filter-bar>
+}
 
 @if (loading()) {
-  <div class="state-panel" role="status">
-    <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
-    <p>{{ 'zones.loading' | translate }}</p>
-  </div>
+  <app-empty-state variant="loading" [body]="'zones.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <div class="state-panel state-panel--error" role="alert">
-    <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'common.loadError' | translate }}</p>
+  <app-empty-state variant="error" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 } @else if (zones().length === 0) {
-  <div class="state-panel">
-    <mat-icon aria-hidden="true">place</mat-icon>
-    <h2>{{ 'zones.emptyTitle' | translate }}</h2>
-    <p>{{ 'zones.emptyBody' | translate }}</p>
-  </div>
+  <app-empty-state icon="place" [title]="'zones.emptyTitle' | translate" [body]="'zones.emptyBody' | translate"></app-empty-state>
+} @else if (filtered().length === 0) {
+  <app-empty-state variant="filtered" [title]="'common.noMatchesTitle' | translate" [body]="'common.noMatches' | translate">
+    <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+  </app-empty-state>
 } @else {
   <div class="table-scroll">
-    <table mat-table [dataSource]="zones()" class="data-table">
+    <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'zones.title' | translate }}</th>
         <td mat-cell *matCellDef="let zone">{{ zone.name }}</td>
@@ -52,7 +55,7 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>

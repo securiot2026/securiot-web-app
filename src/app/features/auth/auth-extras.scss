@@ -44,11 +44,11 @@
   padding: 1rem;
   border: 1px solid var(--marca);
   border-radius: 8px;
-  background: rgba(31, 211, 196, 0.08);
+  background: var(--marca-suave);
 
   &--invalid {
     border-color: var(--alerta);
-    background: rgba(255, 92, 108, 0.1);
+    background: var(--alerta-suave);
   }
 
   &__heading {

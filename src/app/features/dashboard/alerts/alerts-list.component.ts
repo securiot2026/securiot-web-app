@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -7,7 +7,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
+import { EmptyStateComponent } from '../../../shared/empty-state/empty-state.component';
+import { FilterBarComponent } from '../../../shared/filter-bar/filter-bar.component';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
 import { forkJoin } from 'rxjs';
 import { AlertsService } from '../../../core/services/alerts.service';
 import { ZonesService } from '../../../core/services/zones.service';
@@ -30,7 +34,11 @@ import { Device } from '../../../core/models/device.model';
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    MatChipsModule,
+    TranslateModule,
+    EmptyStateComponent,
+    FilterBarComponent,
+    PageHeaderComponent
   ],
   templateUrl: './alerts-list.component.html',
   styleUrl: './alerts-list.component.scss'
@@ -46,9 +54,25 @@ export class AlertsListComponent implements OnInit {
   readonly deviceFilter = signal<string>('');
   readonly statusFilter = signal<string>('');
 
+  readonly query = signal('');
+  readonly severityFilter = signal<'all' | 'low' | 'medium' | 'high'>('all');
+
   get hasActiveFilters(): boolean {
     return !!(this.zoneFilter() || this.deviceFilter() || this.statusFilter());
   }
+
+  readonly filtered = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    const severity = this.severityFilter();
+    return this.alerts().filter((alert) => {
+      if (severity === 'high' ? !['high', 'critical'].includes(alert.severity) : severity !== 'all' && alert.severity !== severity) {
+        return false;
+      }
+      if (!q) return true;
+      const haystack = `${alert.message} ${alert.ruleType} ${this.zoneName(alert.zoneId)} ${this.deviceName(alert.deviceId)}`;
+      return haystack.toLowerCase().includes(q);
+    });
+  });
 
   readonly displayedColumns = ['createdAt', 'zone', 'device', 'rule', 'severity', 'status', 'message'];
 
@@ -105,7 +129,13 @@ export class AlertsListComponent implements OnInit {
     this.load();
   }
 
+  setSeverity(value: 'all' | 'low' | 'medium' | 'high' | undefined): void {
+    this.severityFilter.set(value ?? 'all');
+  }
+
   clearFilters(): void {
+    this.query.set('');
+    this.severityFilter.set('all');
     this.zoneFilter.set('');
     this.deviceFilter.set('');
     this.statusFilter.set('');
