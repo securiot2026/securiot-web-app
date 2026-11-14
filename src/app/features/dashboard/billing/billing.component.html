@@ -1,0 +1,200 @@
+<h1 class="page-title">{{ 'billing.title' | translate }}</h1>
+
+<section class="sim-banner" aria-labelledby="sim-title">
+  <h2 id="sim-title" class="sim-banner__title">
+    <mat-icon aria-hidden="true">science</mat-icon>
+    {{ 'billing.simulation.title' | translate }}
+  </h2>
+  <p>{{ 'billing.simulation.body' | translate }}</p>
+  <div class="table-scroll">
+    <table class="plain-table">
+      <caption class="visually-hidden">{{ 'billing.simulation.tableCaption' | translate }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'billing.simulation.card' | translate }}</th>
+          <th scope="col">{{ 'billing.simulation.result' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (card of testCards; track card.number) {
+          <tr>
+            <td class="mono">{{ card.number }}</td>
+            <td>
+              <span class="result-chip" [class.result-chip--ok]="card.icon === 'check_circle'" [class.result-chip--fail]="card.icon !== 'check_circle'">
+                <mat-icon aria-hidden="true">{{ card.icon }}</mat-icon>
+                {{ card.resultKey | translate }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="sim-banner__hint">{{ 'billing.simulation.otherCards' | translate }}</p>
+</section>
+
+<div class="visually-hidden" role="status" aria-live="polite">
+  @if (statusMessage()) { {{ statusMessage() | translate }} }
+</div>
+
+<section class="block" aria-labelledby="sub-title">
+  <h2 id="sub-title" class="block__title">{{ 'billing.subscription.title' | translate }}</h2>
+
+  @if (subLoading()) {
+    <div class="state-panel" role="status">
+      <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+      <p>{{ 'billing.subscription.loading' | translate }}</p>
+    </div>
+  } @else if (subError()) {
+    <div class="state-panel state-panel--error" role="alert">
+      <mat-icon aria-hidden="true">error_outline</mat-icon>
+      <p>{{ 'billing.errors.unavailable' | translate }}</p>
+      <button mat-stroked-button type="button" (click)="loadSubscription()">{{ 'common.retry' | translate }}</button>
+    </div>
+  } @else {
+    @if (subscription(); as sub) {
+      <div class="sub-card">
+        <p class="sub-status">
+          <span class="result-chip" [class.result-chip--ok]="sub.status === 'active'" [class.result-chip--fail]="sub.status !== 'active'">
+            <mat-icon aria-hidden="true">{{ sub.status === 'active' ? 'check_circle' : 'remove_circle_outline' }}</mat-icon>
+            {{ (sub.status === 'active' ? 'billing.subscription.active' : 'billing.subscription.canceled') | translate }}
+          </span>
+        </p>
+        <dl class="kv">
+          <dt>{{ 'billing.receipt.plan' | translate }}</dt><dd>{{ currentPlanName() }}</dd>
+          <dt>{{ 'billing.receipt.cameras' | translate }}</dt><dd>{{ sub.cameras }}</dd>
+          <dt>{{ 'billing.subscription.monthly' | translate }}</dt>
+          <dd>{{ sub.monthlyPerCamera * sub.cameras | currency: currency() : 'S/ ' }}</dd>
+          <dt>{{ (sub.status === 'active' ? 'billing.subscription.nextBilling' : 'billing.subscription.accessUntil') | translate }}</dt>
+          <dd>{{ sub.currentPeriodEnd | date: 'mediumDate' }}</dd>
+        </dl>
+        @if (sub.status === 'active') {
+          <button mat-stroked-button type="button" (click)="confirmCancel()" [disabled]="canceling()">
+            {{ (canceling() ? 'billing.subscription.canceling' : 'billing.subscription.cancel') | translate }}
+          </button>
+        }
+        @if (cancelError()) {
+          <p class="inline-error" role="alert">
+            <mat-icon aria-hidden="true">error_outline</mat-icon>
+            {{ 'billing.errors.cancelFailed' | translate }}
+          </p>
+        }
+      </div>
+    } @else {
+      <div class="state-panel">
+        <mat-icon aria-hidden="true">credit_card_off</mat-icon>
+        <h3>{{ 'billing.subscription.noneTitle' | translate }}</h3>
+        <p>{{ 'billing.subscription.noneBody' | translate }}</p>
+      </div>
+    }
+
+    <h3 class="block__subtitle">{{ 'billing.history.title' | translate }}</h3>
+    @if (payments().length === 0) {
+      <p class="muted">{{ 'billing.history.empty' | translate }}</p>
+    } @else {
+      <div class="table-scroll">
+        <table class="plain-table">
+          <caption class="visually-hidden">{{ 'billing.history.title' | translate }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'billing.receipt.date' | translate }}</th>
+              <th scope="col">{{ 'billing.receipt.paymentId' | translate }}</th>
+              <th scope="col">{{ 'billing.receipt.card' | translate }}</th>
+              <th scope="col">{{ 'billing.totals.total' | translate }}</th>
+              <th scope="col">{{ 'billing.history.status' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (payment of payments(); track payment.id) {
+              <tr>
+                <td>{{ payment.createdAt | date: 'medium' }}</td>
+                <td class="mono">{{ payment.id }}</td>
+                <td class="mono">{{ payment.cardBrand }} **** {{ payment.last4 }}</td>
+                <td class="mono">{{ payment.total | currency: payment.currency : 'S/ ' }}</td>
+                <td>
+                  <span class="result-chip" [class.result-chip--ok]="payment.status === 'approved'" [class.result-chip--fail]="payment.status !== 'approved'">
+                    <mat-icon aria-hidden="true">{{ payment.status === 'approved' ? 'check_circle' : 'cancel' }}</mat-icon>
+                    {{ (payment.status === 'approved' ? 'billing.history.approved' : 'billing.history.declined') | translate }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>
+
+@if (!hasActiveSubscription()) {
+  <section class="block" aria-labelledby="plans-title">
+    <h2 id="plans-title" class="block__title">{{ 'billing.plans.title' | translate }}</h2>
+
+    @if (plansLoading()) {
+      <div class="state-panel" role="status">
+        <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+        <p>{{ 'billing.plans.loading' | translate }}</p>
+      </div>
+    } @else if (plansError()) {
+      <div class="state-panel state-panel--error" role="alert">
+        <mat-icon aria-hidden="true">error_outline</mat-icon>
+        <p>{{ 'billing.errors.unavailable' | translate }}</p>
+        <button mat-stroked-button type="button" (click)="loadPlans()">{{ 'common.retry' | translate }}</button>
+      </div>
+    } @else {
+      <mat-form-field appearance="outline" class="cameras-field">
+        <mat-label>{{ 'billing.plans.cameras' | translate }}</mat-label>
+        <mat-select [value]="cameras()" (selectionChange)="setCameras($event.value)">
+          @for (n of cameraOptions; track n) {
+            <mat-option [value]="n">{{ n }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="visually-hidden" role="status" aria-live="polite">
+        {{ 'billing.plans.camerasAnnounce' | translate: { count: cameras() } }}
+      </div>
+
+      <ul class="plan-grid">
+        @for (plan of plans(); track plan.id) {
+          <li class="plan-card" [class.plan-card--recommended]="isRecommended(plan)">
+            <article [attr.aria-labelledby]="'plan-name-' + plan.id">
+              @if (isRecommended(plan)) {
+                <p class="badge">
+                  <mat-icon aria-hidden="true">star</mat-icon>
+                  {{ 'billing.plans.recommended' | translate }}
+                </p>
+              }
+              <h3 [id]="'plan-name-' + plan.id" class="plan-card__name">{{ plan.name }}</h3>
+              <p class="plan-card__price">
+                <span class="mono">{{ plan.monthlyPerCamera | currency: currency() : 'S/ ' }}</span>
+                {{ 'billing.plans.perCameraMonth' | translate }}
+              </p>
+              <p class="plan-card__install">
+                {{ 'billing.plans.install' | translate: { fee: (plan.installFeePerCamera | currency: currency() : 'S/ ') } }}
+              </p>
+              <ul class="plan-card__features">
+                @for (feature of plan.features; track feature) {
+                  <li><mat-icon aria-hidden="true">check</mat-icon>{{ feature }}</li>
+                }
+              </ul>
+              @if (planTotals()[plan.id]; as t) {
+                <dl class="totals">
+                  <dt>{{ 'billing.totals.subtotal' | translate }}</dt>
+                  <dd>{{ t.subtotal | currency: currency() : 'S/ ' }}</dd>
+                  <dt>{{ 'billing.totals.igvRate' | translate: { rate: igvPercent() } }}</dt>
+                  <dd>{{ t.igv | currency: currency() : 'S/ ' }}</dd>
+                  <dt class="totals__total">{{ 'billing.totals.firstCharge' | translate }}</dt>
+                  <dd class="totals__total">{{ t.total | currency: currency() : 'S/ ' }}</dd>
+                </dl>
+              }
+              <button mat-flat-button type="button" (click)="choose(plan)" [attr.aria-describedby]="'plan-name-' + plan.id">
+                {{ 'billing.plans.choose' | translate: { plan: plan.name } }}
+              </button>
+            </article>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}

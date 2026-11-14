@@ -36,3 +36,25 @@ from `develop` into `main`.
 frame. A 403 with an empty body means Cloudflare is challenging the VPS, a 502
 means the admin keys differ, and "offline" means the Edge heartbeat is failing.
 See the Edge repo `docs/LOCAL_DEPLOYMENT.md`.
+
+## Plan y facturación (simulated payments)
+
+Route `/billing`, nav item "Plan y facturación". It lists the plans from
+`GET /billing/plans`, runs a card checkout in a dialog (`POST /billing/checkout`),
+shows the current subscription and payment history, and cancels with a confirm
+step. The Cloud API must have the billing endpoints deployed, otherwise the page
+shows a friendly error state with a retry button.
+
+The gateway is a simulation and no real money is charged. The page shows a
+permanent notice and the test card table. Only these cards work:
+
+| Card | Result |
+|------|--------|
+| 4242 4242 4242 4242 | Approved |
+| 4000 0000 0000 0002 | Declined |
+| 4000 0000 0000 9995 | Insufficient funds |
+| 4000 0000 0000 0069 | Expired card |
+
+Any other number is declined as an unknown test card. Use any holder name, a
+future expiry and a 3 digit CVC. The form is cleared on submit and card data is
+never stored or logged by the web app.

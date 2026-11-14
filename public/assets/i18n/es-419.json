@@ -9,7 +9,8 @@
     "alerts": "Alertas",
     "logout": "Cerrar sesión",
     "language": "Selector de idioma",
-    "mainNavigation": "Navegación del panel"
+    "mainNavigation": "Navegación del panel",
+    "billing": "Plan y facturación"
   },
   "login": {
     "title": "Inicia sesión en SecurIoT",
@@ -255,6 +256,113 @@
   "common": {
     "loadError": "No pudimos cargar esta información. Revisa tu conexión e inténtalo de nuevo.",
     "retry": "Reintentar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "cancel": "Cancelar"
+  },
+  "billing": {
+    "title": "Plan y facturación",
+    "simulation": {
+      "title": "Pasarela de pago simulada: no se cobra dinero real",
+      "body": "Usa solo las tarjetas de prueba de la tabla. Cualquier otro número se rechaza.",
+      "short": "Pasarela de pago simulada: no se cobra dinero real. Usa solo las tarjetas de prueba.",
+      "tableCaption": "Tarjetas de prueba y su resultado",
+      "card": "Número de tarjeta",
+      "result": "Resultado",
+      "approved": "Aprobada",
+      "declined": "Rechazada",
+      "insufficient": "Fondos insuficientes",
+      "expired": "Tarjeta vencida",
+      "otherCards": "Cualquier otro número se rechaza como tarjeta de prueba desconocida. Usa cualquier titular, fecha futura y CVC de 3 dígitos."
+    },
+    "plans": {
+      "title": "Elige tu plan",
+      "loading": "Cargando planes…",
+      "cameras": "Cantidad de cámaras (1 a 8)",
+      "camerasAnnounce": "{{count}} cámaras seleccionadas. Los totales se actualizaron.",
+      "recommended": "Recomendado",
+      "perCameraMonth": "por cámara al mes",
+      "install": "Instalación: {{fee}} por cámara (pago único)",
+      "choose": "Contratar {{plan}}"
+    },
+    "totals": {
+      "subtotal": "Subtotal",
+      "igv": "IGV",
+      "igvRate": "IGV ({{rate}} %)",
+      "total": "Total",
+      "firstCharge": "Total del primer cobro"
+    },
+    "checkout": {
+      "title": "Pago con tarjeta",
+      "summary": "Plan {{plan}} con {{cameras}} cámaras. Total del primer cobro:",
+      "cardNumber": "Número de tarjeta",
+      "cardNumberRequired": "Ingresa el número de tarjeta.",
+      "cardNumberInvalid": "Ingresa un número de tarjeta válido de 13 a 19 dígitos.",
+      "holder": "Nombre del titular",
+      "holderRequired": "Ingresa el nombre del titular.",
+      "expiry": "Vencimiento (MM/AA)",
+      "expiryRequired": "Ingresa la fecha de vencimiento.",
+      "expiryInvalid": "Usa el formato MM/AA con un mes válido.",
+      "cvc": "CVC",
+      "cvcRequired": "Ingresa el CVC.",
+      "cvcInvalid": "El CVC tiene 3 o 4 dígitos.",
+      "pay": "Pagar {{total}}",
+      "processing": "Procesando el pago…",
+      "processingShort": "Procesando…",
+      "approvedTitle": "Pago aprobado",
+      "approvedAnnounce": "Pago aprobado. Tu suscripción está activa.",
+      "declinedTitle": "Pago rechazado",
+      "errorTitle": "No pudimos completar el pago",
+      "retry": "Reintentar",
+      "done": "Listo"
+    },
+    "receipt": {
+      "paymentId": "N.º de pago",
+      "plan": "Plan",
+      "cameras": "Cámaras",
+      "card": "Tarjeta",
+      "date": "Fecha",
+      "simulated": "Comprobante de una pasarela simulada. No se cobró dinero real."
+    },
+    "reasons": {
+      "card_declined": "El banco rechazó la tarjeta. Prueba con otra tarjeta de prueba.",
+      "insufficient_funds": "La tarjeta no tiene fondos suficientes.",
+      "expired_card": "La tarjeta está vencida.",
+      "unknown_test_card": "Esa tarjeta no es una tarjeta de prueba. Usa una de la tabla de tarjetas de prueba.",
+      "unknown": "No pudimos procesar el pago con esa tarjeta."
+    },
+    "errors": {
+      "generic": "Ocurrió un error al procesar el pago. Inténtalo de nuevo.",
+      "conflict": "Ya tienes una suscripción activa. Cancélala antes de contratar otro plan.",
+      "validation": "Los datos del pago no son válidos. Revisa la información e inténtalo de nuevo.",
+      "unavailable": "No pudimos cargar la información de facturación. Puede que el servicio aún no esté disponible. Inténtalo de nuevo en unos minutos.",
+      "cancelFailed": "No pudimos cancelar la suscripción. Inténtalo de nuevo."
+    },
+    "subscription": {
+      "title": "Tu suscripción",
+      "loading": "Cargando suscripción…",
+      "active": "Activa",
+      "canceled": "Cancelada",
+      "monthly": "Cobro mensual",
+      "nextBilling": "Próximo cobro",
+      "accessUntil": "Vigente hasta",
+      "cancel": "Cancelar suscripción",
+      "canceling": "Cancelando…",
+      "canceledAnnounce": "Suscripción cancelada.",
+      "noneTitle": "Sin suscripción activa",
+      "noneBody": "Elige un plan para activar tu servicio."
+    },
+    "cancelDialog": {
+      "title": "¿Cancelar la suscripción?",
+      "body": "Tu servicio seguirá vigente hasta el final del periodo pagado. No se harán más cobros.",
+      "keep": "Mantener suscripción",
+      "confirm": "Sí, cancelar"
+    },
+    "history": {
+      "title": "Historial de pagos",
+      "empty": "Aún no tienes pagos.",
+      "status": "Estado",
+      "approved": "Aprobado",
+      "declined": "Rechazado"
+    }
   }
 }
