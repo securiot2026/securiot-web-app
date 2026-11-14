@@ -5,12 +5,12 @@
 
 .skip-link {
   position: absolute;
-  top: -3rem;
-  left: 0.5rem;
+  top: -6rem;
+  left: var(--space-sm);
   z-index: 1000;
   background: var(--texto);
   color: var(--noche);
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-md) var(--space-lg);
   border-radius: 0 0 8px 8px;
   font-weight: 600;
   transition: top 150ms ease-out;
@@ -22,40 +22,41 @@
   }
 }
 
-.shell-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.mobile-bar {
   position: sticky;
   top: 0;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  height: 56px;
+  padding: 0 var(--space-sm);
+  box-sizing: border-box;
+  background: var(--noche);
+  border-bottom: 1px solid var(--linea);
 
-  &__brand {
-    font-weight: 600;
-    letter-spacing: 0.02em;
+  &__menu {
+    width: var(--target-size);
+    height: var(--target-size);
   }
 
-  &__spacer {
-    flex: 1 1 auto;
+  &__brand {
+    font-family: var(--font-display);
+    font-weight: 700;
   }
 }
 
 .shell-container {
-  height: calc(100dvh - 64px);
-}
+  height: 100dvh;
+  background: var(--noche);
 
-.shell-sidenav {
-  width: 15rem;
-  border-right: 1px solid rgba(238, 240, 244, 0.08);
-
-  .active-link {
-    --mdc-list-list-item-label-text-color: var(--marca);
-    font-weight: 600;
+  &--mobile {
+    height: calc(100dvh - 56px);
   }
 }
 
 .shell-main {
-  padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem;
+  padding: var(--space-lg) clamp(1rem, 3vw, 2.5rem) var(--space-2xl);
   max-width: 1200px;
   margin: 0 auto;
 
@@ -63,3 +64,4 @@
     outline: none;
   }
 }
+
