@@ -2,6 +2,9 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use 'styles/rail';
+@use 'styles/plans';
+@use 'styles/checkout';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -55,6 +58,17 @@ $securiot-web-app-theme: mat.define-theme((
   --texto: #EEF0F4;      // primary text — never pure #FFFFFF
   --texto-mute: #8B93A3; // secondary text, captions, disabled, offline
 
+  // Derived neutrals (no new hue): raised surface and hairline, built from the tokens above
+  --superficie: color-mix(in srgb, var(--texto) 5%, var(--noche));
+  --linea: color-mix(in srgb, var(--texto) 12%, transparent);
+  --marca-suave: color-mix(in srgb, var(--marca) 14%, transparent);
+  --alerta-suave: color-mix(in srgb, var(--alerta) 12%, transparent);
+  --verificado-suave: color-mix(in srgb, var(--verificado) 12%, transparent);
+  --senal-suave: color-mix(in srgb, var(--senal) 12%, transparent);
+  --mute-suave: color-mix(in srgb, var(--texto-mute) 12%, transparent);
+  // Status tints at 12% keep each status text at 4.5:1 or more on its own tint (WCAG formula)
+  --target-size: 44px; // A11Y.md target size
+
   // Spacing scale (8pt) — unchanged from prior contract
   --space-xs: 4px;
   --space-sm: 8px;
@@ -83,6 +97,13 @@ $securiot-web-app-theme: mat.define-theme((
   --mdc-text-button-label-text-color: var(--marca);
   --mdc-outlined-button-label-text-color: var(--marca);
   --mdc-outlined-button-outline-color: var(--marca);
+
+  // 44px minimum targets (A11Y.md)
+  --mdc-text-button-container-height: var(--target-size);
+  --mdc-outlined-button-container-height: var(--target-size);
+  --mdc-filled-button-container-height: var(--target-size);
+  --mdc-protected-button-container-height: var(--target-size);
+  --mat-standard-button-toggle-height: var(--target-size);
 
   // Inputs: teal focus state
   --mdc-outlined-text-field-caret-color: var(--marca);
@@ -156,18 +177,19 @@ a {
   color: var(--texto);
 }
 
+// Legacy panel kept for pages that have not moved to app-empty-state yet.
 .state-panel {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-sm);
   padding: var(--space-lg) var(--space-md);
-  background: #10141d;
+  background: var(--superficie);
   border-radius: 12px;
-  border: 1px solid rgba(238, 240, 244, 0.12);
+  border: 1px solid var(--linea);
   max-width: 32rem;
 
-  h2 {
+  h2, h3 {
     font-family: var(--font-display);
     margin: 0;
     font-size: var(--type-heading-size);
@@ -183,7 +205,7 @@ a {
   }
 
   &--error {
-    border-color: rgba(255, 92, 108, 0.35);
+    border-color: color-mix(in srgb, var(--alerta) 35%, transparent);
 
     mat-icon {
       color: var(--alerta);
@@ -195,22 +217,55 @@ a {
   }
 }
 
+// Table wrapper: scrolls both ways, header row sticks while the body scrolls.
 .table-scroll {
-  overflow-x: auto;
-  background: #10141d;
+  overflow: auto;
+  max-height: calc(100dvh - 22rem);
+  min-height: 12rem;
+  background: var(--superficie);
   border-radius: 12px;
-  border: 1px solid rgba(238, 240, 244, 0.12);
+  border: 1px solid var(--linea);
 }
 
 .data-table {
   width: 100%;
   min-width: 640px;
+  background: transparent;
+
+  th.mat-mdc-header-cell {
+    background: var(--superficie);
+    color: var(--texto-mute);
+    font-size: var(--type-label-size);
+    font-weight: 600;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  tr.mat-mdc-row,
+  tr.mat-mdc-header-row {
+    height: 56px; // one row density for every list
+  }
+
+  tr.mat-mdc-row:hover td.mat-mdc-cell {
+    background: var(--marca-suave);
+  }
+
+  td.mat-mdc-cell,
+  th.mat-mdc-header-cell {
+    background-color: transparent;
+  }
+
+  th.mat-mdc-header-cell {
+    background-color: var(--superficie);
+  }
 
   // Data/telemetry cells (timestamps, zone/device codes, log rows) use the
   // mono face per DESIGN.md "Type" — headers stay in the body face as labels.
   td.mat-mdc-cell {
     font-family: var(--font-mono);
     font-size: var(--type-mono-size);
+    line-height: 1.35;
+    padding-block: var(--space-sm);
+    border-bottom-color: var(--linea);
   }
 }
 
@@ -225,6 +280,18 @@ a {
   }
 }
 
+// Chips used as single-choice filters, sized to the 44px target.
+.filter-chips {
+  --mdc-chip-container-height: var(--target-size);
+  --mdc-chip-label-text-color: var(--texto);
+  --mdc-chip-elevated-container-color: transparent;
+  --mdc-chip-elevated-selected-container-color: var(--marca-suave);
+  --mdc-chip-outline-color: var(--linea);
+  --mdc-chip-selected-outline-color: var(--marca);
+  --mdc-chip-with-icon-icon-color: var(--texto-mute);
+  --mdc-chip-with-icon-selected-icon-color: var(--marca);
+}
+
 // Status chips: icon + text + color, per A11Y.md "no color alone" rule.
 .status-chip {
   display: inline-flex;
@@ -236,6 +303,7 @@ a {
   font-size: var(--type-label-size);
   font-weight: 600;
   line-height: 1.4;
+  white-space: nowrap;
 
   mat-icon {
     font-size: 1.05rem;
@@ -246,13 +314,13 @@ a {
   // Online / authorized / resolved — verificado
   &--online,
   &--resolved {
-    background: rgba(34, 221, 102, 0.16);
+    background: var(--verificado-suave);
     color: var(--verificado);
   }
 
   // Offline — neutral, not a brand status color
   &--offline {
-    background: rgba(139, 147, 163, 0.16);
+    background: var(--mute-suave);
     color: var(--texto-mute);
   }
 
@@ -263,7 +331,43 @@ a {
   &--high,
   &--active,
   &--critical {
-    background: rgba(255, 92, 108, 0.16);
+    background: var(--alerta-suave);
     color: var(--alerta);
   }
+}
+
+// Shared by the billing page blocks (moved out of the component to respect the style budget).
+.block {
+  margin-bottom: var(--space-xl);
+  &__title { font-family: var(--font-display); font-size: var(--type-heading-size); margin: 0 0 var(--space-md); }
+  &__subtitle { font-family: var(--font-display); font-size: var(--type-body-size); margin: var(--space-lg) 0 var(--space-sm); }
+}
+
+.plain-table {
+  width: 100%;
+  min-width: 28rem;
+  border-collapse: collapse;
+  th, td { text-align: left; padding: var(--space-sm) var(--space-md); border-bottom: 1px solid var(--linea); }
+  th { font-weight: 600; font-size: var(--type-label-size); color: var(--texto-mute); }
+  tbody tr:last-child td { border-bottom: 0; }
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-xs) var(--space-lg);
+  margin: 0 0 var(--space-md);
+  dt { color: var(--texto-mute); }
+  dd { margin: 0; font-family: var(--font-mono); font-size: var(--type-mono-size); }
+}
+
+.result-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--type-label-size);
+  font-weight: 600;
+  mat-icon { width: 1.05rem; height: 1.05rem; font-size: 1.05rem; }
+  &--ok mat-icon { color: var(--verificado); }
+  &--fail mat-icon { color: var(--alerta); }
 }

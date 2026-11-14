@@ -1,0 +1,85 @@
+// Checkout dialog step indicator and order summary. Global partial to respect the component style budget.
+.steps {
+  display: flex;
+  gap: var(--space-sm);
+  list-style: none;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+
+  &__item {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 3px solid var(--linea);
+    color: var(--texto-mute);
+    font-size: var(--type-label-size);
+
+    &--done { border-color: var(--verificado); color: var(--texto); }
+    &--current { border-color: var(--marca); color: var(--texto); font-weight: 700; }
+    &--failed { border-color: var(--alerta); color: var(--texto); font-weight: 700; }
+  }
+
+  &__badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    mat-icon { width: 16px; height: 16px; font-size: 16px; }
+  }
+}
+
+// Summary stays visible beside the form (above it on narrow dialogs) and reflects the payment state.
+.checkout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14rem;
+  gap: var(--space-lg);
+  align-items: start;
+
+  &__summary {
+    padding: var(--space-md);
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+  }
+
+  &__summary-title { margin: 0 0 var(--space-sm); font-family: var(--font-display); font-size: var(--type-body-size); }
+
+  &__state {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: 0;
+    font-size: var(--type-label-size);
+    font-weight: 600;
+    &--ok { color: var(--verificado); }
+    &--fail { color: var(--alerta); }
+    &--busy { color: var(--senal); }
+    &--idle { color: var(--texto-mute); }
+  }
+}
+
+.order-totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-xs) var(--space-sm);
+  margin: 0 0 var(--space-md);
+  dt { color: var(--texto-mute); }
+  dd { margin: 0; text-align: right; font-family: var(--font-mono); font-size: var(--type-mono-size); }
+  &__total { font-weight: 700; color: var(--texto) !important; }
+}
+
+@media (max-width: 40rem) {
+  .checkout {
+    grid-template-columns: 1fr;
+    &__summary { order: -1; }
+  }
+  .steps__label { font-size: 0.75rem; }
+}
