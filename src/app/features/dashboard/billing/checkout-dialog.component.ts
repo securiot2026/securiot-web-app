@@ -1,5 +1,6 @@
 import { Component, ElementRef, Inject, ViewChild, computed, signal } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
+import { AppDatePipe } from '../../../shared/pipes/app-date.pipe';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -43,7 +44,7 @@ function expiryValidator(control: FormControl<string>): ValidationErrors | null 
   standalone: true,
   imports: [
     CurrencyPipe,
-    DatePipe,
+    AppDatePipe,
     ReactiveFormsModule,
     MatDialogModule,
     MatFormFieldModule,

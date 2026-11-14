@@ -3,6 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, TestRequest, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeviceRulesComponent } from './device-rules.component';
 
@@ -191,5 +193,36 @@ describe('DeviceRulesComponent dry-run execute checkbox', () => {
     expect(text).not.toContain(SIMULATED_KEY);
     expect(text).not.toContain(EXECUTED_KEY);
     expect(text).not.toContain('rules.dryRunNotConfirmed');
+  });
+});
+
+describe('DeviceRulesComponent delete confirmation', () => {
+  it('asks before deleting and only calls the API after confirming', async () => {
+    await TestBed.configureTestingModule({
+      imports: [DeviceRulesComponent, TranslateModule.forRoot()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideNoopAnimations(),
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => 'dev-1' } } } }
+      ]
+    }).compileComponents();
+    const httpMock = TestBed.inject(HttpTestingController);
+    const fixture = TestBed.createComponent(DeviceRulesComponent);
+    const dialog = (fixture.componentInstance as unknown as { dialog: MatDialog }).dialog;
+    const afterClosed = new Subject<boolean>();
+    const open = spyOn(dialog, 'open').and.returnValue({ afterClosed: () => afterClosed } as never);
+
+    fixture.componentInstance.deleteRule({ id: 7, name: 'Puerta' } as never);
+    expect(open).toHaveBeenCalled();
+    httpMock.expectNone((req) => req.method === 'DELETE');
+
+    afterClosed.next(false);
+    httpMock.expectNone((req) => req.method === 'DELETE');
+
+    afterClosed.next(true);
+    httpMock.expectOne((req) => req.method === 'DELETE' && req.url.endsWith('/devices/dev-1/rules/7')).flush(null);
+    httpMock.match(() => true);
   });
 });

@@ -3,34 +3,37 @@
 <section class="sim-banner" aria-labelledby="sim-title">
   <h2 id="sim-title" class="sim-banner__title">
     <mat-icon aria-hidden="true">science</mat-icon>
-    {{ 'billing.simulation.title' | translate }}
+    <span>{{ 'billing.simulation.title' | translate }}</span>
   </h2>
   <p>{{ 'billing.simulation.body' | translate }}</p>
-  <div class="table-scroll">
-    <table class="plain-table">
-      <caption class="visually-hidden">{{ 'billing.simulation.tableCaption' | translate }}</caption>
-      <thead>
-        <tr>
-          <th scope="col">{{ 'billing.simulation.card' | translate }}</th>
-          <th scope="col">{{ 'billing.simulation.result' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (card of testCards; track card.number) {
+  <details class="sim-banner__details">
+    <summary>{{ 'billing.simulation.cardsToggle' | translate }}</summary>
+    <div class="table-scroll">
+      <table class="plain-table">
+        <caption class="visually-hidden">{{ 'billing.simulation.tableCaption' | translate }}</caption>
+        <thead>
           <tr>
-            <td class="mono">{{ card.number }}</td>
-            <td>
-              <span class="result-chip" [class.result-chip--ok]="card.icon === 'check_circle'" [class.result-chip--fail]="card.icon !== 'check_circle'">
-                <mat-icon aria-hidden="true">{{ card.icon }}</mat-icon>
-                {{ card.resultKey | translate }}
-              </span>
-            </td>
+            <th scope="col">{{ 'billing.simulation.card' | translate }}</th>
+            <th scope="col">{{ 'billing.simulation.result' | translate }}</th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-  <p class="sim-banner__hint">{{ 'billing.simulation.otherCards' | translate }}</p>
+        </thead>
+        <tbody>
+          @for (card of testCards; track card.number) {
+            <tr>
+              <td class="mono">{{ card.number }}</td>
+              <td>
+                <span class="result-chip" [class.result-chip--ok]="card.icon === 'check_circle'" [class.result-chip--fail]="card.icon !== 'check_circle'">
+                  <mat-icon aria-hidden="true">{{ card.icon }}</mat-icon>
+                  {{ card.resultKey | translate }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="sim-banner__hint">{{ 'billing.simulation.otherCards' | translate }}</p>
+  </details>
 </section>
 
 <div class="visually-hidden" role="status" aria-live="polite">
@@ -66,7 +69,7 @@
           <dt>{{ 'billing.subscription.monthly' | translate }}</dt>
           <dd>{{ sub.monthlyPerCamera * sub.cameras | currency: currency() : 'S/ ' }}</dd>
           <dt>{{ (sub.status === 'active' ? 'billing.subscription.nextBilling' : 'billing.subscription.accessUntil') | translate }}</dt>
-          <dd>{{ sub.currentPeriodEnd | date: 'mediumDate' }}</dd>
+          <dd>{{ sub.currentPeriodEnd | appDate: 'mediumDate' }}</dd>
         </dl>
         @if (sub.status === 'active') {
           <button mat-stroked-button type="button" (click)="confirmCancel()" [disabled]="canceling()">
@@ -81,17 +84,11 @@
         }
       </div>
     } @else {
-      <div class="state-panel">
-        <mat-icon aria-hidden="true">credit_card_off</mat-icon>
-        <h3>{{ 'billing.subscription.noneTitle' | translate }}</h3>
-        <p>{{ 'billing.subscription.noneBody' | translate }}</p>
-      </div>
+      <p class="muted"><strong>{{ 'billing.subscription.noneTitle' | translate }}.</strong> {{ 'billing.subscription.noneBody' | translate }}</p>
     }
 
-    <h3 class="block__subtitle">{{ 'billing.history.title' | translate }}</h3>
-    @if (payments().length === 0) {
-      <p class="muted">{{ 'billing.history.empty' | translate }}</p>
-    } @else {
+    @if (payments().length > 0) {
+      <h3 class="block__subtitle">{{ 'billing.history.title' | translate }}</h3>
       <div class="table-scroll">
         <table class="plain-table">
           <caption class="visually-hidden">{{ 'billing.history.title' | translate }}</caption>
@@ -107,7 +104,7 @@
           <tbody>
             @for (payment of payments(); track payment.id) {
               <tr>
-                <td>{{ payment.createdAt | date: 'medium' }}</td>
+                <td class="mono">{{ payment.createdAt | appDate: 'medium' }}</td>
                 <td class="mono">{{ payment.id }}</td>
                 <td class="mono">{{ payment.cardBrand }} **** {{ payment.last4 }}</td>
                 <td class="mono">{{ payment.total | currency: payment.currency : 'S/ ' }}</td>

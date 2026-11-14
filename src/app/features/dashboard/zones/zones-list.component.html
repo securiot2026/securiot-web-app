@@ -1,13 +1,13 @@
 <app-page-header
   [title]="'zones.title' | translate"
-  [countLabel]="!loading() && !error() ? ('zones.count' | translate: { count: zones().length }) : ''"
+  [countLabel]="!loading() && !error() && zones().length > 0 ? ('zones.count' | translate: { count: zones().length }) : ''"
 ></app-page-header>
 
 @if (!loading() && !error() && zones().length > 0) {
   <app-filter-bar
     [searchLabel]="'zones.search' | translate"
     [clearLabel]="'common.clearFilters' | translate"
-    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: zones().length }"
+    [resultText]="query() ? ('common.resultCount' | translate: { shown: filtered().length, total: zones().length }) : ''"
     [showClear]="query() !== ''"
     [(query)]="query"
     (clear)="clearFilters()"
@@ -17,7 +17,7 @@
 @if (loading()) {
   <app-empty-state variant="loading" [body]="'zones.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <app-empty-state variant="error" [body]="'common.loadError' | translate">
+  <app-empty-state variant="error" [title]="'common.loadErrorTitle' | translate" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </app-empty-state>
 } @else if (zones().length === 0) {
@@ -30,27 +30,27 @@
   <div class="table-scroll">
     <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'zones.title' | translate }}</th>
-        <td mat-cell *matCellDef="let zone">{{ zone.name }}</td>
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'zones.name' | translate }}</th>
+        <td mat-cell *matCellDef="let zone" class="cell-title" [attr.data-label]="'zones.name' | translate"><strong>{{ zone.name }}</strong></td>
       </ng-container>
 
       <ng-container matColumnDef="location">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'zones.location' | translate }}</th>
-        <td mat-cell *matCellDef="let zone">{{ zone.location || ('zones.noLocation' | translate) }}</td>
+        <td mat-cell *matCellDef="let zone" [attr.data-label]="'zones.location' | translate" [class.cell-muted]="!zone.location">{{ zone.location || ('zones.noLocation' | translate) }}</td>
       </ng-container>
 
       <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'zones.createdAt' | translate }}</th>
-        <td mat-cell *matCellDef="let zone">{{ zone.createdAt | date: 'mediumDate' }}</td>
+        <th mat-header-cell *matHeaderCellDef scope="col" class="cell-nowrap">{{ 'zones.createdAt' | translate }}</th>
+        <td mat-cell *matCellDef="let zone" class="cell-mono" [attr.data-label]="'zones.createdAt' | translate">{{ zone.createdAt | appDate: 'mediumDate' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef scope="col">
           <span class="visually-hidden">{{ 'devices.title' | translate }}</span>
         </th>
-        <td mat-cell *matCellDef="let zone">
-          <a mat-button color="primary" [routerLink]="['/devices']" [queryParams]="{ zone: zone.id }">
-            {{ 'devices.title' | translate }}
+        <td mat-cell *matCellDef="let zone" class="cell-actions">
+          <a mat-stroked-button [routerLink]="['/devices']" [queryParams]="{ zone: zone.id }" [attr.aria-label]="('zones.viewDevices' | translate) + ': ' + zone.name">
+            {{ 'zones.viewDevices' | translate }}
           </a>
         </td>
       </ng-container>

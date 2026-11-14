@@ -22,12 +22,19 @@ const DEFAULT_ICONS: Record<StatusTileStatus, string> = {
   imports: [MatIconModule],
   template: `
     <article class="tile" [class]="'tile tile--' + status()">
-      <p class="tile__label">{{ label() }}</p>
-      <p class="tile__value">{{ value() }}</p>
-      <p class="tile__status">
-        <mat-icon aria-hidden="true">{{ resolvedIcon() }}</mat-icon>
-        <span>{{ statusText() }}</span>
+      <p class="tile__label">
+        @if (!statusText()) {
+          <mat-icon aria-hidden="true">{{ resolvedIcon() }}</mat-icon>
+        }
+        {{ label() }}
       </p>
+      <p class="tile__value">{{ value() }}</p>
+      @if (statusText()) {
+        <p class="tile__status">
+          <mat-icon aria-hidden="true">{{ resolvedIcon() }}</mat-icon>
+          <span>{{ statusText() }}</span>
+        </p>
+      }
       @if (hint()) {
         <p class="tile__hint">{{ hint() }}</p>
       }
@@ -43,7 +50,8 @@ const DEFAULT_ICONS: Record<StatusTileStatus, string> = {
 export class StatusTileComponent {
   readonly label = input.required<string>();
   readonly value = input.required<string>();
-  readonly statusText = input.required<string>();
+  /** Optional status pill. Leave empty when the label already names the state. */
+  readonly statusText = input<string>('');
   readonly status = input<StatusTileStatus>('neutral');
   readonly icon = input<string>('');
   readonly hint = input<string>('');

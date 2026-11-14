@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AppDatePipe } from '../../../../shared/pipes/app-date.pipe';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +16,7 @@ const POLL_INTERVAL_MS = 5000;
 @Component({
   selector: 'app-device-live-feed',
   standalone: true,
-  imports: [CommonModule, DatePipe, RouterLink, MatButtonModule, MatIconModule, MatProgressSpinnerModule, TranslateModule],
+  imports: [CommonModule, AppDatePipe, RouterLink, MatButtonModule, MatIconModule, MatProgressSpinnerModule, TranslateModule],
   templateUrl: './device-live-feed.component.html',
   styleUrl: './device-live-feed.component.scss'
 })

@@ -1,49 +1,46 @@
 <app-page-header
   [title]="'alerts.title' | translate"
-  [countLabel]="!loading() && !error() ? ('alerts.count' | translate: { count: alerts().length }) : ''"
+  [countLabel]="!loading() && !error() && alerts().length > 0 ? ((alerts().length === 1 ? 'alerts.countOne' : 'alerts.count') | translate: { count: alerts().length }) : ''"
 ></app-page-header>
 
-<div class="filters-bar filters-bar--server">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ 'alerts.filterByZone' | translate }}</mat-label>
-    <mat-select [value]="zoneFilter()" (selectionChange)="onFilterChange('zone', $event.value)">
-      <mat-option value="">{{ 'alerts.allZones' | translate }}</mat-option>
-      @for (zone of zones(); track zone.id) {
-        <mat-option [value]="zone.id">{{ zone.name }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>{{ 'alerts.filterByDevice' | translate }}</mat-label>
-    <mat-select [value]="deviceFilter()" (selectionChange)="onFilterChange('device', $event.value)">
-      <mat-option value="">{{ 'alerts.allDevices' | translate }}</mat-option>
-      @for (device of devices(); track device.id) {
-        <mat-option [value]="device.id">{{ device.name }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>{{ 'alerts.filterByStatus' | translate }}</mat-label>
-    <mat-select [value]="statusFilter()" (selectionChange)="onFilterChange('status', $event.value)">
-      <mat-option value="">{{ 'alerts.allStatuses' | translate }}</mat-option>
-      <mat-option value="active">{{ 'alerts.status.active' | translate }}</mat-option>
-      <mat-option value="resolved">{{ 'alerts.status.resolved' | translate }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-</div>
-
-@if (!loading() && !error() && alerts().length > 0) {
+@if (!loading() && !error() && (alerts().length > 0 || hasActiveFilters)) {
   <app-filter-bar
     [searchLabel]="'alerts.search' | translate"
     [clearLabel]="'common.clearFilters' | translate"
-    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: alerts().length }"
+    [resultText]="query() !== '' || severityFilter() !== 'all' ? ('common.resultCount' | translate: { shown: filtered().length, total: alerts().length }) : ''"
     [showClear]="query() !== '' || severityFilter() !== 'all' || hasActiveFilters"
     [(query)]="query"
     (clear)="clearFilters()"
   >
+    <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+      <mat-label>{{ 'alerts.filterByZone' | translate }}</mat-label>
+      <mat-select [value]="zoneFilter()" (selectionChange)="onFilterChange('zone', $event.value)">
+        <mat-option value="">{{ 'alerts.allZones' | translate }}</mat-option>
+        @for (zone of zones(); track zone.id) {
+          <mat-option [value]="zone.id">{{ zone.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+      <mat-label>{{ 'alerts.filterByDevice' | translate }}</mat-label>
+      <mat-select [value]="deviceFilter()" (selectionChange)="onFilterChange('device', $event.value)">
+        <mat-option value="">{{ 'alerts.allDevices' | translate }}</mat-option>
+        @for (device of devices(); track device.id) {
+          <mat-option [value]="device.id">{{ device.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+      <mat-label>{{ 'alerts.filterByStatus' | translate }}</mat-label>
+      <mat-select [value]="statusFilter()" (selectionChange)="onFilterChange('status', $event.value)">
+        <mat-option value="">{{ 'alerts.allStatuses' | translate }}</mat-option>
+        <mat-option value="active">{{ 'alerts.status.active' | translate }}</mat-option>
+        <mat-option value="resolved">{{ 'alerts.status.resolved' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-chip-listbox
       class="filter-chips"
       [attr.aria-label]="'alerts.severityFilter' | translate"
@@ -53,7 +50,7 @@
       <mat-chip-option value="all">{{ 'common.all' | translate }}</mat-chip-option>
       <mat-chip-option value="low"><mat-icon matChipAvatar aria-hidden="true">info_outline</mat-icon>{{ 'alerts.severity.low' | translate }}</mat-chip-option>
       <mat-chip-option value="medium"><mat-icon matChipAvatar aria-hidden="true">error_outline</mat-icon>{{ 'alerts.severity.medium' | translate }}</mat-chip-option>
-      <mat-chip-option value="high"><mat-icon matChipAvatar aria-hidden="true">warning_amber_rounded</mat-icon>{{ 'alerts.severity.high' | translate }}</mat-chip-option>
+      <mat-chip-option value="high"><mat-icon matChipAvatar aria-hidden="true">warning_amber</mat-icon>{{ 'alerts.severity.highOrCritical' | translate }}</mat-chip-option>
     </mat-chip-listbox>
   </app-filter-bar>
 }
@@ -61,7 +58,7 @@
 @if (loading()) {
   <app-empty-state variant="loading" [body]="'alerts.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <app-empty-state variant="error" [body]="'common.loadError' | translate">
+  <app-empty-state variant="error" [title]="'common.loadErrorTitle' | translate" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </app-empty-state>
 } @else if (alerts().length === 0) {
@@ -79,29 +76,9 @@
 } @else {
   <div class="table-scroll">
     <table mat-table [dataSource]="filtered()" class="data-table">
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.createdAt' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ alert.createdAt | date: 'short' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="zone">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.zone' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ zoneName(alert.zoneId) }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="device">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.device' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ deviceName(alert.deviceId) }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="rule">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.rule' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ alert.ruleType }}</td>
-      </ng-container>
-
       <ng-container matColumnDef="severity">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.severity' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">
+        <td mat-cell *matCellDef="let alert" [attr.data-label]="'alerts.severity' | translate">
           <span class="status-chip" [class]="'status-chip--' + alert.severity">
             <mat-icon aria-hidden="true">{{ severityIcon(alert.severity) }}</mat-icon>
             {{ ('alerts.severity.' + alert.severity) | translate }}
@@ -109,19 +86,35 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="message">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.message' | translate }}</th>
+        <td mat-cell *matCellDef="let alert" class="cell-message" [attr.data-label]="'alerts.message' | translate">
+          <strong>{{ alert.message }}</strong>
+          <span class="cell-sub">{{ ruleLabel(alert.ruleType) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.location' | translate }}</th>
+        <td mat-cell *matCellDef="let alert" class="cell-message" [attr.data-label]="'alerts.location' | translate">
+          <span>{{ zoneName(alert.zoneId) }}</span>
+          <span class="cell-sub">{{ deviceName(alert.deviceId) }}</span>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.status' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">
-          <span class="status-chip" [class]="'status-chip--' + alert.status">
-            <mat-icon aria-hidden="true">{{ alert.status === 'active' ? 'error' : 'check_circle' }}</mat-icon>
-            {{ ('alerts.status.' + alert.status) | translate }}
+        <td mat-cell *matCellDef="let alert" [attr.data-label]="'alerts.status' | translate">
+          <span class="status-chip" [class]="'status-chip--' + statusClass(alert.status)">
+            <mat-icon aria-hidden="true">{{ statusIcon(alert.status) }}</mat-icon>
+            {{ statusLabel(alert.status) }}
           </span>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="message">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.message' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ alert.message }}</td>
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef scope="col" class="cell-nowrap">{{ 'alerts.createdAt' | translate }}</th>
+        <td mat-cell *matCellDef="let alert" class="cell-mono" [attr.data-label]="'alerts.createdAt' | translate">{{ alert.createdAt | appDate: 'short' }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
