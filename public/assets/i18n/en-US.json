@@ -9,7 +9,8 @@
     "alerts": "Alerts",
     "logout": "Log out",
     "language": "Language selector",
-    "mainNavigation": "Dashboard navigation"
+    "mainNavigation": "Dashboard navigation",
+    "billing": "Plan and billing"
   },
   "login": {
     "title": "Sign in to SecurIoT",
@@ -255,6 +256,113 @@
   "common": {
     "loadError": "We couldn't load this. Check your connection and try again.",
     "retry": "Try again",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel"
+  },
+  "billing": {
+    "title": "Plan and billing",
+    "simulation": {
+      "title": "Simulated payment gateway: no real money is charged",
+      "body": "Use only the test cards in the table. Any other number is declined.",
+      "short": "Simulated payment gateway: no real money is charged. Use only the test cards.",
+      "tableCaption": "Test cards and their outcome",
+      "card": "Card number",
+      "result": "Outcome",
+      "approved": "Approved",
+      "declined": "Declined",
+      "insufficient": "Insufficient funds",
+      "expired": "Expired card",
+      "otherCards": "Any other number is declined as an unknown test card. Use any holder name, a future date and a 3 digit CVC."
+    },
+    "plans": {
+      "title": "Choose your plan",
+      "loading": "Loading plans…",
+      "cameras": "Number of cameras (1 to 8)",
+      "camerasAnnounce": "{{count}} cameras selected. Totals updated.",
+      "recommended": "Recommended",
+      "perCameraMonth": "per camera per month",
+      "install": "Installation: {{fee}} per camera (one time)",
+      "choose": "Subscribe to {{plan}}"
+    },
+    "totals": {
+      "subtotal": "Subtotal",
+      "igv": "IGV",
+      "igvRate": "IGV ({{rate}}%)",
+      "total": "Total",
+      "firstCharge": "First charge total"
+    },
+    "checkout": {
+      "title": "Card payment",
+      "summary": "{{plan}} plan with {{cameras}} cameras. First charge total:",
+      "cardNumber": "Card number",
+      "cardNumberRequired": "Enter the card number.",
+      "cardNumberInvalid": "Enter a valid card number of 13 to 19 digits.",
+      "holder": "Cardholder name",
+      "holderRequired": "Enter the cardholder name.",
+      "expiry": "Expiry (MM/YY)",
+      "expiryRequired": "Enter the expiry date.",
+      "expiryInvalid": "Use the MM/YY format with a valid month.",
+      "cvc": "CVC",
+      "cvcRequired": "Enter the CVC.",
+      "cvcInvalid": "The CVC has 3 or 4 digits.",
+      "pay": "Pay {{total}}",
+      "processing": "Processing the payment…",
+      "processingShort": "Processing…",
+      "approvedTitle": "Payment approved",
+      "approvedAnnounce": "Payment approved. Your subscription is active.",
+      "declinedTitle": "Payment declined",
+      "errorTitle": "We couldn't complete the payment",
+      "retry": "Try again",
+      "done": "Done"
+    },
+    "receipt": {
+      "paymentId": "Payment ID",
+      "plan": "Plan",
+      "cameras": "Cameras",
+      "card": "Card",
+      "date": "Date",
+      "simulated": "Receipt from a simulated gateway. No real money was charged."
+    },
+    "reasons": {
+      "card_declined": "The bank declined the card. Try another test card.",
+      "insufficient_funds": "The card has insufficient funds.",
+      "expired_card": "The card is expired.",
+      "unknown_test_card": "That card is not a test card. Use one from the test card table.",
+      "unknown": "We couldn't process the payment with that card."
+    },
+    "errors": {
+      "generic": "Something went wrong while processing the payment. Try again.",
+      "conflict": "You already have an active subscription. Cancel it before choosing another plan.",
+      "validation": "The payment details are not valid. Check them and try again.",
+      "unavailable": "We couldn't load the billing information. The service may not be available yet. Try again in a few minutes.",
+      "cancelFailed": "We couldn't cancel the subscription. Try again."
+    },
+    "subscription": {
+      "title": "Your subscription",
+      "loading": "Loading subscription…",
+      "active": "Active",
+      "canceled": "Canceled",
+      "monthly": "Monthly charge",
+      "nextBilling": "Next billing date",
+      "accessUntil": "Valid until",
+      "cancel": "Cancel subscription",
+      "canceling": "Canceling…",
+      "canceledAnnounce": "Subscription canceled.",
+      "noneTitle": "No active subscription",
+      "noneBody": "Choose a plan to activate your service."
+    },
+    "cancelDialog": {
+      "title": "Cancel the subscription?",
+      "body": "Your service stays active until the end of the paid period. No further charges will be made.",
+      "keep": "Keep subscription",
+      "confirm": "Yes, cancel"
+    },
+    "history": {
+      "title": "Payment history",
+      "empty": "You have no payments yet.",
+      "status": "Status",
+      "approved": "Approved",
+      "declined": "Declined"
+    }
   }
 }
