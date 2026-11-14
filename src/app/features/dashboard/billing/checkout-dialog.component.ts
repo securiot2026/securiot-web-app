@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild, computed, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -63,6 +63,34 @@ export class CheckoutDialogComponent {
   readonly payment = signal<Payment | null>(null);
   readonly subscription = signal<Subscription | null>(null);
   readonly failureKey = signal<string>('billing.errors.generic');
+
+  /** Plan, payment and receipt, with the state of each derived from the checkout step. */
+  readonly stepItems = computed(() => {
+    const step = this.step();
+    type State = 'done' | 'current' | 'pending' | 'failed';
+    const payment: State = step === 'approved' ? 'done' : step === 'declined' || step === 'error' ? 'failed' : 'current';
+    const receipt: State = step === 'approved' ? 'current' : 'pending';
+    return [
+      { key: 'plan', state: 'done' as State },
+      { key: 'payment', state: payment },
+      { key: 'receipt', state: receipt }
+    ];
+  });
+
+  readonly summaryState = computed(() => {
+    switch (this.step()) {
+      case 'processing':
+        return { key: 'billing.summary.processing', icon: 'hourglass_top', tone: 'busy' };
+      case 'approved':
+        return { key: 'billing.summary.paid', icon: 'check_circle', tone: 'ok' };
+      case 'declined':
+        return { key: 'billing.summary.declined', icon: 'cancel', tone: 'fail' };
+      case 'error':
+        return { key: 'billing.summary.failed', icon: 'error_outline', tone: 'fail' };
+      default:
+        return { key: 'billing.summary.pending', icon: 'schedule', tone: 'idle' };
+    }
+  });
 
   readonly form = new FormGroup({
     number: new FormControl('', {

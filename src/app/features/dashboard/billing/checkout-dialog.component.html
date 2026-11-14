@@ -1,6 +1,20 @@
 <h2 mat-dialog-title id="checkout-title">{{ 'billing.checkout.title' | translate }}</h2>
 
 <mat-dialog-content>
+  <ol class="steps" [attr.aria-label]="'billing.steps.label' | translate">
+    @for (item of stepItems(); track item.key; let i = $index) {
+      <li class="steps__item" [class]="'steps__item steps__item--' + item.state" [attr.aria-current]="item.state === 'current' ? 'step' : null">
+        <span class="steps__badge" aria-hidden="true">
+          @if (item.state === 'done') { <mat-icon>check</mat-icon> }
+          @else if (item.state === 'failed') { <mat-icon>priority_high</mat-icon> }
+          @else { {{ i + 1 }} }
+        </span>
+        <span class="steps__label">{{ 'billing.steps.' + item.key | translate }}</span>
+        <span class="visually-hidden">({{ 'billing.steps.' + (item.state === 'done' ? 'done' : item.state) | translate }})</span>
+      </li>
+    }
+  </ol>
+
   <p class="sim-note">
     <mat-icon aria-hidden="true">science</mat-icon>
     <span>{{ 'billing.simulation.short' | translate }}</span>
@@ -15,12 +29,10 @@
     }
   </div>
 
+  <div class="checkout">
+  <div class="checkout__main">
   @switch (step()) {
     @case ('form') {
-      <p class="summary">
-        {{ 'billing.checkout.summary' | translate: { plan: data.plan.name, cameras: data.cameras } }}
-        <strong>{{ data.totals.total | currency: data.currency : 'S/ ' }}</strong>
-      </p>
       <form id="checkout-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off">
         <mat-form-field appearance="outline">
           <mat-label>{{ 'billing.checkout.cardNumber' | translate }}</mat-label>
@@ -112,6 +124,22 @@
       </div>
     }
   }
+  </div>
+
+  <aside class="checkout__summary" aria-labelledby="checkout-summary-title">
+    <h3 id="checkout-summary-title" class="checkout__summary-title">{{ 'billing.summary.title' | translate }}</h3>
+    <dl class="order-totals">
+      <dt>{{ data.plan.name }} x {{ data.cameras }}</dt><dd>{{ data.totals.subtotal | currency: data.currency : 'S/ ' }}</dd>
+      <dt>{{ 'billing.totals.igv' | translate }}</dt><dd>{{ data.totals.igv | currency: data.currency : 'S/ ' }}</dd>
+      <dt class="order-totals__total">{{ 'billing.totals.total' | translate }}</dt>
+      <dd class="order-totals__total">{{ data.totals.total | currency: data.currency : 'S/ ' }}</dd>
+    </dl>
+    <p class="checkout__state" [class]="'checkout__state checkout__state--' + summaryState().tone">
+      <mat-icon aria-hidden="true">{{ summaryState().icon }}</mat-icon>
+      <span>{{ summaryState().key | translate }}</span>
+    </p>
+  </aside>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

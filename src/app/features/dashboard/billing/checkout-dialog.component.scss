@@ -1,6 +1,6 @@
 :host { display: block; }
 
-form { display: flex; flex-direction: column; gap: var(--space-xs); min-width: min(24rem, 100%); }
+form { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
 .row { display: flex; gap: var(--space-md); flex-wrap: wrap; mat-form-field { flex: 1 1 8rem; } }
 
 .sim-note {
@@ -13,7 +13,6 @@ form { display: flex; flex-direction: column; gap: var(--space-xs); min-width: m
   mat-icon { color: var(--marca); flex: none; }
 }
 
-.summary { margin: 0 0 var(--space-md); strong { font-family: var(--font-mono); } }
 
 .processing { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-lg) 0; p { margin: 0; } }
 
@@ -39,3 +38,4 @@ form { display: flex; flex-direction: column; gap: var(--space-xs); min-width: m
   dt { color: var(--texto-mute); }
   dd { margin: 0; font-family: var(--font-mono); font-size: var(--type-mono-size); overflow-wrap: anywhere; }
 }
+
