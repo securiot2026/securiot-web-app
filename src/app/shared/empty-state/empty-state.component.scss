@@ -52,8 +52,7 @@
     border-style: solid;
     border-color: color-mix(in srgb, var(--alerta) 45%, transparent);
 
-    mat-icon,
-    .empty-state__body {
+    mat-icon {
       color: var(--alerta);
     }
   }

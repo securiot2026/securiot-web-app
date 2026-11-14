@@ -24,8 +24,18 @@
   }
 
   &__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
     font-size: var(--type-label-size);
     color: var(--texto-mute);
+
+    mat-icon {
+      width: 1.05rem;
+      height: 1.05rem;
+      font-size: 1.05rem;
+      color: var(--tile-accent);
+    }
   }
 
   &__value {
@@ -58,8 +68,8 @@
   }
 
   &__hint {
-    margin-top: var(--space-sm);
-    font-family: var(--font-mono);
+    margin-top: var(--space-xs);
+    font-family: var(--font-body);
     font-size: var(--type-label-size);
     color: var(--texto-mute);
     overflow-wrap: anywhere;
