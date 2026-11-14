@@ -21,7 +21,7 @@
     "closeMenu": "Cerrar menú de navegación"
   },
   "login": {
-    "title": "Inicia sesión en SecurIoT",
+    "title": "Inicia sesión",
     "subtitle": "Supervisa zonas, dispositivos y alertas de tus instalaciones.",
     "email": "Correo electrónico",
     "password": "Contraseña",
@@ -78,18 +78,21 @@
   "zones": {
     "title": "Zonas",
     "emptyTitle": "Aún no hay zonas",
-    "emptyBody": "Las zonas que registres aparecerán aquí con sus dispositivos y estado.",
+    "emptyBody": "Las zonas que registres aparecerán aquí con sus dispositivos y su estado.",
     "location": "Ubicación",
     "noLocation": "Sin ubicación registrada",
     "createdAt": "Fecha de registro",
     "loading": "Cargando zonas…",
     "search": "Buscar zonas por nombre o ubicación",
-    "count": "{{count}} zonas"
+    "count": "{{count}} zonas",
+    "name": "Zona",
+    "viewDevices": "Ver dispositivos",
+    "countOne": "1 zona"
   },
   "devices": {
     "title": "Dispositivos",
     "emptyTitle": "Aún no hay dispositivos",
-    "emptyBody": "Registra un dispositivo y asígnalo a una zona para ver su estado aquí.",
+    "emptyBody": "Cuando conectes un dispositivo a una zona, verás aquí su estado y su última lectura.",
     "name": "Dispositivo",
     "zone": "Zona",
     "status": "Estado",
@@ -102,7 +105,7 @@
     "allZones": "Todas las zonas",
     "faceRecognition": "Reconocimiento facial",
     "rules": "Reglas",
-    "liveFeed": "Feed en vivo",
+    "liveFeed": "Transmisión en vivo",
     "operations": "Acciones del dispositivo",
     "setup": "Configurar dispositivo",
     "search": "Buscar dispositivos por nombre o zona",
@@ -116,8 +119,14 @@
       "ofTotal": "de {{total}} dispositivos",
       "none": "Sin lecturas",
       "recent": "Lectura reciente",
-      "noReadings": "Ningún dispositivo ha reportado"
-    }
+      "noReadings": "Ningún dispositivo ha reportado",
+      "needsAttention": "Revisa su conexión",
+      "allConnected": "Todos conectados"
+    },
+    "countOne": "1 dispositivo",
+    "emptyZoneTitle": "Esta zona no tiene dispositivos",
+    "emptyZoneBody": "Prueba con otra zona o quita el filtro.",
+    "goToZones": "Ir a zonas"
   },
   "faceRecognition": {
     "title": "Reconocimiento facial",
@@ -148,11 +157,11 @@
   },
   "rules": {
     "title": "Reglas",
-    "viewLiveFeed": "Ver feed en vivo",
+    "viewLiveFeed": "Ver transmisión en vivo",
     "needsEdgeUrl": "Configura la URL del Edge API del dispositivo (en Reconocimiento facial) antes de administrar reglas.",
     "loading": "Cargando reglas…",
     "loadError": "No pudimos cargar las reglas. Intenta de nuevo.",
-    "emptyBody": "Todavía no hay reglas para este dispositivo. Creá una para empezar.",
+    "emptyBody": "Crea una regla para decidir qué hace el dispositivo cuando detecta algo.",
     "createButton": "Nueva regla",
     "createTitle": "Nueva regla",
     "editTitle": "Editar regla",
@@ -203,10 +212,16 @@
     "saveButton": "Guardar",
     "cancelButton": "Cancelar",
     "saveError": "No pudimos guardar esta regla. Revisa los campos e intenta de nuevo.",
-    "toggleError": "No pudimos actualizar esta regla. Intenta de nuevo."
+    "toggleError": "No pudimos actualizar esta regla. Intenta de nuevo.",
+    "emptyTitle": "Aún no hay reglas",
+    "deleteDialog": {
+      "title": "¿Eliminar la regla «{{name}}»?",
+      "body": "El dispositivo dejará de aplicarla y no podrás recuperarla.",
+      "keep": "Conservar regla"
+    }
   },
   "liveFeed": {
-    "title": "Feed en vivo",
+    "title": "Transmisión en vivo",
     "viewRules": "Ver reglas",
     "needsEdgeUrl": "Configura la URL del Edge API del dispositivo (en Reconocimiento facial) antes de ver su feed.",
     "loading": "Cargando feed…",
@@ -218,7 +233,7 @@
   "alerts": {
     "title": "Alertas",
     "emptyTitle": "No hay alertas para mostrar",
-    "emptyBody": "Las alertas de tus zonas y dispositivos aparecerán aquí.",
+    "emptyBody": "Cuando un dispositivo detecte algo, la alerta aparecerá aquí.",
     "emptyFiltered": "Ningún resultado coincide con estos filtros.",
     "severity": "Severidad",
     "status": "Estado",
@@ -243,19 +258,32 @@
     "clearFilters": "Limpiar filtros",
     "search": "Buscar alertas por mensaje, regla, zona o dispositivo",
     "count": "{{count}} alertas",
-    "severityFilter": "Filtrar por severidad"
+    "severityFilter": "Filtrar por severidad",
+    "countOne": "1 alerta",
+    "location": "Zona y dispositivo",
+    "severity.highOrCritical": "Alta o crítica",
+    "status.acknowledged": "Reconocida",
+    "rules": {
+      "door_contact": "Puerta abierta",
+      "weapon": "Arma detectada",
+      "fire": "Fuego detectado",
+      "motion": "Movimiento",
+      "occupancy": "Ocupación",
+      "object_class": "Objeto detectado",
+      "sensor_threshold": "Umbral de sensor"
+    }
   },
   "setup": {
     "title": "Configurar dispositivo",
     "deviceLabel": "Dispositivo: {{name}}",
     "backToDevices": "Volver a dispositivos",
-    "intro": "Muestra un QR de configuración para que el formulario del dispositivo se llene solo y únicamente tengas que escribir tu WiFi.",
+    "intro": "Muestra un QR para que el formulario del dispositivo se llene solo. Tú únicamente escribes tu WiFi.",
     "stepsTitle": "Cómo configurar el dispositivo",
     "step1": "Enciende el dispositivo y conecta tu teléfono a la red WiFi llamada SecurIoT-Setup-XXXX. Los últimos cuatro caracteres son distintos en cada dispositivo.",
     "step2": "Pulsa Mostrar QR de configuración en esta página.",
     "step3": "Escanea el código QR con la cámara de tu teléfono y abre el enlace.",
     "step4": "Escribe el nombre y la contraseña de tu red WiFi cuando la página de configuración te los pida.",
-    "step5": "Revisa los campos ya completados y pulsa Save and connect. El dispositivo se reinicia solo.",
+    "step5": "Revisa los campos ya completados y pulsa «Save and connect». Ese botón aparece en inglés en la página del dispositivo, que se reinicia sola.",
     "warningTitle": "Mantén este QR en privado.",
     "warningBody": "Contiene la clave secreta del dispositivo. No lo compartas, no lo publiques ni le tomes una captura de pantalla, y abre el enlace solo mientras tu teléfono esté conectado a la red SecurIoT-Setup.",
     "showButton": "Mostrar QR de configuración",
@@ -280,7 +308,7 @@
     "guidanceTitle": "Antes de empezar"
   },
   "common": {
-    "loadError": "No pudimos cargar esta información. Revisa tu conexión e inténtalo de nuevo.",
+    "loadError": "Revisa tu conexión e inténtalo de nuevo.",
     "retry": "Reintentar",
     "close": "Cerrar",
     "cancel": "Cancelar",
@@ -291,7 +319,8 @@
     "noMatchesTitle": "Sin coincidencias",
     "all": "Todos",
     "filterChips": "Filtros rápidos",
-    "step": "Paso"
+    "step": "Paso",
+    "loadErrorTitle": "No se pudo cargar"
   },
   "billing": {
     "title": "Plan y facturación",
@@ -306,7 +335,8 @@
       "declined": "Rechazada",
       "insufficient": "Fondos insuficientes",
       "expired": "Tarjeta vencida",
-      "otherCards": "Cualquier otro número se rechaza como tarjeta de prueba desconocida. Usa cualquier titular, fecha futura y CVC de 3 dígitos."
+      "otherCards": "Cualquier otro número se rechaza como tarjeta de prueba desconocida. Usa cualquier titular, fecha futura y CVC de 3 dígitos.",
+      "cardsToggle": "Ver tarjetas de prueba"
     },
     "plans": {
       "title": "Elige tu plan",

@@ -7,7 +7,7 @@
 }
 
 .feed-hint {
-  color: var(--mat-app-text-secondary, #666);
+  color: var(--texto-mute);
 }
 
 .feed-loading {
@@ -20,7 +20,7 @@
   margin-block: 0.5rem;
 
   &--error {
-    color: var(--sangre, #c62828);
+    color: var(--alerta);
   }
 }
 
@@ -37,10 +37,10 @@
 
 .feed-caption {
   margin-block-start: 0.5rem;
-  color: var(--mat-app-text-secondary, #666);
+  color: var(--texto-mute);
 }
 
 a:focus-visible {
-  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline: 2px solid var(--marca);
   outline-offset: 2px;
 }

@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
       <button mat-stroked-button type="button" [mat-dialog-close]="false" cdkFocusInitial>
         {{ 'billing.cancelDialog.keep' | translate }}
       </button>
-      <button mat-flat-button type="button" [mat-dialog-close]="true">
+      <button mat-flat-button type="button" class="confirm-danger" [mat-dialog-close]="true">
         {{ 'billing.cancelDialog.confirm' | translate }}
       </button>
     </mat-dialog-actions>

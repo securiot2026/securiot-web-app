@@ -1,9 +1,11 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AppDatePipe } from '../../../shared/pipes/app-date.pipe';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -26,7 +28,8 @@ import { Zone } from '../../../core/models/zone.model';
   standalone: true,
   imports: [
     CommonModule,
-    DatePipe,
+    AppDatePipe,
+    MatMenuModule,
     RouterLink,
     FormsModule,
     MatTableModule,
@@ -99,9 +102,14 @@ export class DevicesListComponent implements OnInit {
     this.statusFilter.set(value ?? 'all');
   }
 
+  readonly hasFilters = computed(() => this.query() !== '' || this.statusFilter() !== 'all' || this.selectedZoneId() !== '');
+
   clearFilters(): void {
     this.query.set('');
     this.statusFilter.set('all');
+    if (this.selectedZoneId()) {
+      this.onZoneFilterChange('');
+    }
   }
 
   zoneName(zoneId: string): string {

@@ -3,7 +3,18 @@
 }
 
 .fr-section {
-  margin-block-end: 2rem;
+  max-width: 40rem;
+  margin-block-end: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+
+  h2 {
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: var(--type-heading-size);
+  }
 }
 
 .fr-field {
@@ -22,18 +33,18 @@
 }
 
 .fr-hint {
-  color: var(--mat-app-text-secondary, #666);
+  color: var(--texto-mute);
 }
 
 .fr-message {
   margin-block: 0.5rem;
 
   &--success {
-    color: var(--pino, #2e7d32);
+    color: var(--verificado);
   }
 
   &--error {
-    color: var(--sangre, #c62828);
+    color: var(--alerta);
   }
 }
 
@@ -49,13 +60,30 @@
   }
 
   input[type='file'] {
-    padding: 0.5rem 0;
+    padding: var(--space-sm);
+    border: 1px dashed var(--linea);
+    border-radius: 8px;
+    background: var(--noche);
+    color: var(--texto);
+    font: inherit;
+  }
+
+  input[type='file']::file-selector-button {
+    margin-right: var(--space-md);
+    min-height: 36px;
+    padding: 0 var(--space-md);
+    border: 1px solid color-mix(in srgb, var(--texto) 32%, transparent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--texto);
+    font: inherit;
+    cursor: pointer;
   }
 }
 
 button:focus-visible,
 input:focus-visible,
 a:focus-visible {
-  outline: 2px solid var(--mat-app-primary, #1976d2);
+  outline: 2px solid var(--marca);
   outline-offset: 2px;
 }

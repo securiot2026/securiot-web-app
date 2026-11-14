@@ -99,7 +99,7 @@
             <dt>{{ 'billing.totals.igv' | translate }}</dt><dd>{{ p.igv | currency: p.currency : 'S/ ' }}</dd>
             <dt>{{ 'billing.totals.total' | translate }}</dt><dd>{{ p.total | currency: p.currency : 'S/ ' }}</dd>
             <dt>{{ 'billing.receipt.card' | translate }}</dt><dd>{{ p.cardBrand }} **** {{ p.last4 }}</dd>
-            <dt>{{ 'billing.receipt.date' | translate }}</dt><dd>{{ p.createdAt | date: 'medium' }}</dd>
+            <dt>{{ 'billing.receipt.date' | translate }}</dt><dd>{{ p.createdAt | appDate: 'medium' }}</dd>
           </dl>
         }
         <p class="sim-note">{{ 'billing.receipt.simulated' | translate }}</p>

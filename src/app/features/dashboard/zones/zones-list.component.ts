@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AppDatePipe } from '../../../shared/pipes/app-date.pipe';
 import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +19,7 @@ import { Zone } from '../../../core/models/zone.model';
   standalone: true,
   imports: [
     CommonModule,
-    DatePipe,
+    AppDatePipe,
     RouterLink,
     MatTableModule,
     MatButtonModule,

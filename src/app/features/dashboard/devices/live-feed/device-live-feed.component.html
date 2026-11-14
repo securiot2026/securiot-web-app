@@ -22,7 +22,7 @@
     <figure class="feed-figure">
       <img [src]="src" [alt]="'liveFeed.imageAlt' | translate" class="feed-image" />
       <figcaption role="status" aria-live="polite" class="feed-caption">
-        {{ 'liveFeed.capturedAt' | translate }} {{ frame()?.captured_at | date: 'medium' }}
+        {{ 'liveFeed.capturedAt' | translate }} {{ frame()?.captured_at | appDate: 'medium' }}
       </figcaption>
     </figure>
   }

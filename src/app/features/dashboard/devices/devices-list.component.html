@@ -1,6 +1,6 @@
 <app-page-header
   [title]="'devices.title' | translate"
-  [countLabel]="!loading() && !error() ? ('devices.count' | translate: { count: devices().length }) : ''"
+  [countLabel]="!loading() && !error() && devices().length > 0 ? ((devices().length === 1 ? 'devices.countOne' : 'devices.count') | translate: { count: devices().length }) : ''"
 ></app-page-header>
 
 @if (!loading() && !error() && devices().length > 0) {
@@ -8,37 +8,33 @@
     <li>
       <app-status-tile
         status="online"
-        [label]="'devices.tiles.online' | translate"
+        [label]="'devices.online' | translate"
         [value]="onlineCount().toString()"
-        [statusText]="'devices.online' | translate"
         [hint]="'devices.tiles.ofTotal' | translate: { total: devices().length }"
       ></app-status-tile>
     </li>
     <li>
       <app-status-tile
         status="offline"
-        [label]="'devices.tiles.offline' | translate"
+        [label]="'devices.offline' | translate"
         [value]="offlineCount().toString()"
-        [statusText]="'devices.offline' | translate"
-        [hint]="'devices.tiles.ofTotal' | translate: { total: devices().length }"
+        [hint]="offlineCount() > 0 ? ('devices.tiles.needsAttention' | translate) : ('devices.tiles.allConnected' | translate)"
       ></app-status-tile>
     </li>
     <li>
       @if (latest(); as last) {
         <app-status-tile
-          status="validating"
+          status="neutral"
           icon="schedule"
           [label]="'devices.tiles.lastReading' | translate"
-          [value]="(last.lastReading!.recordedAt | date: 'shortTime') ?? ''"
-          [statusText]="'devices.tiles.recent' | translate"
-          [hint]="last.name + ' · ' + (last.lastReading!.recordedAt | date: 'mediumDate')"
+          [value]="(last.lastReading!.recordedAt | appDate: 'shortTime') ?? ''"
+          [hint]="last.name + ', ' + (last.lastReading!.recordedAt | appDate: 'mediumDate')"
         ></app-status-tile>
       } @else {
         <app-status-tile
           status="neutral"
           [label]="'devices.tiles.lastReading' | translate"
           [value]="'devices.tiles.none' | translate"
-          [statusText]="'devices.noReading' | translate"
           [hint]="'devices.tiles.noReadings' | translate"
         ></app-status-tile>
       }
@@ -46,27 +42,24 @@
   </ul>
 }
 
-<div class="filters-bar filters-bar--zone">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ 'devices.filterByZone' | translate }}</mat-label>
-    <mat-select [value]="selectedZoneId()" (selectionChange)="onZoneFilterChange($event.value)">
-      <mat-option value="">{{ 'devices.allZones' | translate }}</mat-option>
-      @for (zone of zones(); track zone.id) {
-        <mat-option [value]="zone.id">{{ zone.name }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-</div>
-
-@if (!loading() && !error() && devices().length > 0) {
+@if (!loading() && !error() && (devices().length > 0 || selectedZoneId())) {
   <app-filter-bar
     [searchLabel]="'devices.search' | translate"
     [clearLabel]="'common.clearFilters' | translate"
-    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: devices().length }"
-    [showClear]="query() !== '' || statusFilter() !== 'all'"
+    [resultText]="hasFilters() ? ('common.resultCount' | translate: { shown: filtered().length, total: devices().length }) : ''"
+    [showClear]="hasFilters()"
     [(query)]="query"
     (clear)="clearFilters()"
   >
+    <mat-form-field appearance="outline" class="filter-select" subscriptSizing="dynamic">
+      <mat-label>{{ 'devices.filterByZone' | translate }}</mat-label>
+      <mat-select [value]="selectedZoneId()" (selectionChange)="onZoneFilterChange($event.value)">
+        <mat-option value="">{{ 'devices.allZones' | translate }}</mat-option>
+        @for (zone of zones(); track zone.id) {
+          <mat-option [value]="zone.id">{{ zone.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
     <mat-chip-listbox
       class="filter-chips"
       [attr.aria-label]="'devices.statusFilter' | translate"
@@ -83,11 +76,17 @@
 @if (loading()) {
   <app-empty-state variant="loading" [body]="'devices.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <app-empty-state variant="error" [body]="'common.loadError' | translate">
+  <app-empty-state variant="error" [title]="'common.loadErrorTitle' | translate" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
   </app-empty-state>
+} @else if (devices().length === 0 && selectedZoneId()) {
+  <app-empty-state variant="filtered" [title]="'devices.emptyZoneTitle' | translate" [body]="'devices.emptyZoneBody' | translate">
+    <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+  </app-empty-state>
 } @else if (devices().length === 0) {
-  <app-empty-state icon="sensors" [title]="'devices.emptyTitle' | translate" [body]="'devices.emptyBody' | translate"></app-empty-state>
+  <app-empty-state icon="sensors" [title]="'devices.emptyTitle' | translate" [body]="'devices.emptyBody' | translate">
+    <a mat-stroked-button routerLink="/zones">{{ 'devices.goToZones' | translate }}</a>
+  </app-empty-state>
 } @else if (filtered().length === 0) {
   <app-empty-state variant="filtered" [title]="'common.noMatchesTitle' | translate" [body]="'common.noMatches' | translate">
     <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
@@ -97,17 +96,17 @@
     <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.name' | translate }}</th>
-        <td mat-cell *matCellDef="let device">{{ device.name }}</td>
+        <td mat-cell *matCellDef="let device" [attr.data-label]="'devices.name' | translate"><strong>{{ device.name }}</strong></td>
       </ng-container>
 
       <ng-container matColumnDef="zone">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.zone' | translate }}</th>
-        <td mat-cell *matCellDef="let device">{{ zoneName(device.zoneId) }}</td>
+        <td mat-cell *matCellDef="let device" [attr.data-label]="'devices.zone' | translate">{{ zoneName(device.zoneId) }}</td>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.status' | translate }}</th>
-        <td mat-cell *matCellDef="let device">
+        <td mat-cell *matCellDef="let device" [attr.data-label]="'devices.status' | translate">
           <span class="status-chip" [class.status-chip--online]="device.isOnline" [class.status-chip--offline]="!device.isOnline">
             <mat-icon aria-hidden="true">{{ device.isOnline ? 'check_circle' : 'remove_circle_outline' }}</mat-icon>
             {{ (device.isOnline ? 'devices.online' : 'devices.offline') | translate }}
@@ -116,10 +115,10 @@
       </ng-container>
 
       <ng-container matColumnDef="lastReading">
-        <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.lastReading' | translate }}</th>
-        <td mat-cell *matCellDef="let device">
+        <th mat-header-cell *matHeaderCellDef scope="col" class="cell-nowrap">{{ 'devices.lastReading' | translate }}</th>
+        <td mat-cell *matCellDef="let device" [class.cell-mono]="!!device.lastReading" [class.cell-muted]="!device.lastReading" [attr.data-label]="'devices.lastReading' | translate">
           @if (device.lastReading) {
-            {{ device.lastReading.recordedAt | date: 'short' }}
+            {{ device.lastReading.recordedAt | appDate: 'short' }}
           } @else {
             {{ 'devices.noReading' | translate }}
           }
@@ -130,19 +129,16 @@
         <th mat-header-cell *matHeaderCellDef scope="col">
           <span class="visually-hidden">{{ 'devices.operations' | translate }}</span>
         </th>
-        <td mat-cell *matCellDef="let device">
-          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'face-recognition']">
-            {{ 'devices.faceRecognition' | translate }}
-          </a>
-          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'rules']">
-            {{ 'devices.rules' | translate }}
-          </a>
-          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'live-feed']">
-            {{ 'devices.liveFeed' | translate }}
-          </a>
-          <a mat-button color="primary" [routerLink]="['/devices', device.id, 'setup']">
-            {{ 'devices.setup' | translate }}
-          </a>
+        <td mat-cell *matCellDef="let device" class="cell-actions">
+          <button
+            mat-icon-button
+            type="button"
+            [matMenuTriggerFor]="deviceMenu"
+            [matMenuTriggerData]="{ device: device }"
+            [attr.aria-label]="('devices.operations' | translate) + ': ' + device.name"
+          >
+            <mat-icon aria-hidden="true">more_vert</mat-icon>
+          </button>
         </td>
       </ng-container>
 
@@ -150,4 +146,25 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
+
+  <mat-menu #deviceMenu="matMenu">
+    <ng-template matMenuContent let-device="device">
+      <a mat-menu-item [routerLink]="['/devices', device.id, 'live-feed']">
+        <mat-icon aria-hidden="true">videocam</mat-icon>
+        <span>{{ 'devices.liveFeed' | translate }}</span>
+      </a>
+      <a mat-menu-item [routerLink]="['/devices', device.id, 'rules']">
+        <mat-icon aria-hidden="true">rule</mat-icon>
+        <span>{{ 'devices.rules' | translate }}</span>
+      </a>
+      <a mat-menu-item [routerLink]="['/devices', device.id, 'face-recognition']">
+        <mat-icon aria-hidden="true">face</mat-icon>
+        <span>{{ 'devices.faceRecognition' | translate }}</span>
+      </a>
+      <a mat-menu-item [routerLink]="['/devices', device.id, 'setup']">
+        <mat-icon aria-hidden="true">qr_code_2</mat-icon>
+        <span>{{ 'devices.setup' | translate }}</span>
+      </a>
+    </ng-template>
+  </mat-menu>
 }

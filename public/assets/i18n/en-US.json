@@ -21,7 +21,7 @@
     "closeMenu": "Close navigation menu"
   },
   "login": {
-    "title": "Sign in to SecurIoT",
+    "title": "Sign in",
     "subtitle": "Monitor zones, devices and alerts across your facilities.",
     "email": "Email",
     "password": "Password",
@@ -78,18 +78,21 @@
   "zones": {
     "title": "Zones",
     "emptyTitle": "No zones yet",
-    "emptyBody": "Zones you register will show up here with their devices and status.",
+    "emptyBody": "Zones you register will appear here with their devices and status.",
     "location": "Location",
     "noLocation": "No location set",
     "createdAt": "Added",
     "loading": "Loading zones…",
     "search": "Search zones by name or location",
-    "count": "{{count}} zones"
+    "count": "{{count}} zones",
+    "name": "Zone",
+    "viewDevices": "View devices",
+    "countOne": "1 zone"
   },
   "devices": {
     "title": "Devices",
     "emptyTitle": "No devices yet",
-    "emptyBody": "Register a device and assign it to a zone to see its status here.",
+    "emptyBody": "Once you connect a device to a zone, you will see its status and last reading here.",
     "name": "Device",
     "zone": "Zone",
     "status": "Status",
@@ -116,8 +119,14 @@
       "ofTotal": "of {{total}} devices",
       "none": "No readings",
       "recent": "Recent reading",
-      "noReadings": "No device has reported yet"
-    }
+      "noReadings": "No device has reported yet",
+      "needsAttention": "Check their connection",
+      "allConnected": "All connected"
+    },
+    "countOne": "1 device",
+    "emptyZoneTitle": "This zone has no devices",
+    "emptyZoneBody": "Try another zone or remove the filter.",
+    "goToZones": "Go to zones"
   },
   "faceRecognition": {
     "title": "Face recognition",
@@ -152,7 +161,7 @@
     "needsEdgeUrl": "Configure the device's Edge API URL (in Face recognition) before managing rules.",
     "loading": "Loading rules…",
     "loadError": "We couldn't load the rules. Try again.",
-    "emptyBody": "No rules yet for this device. Create one to get started.",
+    "emptyBody": "Create a rule to decide what the device does when it detects something.",
     "createButton": "New rule",
     "createTitle": "New rule",
     "editTitle": "Edit rule",
@@ -203,7 +212,13 @@
     "saveButton": "Save",
     "cancelButton": "Cancel",
     "saveError": "Could not save this rule. Check the fields and try again.",
-    "toggleError": "Could not update this rule. Try again."
+    "toggleError": "Could not update this rule. Try again.",
+    "emptyTitle": "No rules yet",
+    "deleteDialog": {
+      "title": "Delete the rule \"{{name}}\"?",
+      "body": "The device will stop applying it and you cannot get it back.",
+      "keep": "Keep rule"
+    }
   },
   "liveFeed": {
     "title": "Live feed",
@@ -218,7 +233,7 @@
   "alerts": {
     "title": "Alerts",
     "emptyTitle": "No alerts to show",
-    "emptyBody": "Alerts triggered by your zones and devices will appear here.",
+    "emptyBody": "When a device detects something, the alert will show up here.",
     "emptyFiltered": "No alerts match these filters.",
     "severity": "Severity",
     "status": "Status",
@@ -243,7 +258,20 @@
     "clearFilters": "Clear filters",
     "search": "Search alerts by message, rule, zone or device",
     "count": "{{count}} alerts",
-    "severityFilter": "Filter by severity"
+    "severityFilter": "Filter by severity",
+    "countOne": "1 alert",
+    "location": "Zone and device",
+    "severity.highOrCritical": "High or critical",
+    "status.acknowledged": "Acknowledged",
+    "rules": {
+      "door_contact": "Door open",
+      "weapon": "Weapon detected",
+      "fire": "Fire detected",
+      "motion": "Motion",
+      "occupancy": "Occupancy",
+      "object_class": "Object detected",
+      "sensor_threshold": "Sensor threshold"
+    }
   },
   "setup": {
     "title": "Configure device",
@@ -280,7 +308,7 @@
     "guidanceTitle": "Before you start"
   },
   "common": {
-    "loadError": "We couldn't load this. Check your connection and try again.",
+    "loadError": "Check your connection and try again.",
     "retry": "Try again",
     "close": "Close",
     "cancel": "Cancel",
@@ -291,7 +319,8 @@
     "noMatchesTitle": "No matches",
     "all": "All",
     "filterChips": "Quick filters",
-    "step": "Step"
+    "step": "Step",
+    "loadErrorTitle": "Could not load this"
   },
   "billing": {
     "title": "Plan and billing",
@@ -306,7 +335,8 @@
       "declined": "Declined",
       "insufficient": "Insufficient funds",
       "expired": "Expired card",
-      "otherCards": "Any other number is declined as an unknown test card. Use any holder name, a future date and a 3 digit CVC."
+      "otherCards": "Any other number is declined as an unknown test card. Use any holder name, a future date and a 3 digit CVC.",
+      "cardsToggle": "Show test cards"
     },
     "plans": {
       "title": "Choose your plan",

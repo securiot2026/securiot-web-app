@@ -1,7 +1,12 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { AppDatePipe } from '../../../../shared/pipes/app-date.pipe';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
+import { EmptyStateComponent } from '../../../../shared/empty-state/empty-state.component';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,7 +49,7 @@ export function resolveDryRunResultKey(requestedExecute: boolean, response: Rule
   standalone: true,
   imports: [
     CommonModule,
-    DatePipe,
+    AppDatePipe,
     RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -56,6 +61,7 @@ export function resolveDryRunResultKey(requestedExecute: boolean, response: Rule
     MatSlideToggleModule,
     MatTableModule,
     MatProgressSpinnerModule,
+    EmptyStateComponent,
     TranslateModule
   ],
   templateUrl: './device-rules.component.html',
@@ -127,7 +133,9 @@ export class DeviceRulesComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly devicesService: DevicesService,
-    private readonly pageTitle: PageTitleService
+    private readonly pageTitle: PageTitleService,
+    private readonly dialog: MatDialog,
+    private readonly translate: TranslateService
   ) {
     this.deviceId = this.route.snapshot.paramMap.get('id')!;
     this.form.controls.condition_type.valueChanges.subscribe((value) => this.formConditionType.set(value));
@@ -265,6 +273,29 @@ export class DeviceRulesComponent implements OnInit {
   }
 
   deleteRule(rule: Rule): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        role: 'alertdialog',
+        width: '28rem',
+        maxWidth: '95vw',
+        restoreFocus: true,
+        ariaLabelledBy: 'confirm-dialog-title',
+        data: {
+          title: this.translate.instant('rules.deleteDialog.title', { name: rule.name }),
+          body: this.translate.instant('rules.deleteDialog.body'),
+          confirmLabel: this.translate.instant('rules.deleteButton'),
+          cancelLabel: this.translate.instant('rules.deleteDialog.keep')
+        }
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.performDelete(rule);
+        }
+      });
+  }
+
+  private performDelete(rule: Rule): void {
     this.deleteErrorKey.set(null);
     this.devicesService.deleteRule(this.deviceId, rule.id).subscribe({
       next: () => this.load(),
