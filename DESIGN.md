@@ -64,3 +64,31 @@ Unchanged from the prior contract except color/type sourcing:
 ## Known open item
 
 This file records the target dark/brand retheme; the app still ships the light navy/teal M3 theme from the original UI-SPEC. Applying this is a retheme (Material palette + typography swap), not a structural redesign, and is separate follow-up work — not done in this pass. Once applied, re-verify contrast computationally (not eyeballed) for `--texto`/`--texto-mute` against `--noche` and against each status tint, the same discipline the prior light-theme build used.
+
+## Patterns adopted from Astryx
+
+[Astryx](https://astryx.atmeta.com) is a React 19 plus StyleX library (MIT). It cannot be installed in an Angular app and the course rubric mandates Angular Material, so only its page patterns and component ideas were ported, rebuilt with Angular Material and the SecurIoT tokens. No React or non-Angular UI dependency was added, and brand colors and fonts did not change.
+
+Ported:
+
+| Astryx pattern | Where it landed |
+|---|---|
+| Side Nav | `features/dashboard/shell`: collapsible rail with grouped links (Monitoring, Account), a `marca` bar plus bold text and `aria-current="page"` on the active link, language switcher and logout at the bottom. Icons only below 1024px or when collapsed (preference kept in `localStorage`), drawer under 600px with a menu button in a slim top bar. Styles live in `src/styles/_rail.scss`. |
+| Service Monitoring Dashboard | Devices list: `app-status-tile` for online, offline and last reading, with a count in the page header. Status is icon plus text plus tint. No sparkline is drawn on the devices page because the API returns only the last reading, not a series; the tile supports one when data exists. |
+| Searchable Table, Filterable Table | Zones, devices and alerts: `app-filter-bar` (search, projected chips, live result count "Mostrando X de Y", clear button), sticky header row, one 56px row density, empty and no-match states. Search and chips filter on the client; the existing server filters (zone, device, status) are unchanged. |
+| Login Split | Login, forgot and reset password: form pane plus `app-brand-panel` with the mark (`public/assets/brand/icono-2.svg`, copied from the landing brand assets). One column under 56rem. |
+| Checkout Wizard | Billing checkout dialog: step indicator (Plan, Payment, Receipt, with `aria-current="step"`) and an order summary that stays visible and shows the payment state. It moves above the form on narrow dialogs. Billing API logic is untouched. |
+| Vertical Wizard | Device setup: numbered vertical rail of the five steps beside the action panel. The panel drops below the rail under 56rem. |
+| Shared states | `app-page-header`, `app-status-tile`, `app-empty-state` (empty, filtered, error with `role="alert"`, loading with `role="status"`), `app-filter-bar` in `src/app/shared`. |
+
+Not ported, and why:
+
+- Resizable rail, history list and search inside the rail: the dashboard has four destinations, so resizing and rail search add controls without value.
+- Per-column popovers and scope toggle of the Searchable Table: the lists have 3 to 7 columns and a single search plus chips is enough.
+- Multi-series time charts and the independent alert column of the monitoring dashboard: no time series endpoint exists.
+- Cart, order and the horizontal stepper fallback of the wizards: billing has one plan and the setup steps are instructions, not a form.
+- Astryx theme tokens: the seven SecurIoT tokens stay the only palette.
+
+Token additions (derived from the seven, no new hue): `--superficie` (texto at 5% over noche), `--linea` (texto at 12%), the `-suave` status tints at 12% (14% for `marca`) and `--target-size` (44px). Measured contrast with the WCAG formula: texto on noche 16.9, texto-mute on noche 6.3 and on superficie 5.7, marca on noche 10.3, verificado, alerta and texto-mute on their own tints 7.7, 5.1 and 4.8. `senal` on its tint is 4.1, so the validating tile lifts its text toward texto.
+
+Accessibility notes for these patterns: one `nav` landmark (the rail), one `main`, a labelled `search` region per list, result counts in a polite live region, error states as `role="alert"`, 44px targets (button heights are set through the Material tokens), focus ring from the global `:focus-visible` rule, the drawer uses `MatSidenav` in `over` mode (focus trap, Escape, focus restore), and `prefers-reduced-motion` stops the rail transition.

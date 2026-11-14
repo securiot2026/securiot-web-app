@@ -9,7 +9,16 @@
     "alerts": "Alerts",
     "logout": "Log out",
     "language": "Language selector",
-    "mainNavigation": "Dashboard navigation"
+    "mainNavigation": "Dashboard navigation",
+    "billing": "Plan and billing",
+    "groups": {
+      "monitoring": "Monitoring",
+      "account": "Account"
+    },
+    "collapse": "Collapse side menu",
+    "expand": "Expand side menu",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
   },
   "login": {
     "title": "Sign in to SecurIoT",
@@ -74,7 +83,8 @@
     "noLocation": "No location set",
     "createdAt": "Added",
     "loading": "Loading zones…",
-    "resultsAnnounce": "Zones: {{count}}"
+    "search": "Search zones by name or location",
+    "count": "{{count}} zones"
   },
   "devices": {
     "title": "Devices",
@@ -90,12 +100,24 @@
     "loading": "Loading devices…",
     "filterByZone": "Filter by zone",
     "allZones": "All zones",
-    "resultsAnnounce": "Devices: {{count}}",
     "faceRecognition": "Face recognition",
     "rules": "Rules",
     "liveFeed": "Live feed",
     "operations": "Device actions",
-    "setup": "Configure device"
+    "setup": "Configure device",
+    "search": "Search devices by name or zone",
+    "count": "{{count}} devices",
+    "statusFilter": "Filter by status",
+    "tiles": {
+      "label": "Device summary",
+      "online": "Online",
+      "offline": "Offline",
+      "lastReading": "Last reading",
+      "ofTotal": "of {{total}} devices",
+      "none": "No readings",
+      "recent": "Recent reading",
+      "noReadings": "No device has reported yet"
+    }
   },
   "faceRecognition": {
     "title": "Face recognition",
@@ -218,8 +240,10 @@
     "status.active": "Active",
     "status.resolved": "Resolved",
     "loading": "Loading alerts…",
-    "resultsAnnounce": "Alerts: {{count}}",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "search": "Search alerts by message, rule, zone or device",
+    "count": "{{count}} alerts",
+    "severityFilter": "Filter by severity"
   },
   "setup": {
     "title": "Configure device",
@@ -250,11 +274,151 @@
     "errorNotFound": "We could not find this device in your account.",
     "errorNotConfigured": "The server is not ready to configure devices. Ask the administrator to set the device setup secret on the Cloud API.",
     "errorGeneric": "We could not prepare the setup QR. Check your connection and try again.",
-    "errorQr": "The QR code could not be drawn. Copy the link below instead."
+    "errorQr": "The QR code could not be drawn. Copy the link below instead.",
+    "stepsRail": "Setup steps",
+    "stepLabel": "Step {{n}}",
+    "guidanceTitle": "Before you start"
   },
   "common": {
     "loadError": "We couldn't load this. Check your connection and try again.",
     "retry": "Try again",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "search": "Search",
+    "clearFilters": "Clear filters",
+    "resultCount": "Showing {{shown}} of {{total}}",
+    "noMatches": "No results match your search or filters.",
+    "noMatchesTitle": "No matches",
+    "all": "All",
+    "filterChips": "Quick filters",
+    "step": "Step"
+  },
+  "billing": {
+    "title": "Plan and billing",
+    "simulation": {
+      "title": "Simulated payment gateway: no real money is charged",
+      "body": "Use only the test cards in the table. Any other number is declined.",
+      "short": "Simulated payment gateway: no real money is charged. Use only the test cards.",
+      "tableCaption": "Test cards and their outcome",
+      "card": "Card number",
+      "result": "Outcome",
+      "approved": "Approved",
+      "declined": "Declined",
+      "insufficient": "Insufficient funds",
+      "expired": "Expired card",
+      "otherCards": "Any other number is declined as an unknown test card. Use any holder name, a future date and a 3 digit CVC."
+    },
+    "plans": {
+      "title": "Choose your plan",
+      "loading": "Loading plans…",
+      "cameras": "Number of cameras (1 to 8)",
+      "camerasAnnounce": "{{count}} cameras selected. Totals updated.",
+      "recommended": "Recommended",
+      "perCameraMonth": "per camera per month",
+      "install": "Installation: {{fee}} per camera (one time)",
+      "choose": "Subscribe to {{plan}}"
+    },
+    "totals": {
+      "subtotal": "Subtotal",
+      "igv": "IGV",
+      "igvRate": "IGV ({{rate}}%)",
+      "total": "Total",
+      "firstCharge": "First charge total"
+    },
+    "checkout": {
+      "title": "Card payment",
+      "summary": "{{plan}} plan with {{cameras}} cameras. First charge total:",
+      "cardNumber": "Card number",
+      "cardNumberRequired": "Enter the card number.",
+      "cardNumberInvalid": "Enter a valid card number of 13 to 19 digits.",
+      "holder": "Cardholder name",
+      "holderRequired": "Enter the cardholder name.",
+      "expiry": "Expiry (MM/YY)",
+      "expiryRequired": "Enter the expiry date.",
+      "expiryInvalid": "Use the MM/YY format with a valid month.",
+      "cvc": "CVC",
+      "cvcRequired": "Enter the CVC.",
+      "cvcInvalid": "The CVC has 3 or 4 digits.",
+      "pay": "Pay {{total}}",
+      "processing": "Processing the payment…",
+      "processingShort": "Processing…",
+      "approvedTitle": "Payment approved",
+      "approvedAnnounce": "Payment approved. Your subscription is active.",
+      "declinedTitle": "Payment declined",
+      "errorTitle": "We couldn't complete the payment",
+      "retry": "Try again",
+      "done": "Done"
+    },
+    "receipt": {
+      "paymentId": "Payment ID",
+      "plan": "Plan",
+      "cameras": "Cameras",
+      "card": "Card",
+      "date": "Date",
+      "simulated": "Receipt from a simulated gateway. No real money was charged."
+    },
+    "reasons": {
+      "card_declined": "The bank declined the card. Try another test card.",
+      "insufficient_funds": "The card has insufficient funds.",
+      "expired_card": "The card is expired.",
+      "unknown_test_card": "That card is not a test card. Use one from the test card table.",
+      "unknown": "We couldn't process the payment with that card."
+    },
+    "errors": {
+      "generic": "Something went wrong while processing the payment. Try again.",
+      "conflict": "You already have an active subscription. Cancel it before choosing another plan.",
+      "validation": "The payment details are not valid. Check them and try again.",
+      "unavailable": "We couldn't load the billing information. The service may not be available yet. Try again in a few minutes.",
+      "cancelFailed": "We couldn't cancel the subscription. Try again."
+    },
+    "subscription": {
+      "title": "Your subscription",
+      "loading": "Loading subscription…",
+      "active": "Active",
+      "canceled": "Canceled",
+      "monthly": "Monthly charge",
+      "nextBilling": "Next billing date",
+      "accessUntil": "Valid until",
+      "cancel": "Cancel subscription",
+      "canceling": "Canceling…",
+      "canceledAnnounce": "Subscription canceled.",
+      "noneTitle": "No active subscription",
+      "noneBody": "Choose a plan to activate your service."
+    },
+    "cancelDialog": {
+      "title": "Cancel the subscription?",
+      "body": "Your service stays active until the end of the paid period. No further charges will be made.",
+      "keep": "Keep subscription",
+      "confirm": "Yes, cancel"
+    },
+    "history": {
+      "title": "Payment history",
+      "empty": "You have no payments yet.",
+      "status": "Status",
+      "approved": "Approved",
+      "declined": "Declined"
+    },
+    "steps": {
+      "label": "Payment steps",
+      "plan": "Plan",
+      "payment": "Payment",
+      "receipt": "Receipt",
+      "done": "completed",
+      "current": "current step",
+      "pending": "pending",
+      "failed": "has a problem"
+    },
+    "summary": {
+      "title": "Order summary",
+      "status": "Status",
+      "pending": "Awaiting payment",
+      "processing": "Processing payment",
+      "paid": "Paid",
+      "declined": "Payment declined",
+      "failed": "Payment not completed"
+    }
+  },
+  "brand": {
+    "tagline": "Perimeter and industrial security, verified in real time."
   }
 }

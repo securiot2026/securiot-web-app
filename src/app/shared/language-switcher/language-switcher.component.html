@@ -1,5 +1,6 @@
 <mat-button-toggle-group
   class="language-switcher"
+  [vertical]="vertical"
   [attr.aria-label]="'nav.language' | translate"
   [value]="languageService.currentLang()"
   (change)="select($event.value)"

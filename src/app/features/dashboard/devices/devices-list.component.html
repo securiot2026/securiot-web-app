@@ -1,6 +1,52 @@
-<h1 class="page-title">{{ 'devices.title' | translate }}</h1>
+<app-page-header
+  [title]="'devices.title' | translate"
+  [countLabel]="!loading() && !error() ? ('devices.count' | translate: { count: devices().length }) : ''"
+></app-page-header>
 
-<div class="filters-bar">
+@if (!loading() && !error() && devices().length > 0) {
+  <ul class="tiles" [attr.aria-label]="'devices.tiles.label' | translate">
+    <li>
+      <app-status-tile
+        status="online"
+        [label]="'devices.tiles.online' | translate"
+        [value]="onlineCount().toString()"
+        [statusText]="'devices.online' | translate"
+        [hint]="'devices.tiles.ofTotal' | translate: { total: devices().length }"
+      ></app-status-tile>
+    </li>
+    <li>
+      <app-status-tile
+        status="offline"
+        [label]="'devices.tiles.offline' | translate"
+        [value]="offlineCount().toString()"
+        [statusText]="'devices.offline' | translate"
+        [hint]="'devices.tiles.ofTotal' | translate: { total: devices().length }"
+      ></app-status-tile>
+    </li>
+    <li>
+      @if (latest(); as last) {
+        <app-status-tile
+          status="validating"
+          icon="schedule"
+          [label]="'devices.tiles.lastReading' | translate"
+          [value]="(last.lastReading!.recordedAt | date: 'shortTime') ?? ''"
+          [statusText]="'devices.tiles.recent' | translate"
+          [hint]="last.name + ' · ' + (last.lastReading!.recordedAt | date: 'mediumDate')"
+        ></app-status-tile>
+      } @else {
+        <app-status-tile
+          status="neutral"
+          [label]="'devices.tiles.lastReading' | translate"
+          [value]="'devices.tiles.none' | translate"
+          [statusText]="'devices.noReading' | translate"
+          [hint]="'devices.tiles.noReadings' | translate"
+        ></app-status-tile>
+      }
+    </li>
+  </ul>
+}
+
+<div class="filters-bar filters-bar--zone">
   <mat-form-field appearance="outline">
     <mat-label>{{ 'devices.filterByZone' | translate }}</mat-label>
     <mat-select [value]="selectedZoneId()" (selectionChange)="onZoneFilterChange($event.value)">
@@ -12,32 +58,43 @@
   </mat-form-field>
 </div>
 
-<div class="visually-hidden" role="status" aria-live="polite">
-  @if (!loading() && !error()) {
-    {{ 'devices.resultsAnnounce' | translate: { count: devices().length } }}
-  }
-</div>
+@if (!loading() && !error() && devices().length > 0) {
+  <app-filter-bar
+    [searchLabel]="'devices.search' | translate"
+    [clearLabel]="'common.clearFilters' | translate"
+    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: devices().length }"
+    [showClear]="query() !== '' || statusFilter() !== 'all'"
+    [(query)]="query"
+    (clear)="clearFilters()"
+  >
+    <mat-chip-listbox
+      class="filter-chips"
+      [attr.aria-label]="'devices.statusFilter' | translate"
+      [value]="statusFilter()"
+      (change)="setStatus($event.value)"
+    >
+      <mat-chip-option value="all">{{ 'common.all' | translate }}</mat-chip-option>
+      <mat-chip-option value="online"><mat-icon matChipAvatar aria-hidden="true">check_circle</mat-icon>{{ 'devices.online' | translate }}</mat-chip-option>
+      <mat-chip-option value="offline"><mat-icon matChipAvatar aria-hidden="true">remove_circle_outline</mat-icon>{{ 'devices.offline' | translate }}</mat-chip-option>
+    </mat-chip-listbox>
+  </app-filter-bar>
+}
 
 @if (loading()) {
-  <div class="state-panel" role="status">
-    <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
-    <p>{{ 'devices.loading' | translate }}</p>
-  </div>
+  <app-empty-state variant="loading" [body]="'devices.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <div class="state-panel state-panel--error" role="alert">
-    <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'common.loadError' | translate }}</p>
+  <app-empty-state variant="error" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 } @else if (devices().length === 0) {
-  <div class="state-panel">
-    <mat-icon aria-hidden="true">sensors</mat-icon>
-    <h2>{{ 'devices.emptyTitle' | translate }}</h2>
-    <p>{{ 'devices.emptyBody' | translate }}</p>
-  </div>
+  <app-empty-state icon="sensors" [title]="'devices.emptyTitle' | translate" [body]="'devices.emptyBody' | translate"></app-empty-state>
+} @else if (filtered().length === 0) {
+  <app-empty-state variant="filtered" [title]="'common.noMatchesTitle' | translate" [body]="'common.noMatches' | translate">
+    <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+  </app-empty-state>
 } @else {
   <div class="table-scroll">
-    <table mat-table [dataSource]="devices()" class="data-table">
+    <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.name' | translate }}</th>
         <td mat-cell *matCellDef="let device">{{ device.name }}</td>
@@ -62,7 +119,7 @@
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'devices.lastReading' | translate }}</th>
         <td mat-cell *matCellDef="let device">
           @if (device.lastReading) {
-            {{ device.lastReading.recordedAt | date: 'medium' }}
+            {{ device.lastReading.recordedAt | date: 'short' }}
           } @else {
             {{ 'devices.noReading' | translate }}
           }
@@ -89,7 +146,7 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>

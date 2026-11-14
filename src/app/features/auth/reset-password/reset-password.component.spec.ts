@@ -89,11 +89,13 @@ describe('ResetPasswordComponent', () => {
   }
 
   beforeEach(() => {
+    // Specs that never call setup() (the routes spec) must not see the previous spec's mock.
+    httpMock = undefined as unknown as HttpTestingController;
     consoleSpies = CONSOLE_METHODS.map((m) => spyOn(console, m));
   });
 
   afterEach(() => {
-    httpMock.verify();
+    httpMock?.verify();
     consoleSpies.forEach((spy) => expect(spy).not.toHaveBeenCalled());
   });
 

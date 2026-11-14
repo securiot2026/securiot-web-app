@@ -30,6 +30,10 @@ The Cloud API (`repos/securiot-cloud-api`) must be running and seeded (`npm run 
 npm run build
 ```
 
+## Operations
+
+GitFlow, CI/CD, board pairing with the Setup QR and live feed troubleshooting are in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+
 ## Tests
 
 ```bash
@@ -43,6 +47,7 @@ npm test -- --watch=false --browsers=ChromeHeadless
 - `src/app/features/dashboard/shell` — authenticated app shell (toolbar, side nav, skip link).
 - `src/app/features/dashboard/{zones,devices,alerts}` — the three list screens.
 - `src/app/shared/language-switcher` — the en-US / es-419 switcher used on both the login screen and the dashboard shell.
+- `src/app/shared/{page-header,status-tile,empty-state,filter-bar,brand-panel}`: standalone building blocks for list pages, states and the login split (see DESIGN.md "Patterns adopted from Astryx").
 - `public/assets/i18n/{en-US,es-419}.json` — translation catalogs (ngx-translate).
 
 ## Accessibility notes

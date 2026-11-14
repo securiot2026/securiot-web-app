@@ -1,6 +1,9 @@
-<h1 class="page-title">{{ 'alerts.title' | translate }}</h1>
+<app-page-header
+  [title]="'alerts.title' | translate"
+  [countLabel]="!loading() && !error() ? ('alerts.count' | translate: { count: alerts().length }) : ''"
+></app-page-header>
 
-<div class="filters-bar">
+<div class="filters-bar filters-bar--server">
   <mat-form-field appearance="outline">
     <mat-label>{{ 'alerts.filterByZone' | translate }}</mat-label>
     <mat-select [value]="zoneFilter()" (selectionChange)="onFilterChange('zone', $event.value)">
@@ -30,42 +33,55 @@
     </mat-select>
   </mat-form-field>
 
-  <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'alerts.clearFilters' | translate }}</button>
 </div>
 
-<div class="visually-hidden" role="status" aria-live="polite">
-  @if (!loading() && !error()) {
-    {{ 'alerts.resultsAnnounce' | translate: { count: alerts().length } }}
-  }
-</div>
+@if (!loading() && !error() && alerts().length > 0) {
+  <app-filter-bar
+    [searchLabel]="'alerts.search' | translate"
+    [clearLabel]="'common.clearFilters' | translate"
+    [resultText]="'common.resultCount' | translate: { shown: filtered().length, total: alerts().length }"
+    [showClear]="query() !== '' || severityFilter() !== 'all' || hasActiveFilters"
+    [(query)]="query"
+    (clear)="clearFilters()"
+  >
+    <mat-chip-listbox
+      class="filter-chips"
+      [attr.aria-label]="'alerts.severityFilter' | translate"
+      [value]="severityFilter()"
+      (change)="setSeverity($event.value)"
+    >
+      <mat-chip-option value="all">{{ 'common.all' | translate }}</mat-chip-option>
+      <mat-chip-option value="low"><mat-icon matChipAvatar aria-hidden="true">info_outline</mat-icon>{{ 'alerts.severity.low' | translate }}</mat-chip-option>
+      <mat-chip-option value="medium"><mat-icon matChipAvatar aria-hidden="true">error_outline</mat-icon>{{ 'alerts.severity.medium' | translate }}</mat-chip-option>
+      <mat-chip-option value="high"><mat-icon matChipAvatar aria-hidden="true">warning_amber_rounded</mat-icon>{{ 'alerts.severity.high' | translate }}</mat-chip-option>
+    </mat-chip-listbox>
+  </app-filter-bar>
+}
 
 @if (loading()) {
-  <div class="state-panel" role="status">
-    <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
-    <p>{{ 'alerts.loading' | translate }}</p>
-  </div>
+  <app-empty-state variant="loading" [body]="'alerts.loading' | translate"></app-empty-state>
 } @else if (error()) {
-  <div class="state-panel state-panel--error" role="alert">
-    <mat-icon aria-hidden="true">error_outline</mat-icon>
-    <p>{{ 'common.loadError' | translate }}</p>
+  <app-empty-state variant="error" [body]="'common.loadError' | translate">
     <button mat-stroked-button type="button" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 } @else if (alerts().length === 0) {
-  <div class="state-panel">
-    <mat-icon aria-hidden="true">notifications_active</mat-icon>
-    @if (hasActiveFilters) {
-      <p>{{ 'alerts.emptyFiltered' | translate }}</p>
-    } @else {
-      <h2>{{ 'alerts.emptyTitle' | translate }}</h2>
-      <p>{{ 'alerts.emptyBody' | translate }}</p>
-    }
-  </div>
+  @if (hasActiveFilters) {
+    <app-empty-state variant="filtered" [title]="'common.noMatchesTitle' | translate" [body]="'alerts.emptyFiltered' | translate">
+      <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+    </app-empty-state>
+  } @else {
+    <app-empty-state icon="notifications_active" [title]="'alerts.emptyTitle' | translate" [body]="'alerts.emptyBody' | translate"></app-empty-state>
+  }
+} @else if (filtered().length === 0) {
+  <app-empty-state variant="filtered" [title]="'common.noMatchesTitle' | translate" [body]="'common.noMatches' | translate">
+    <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+  </app-empty-state>
 } @else {
   <div class="table-scroll">
-    <table mat-table [dataSource]="alerts()" class="data-table">
+    <table mat-table [dataSource]="filtered()" class="data-table">
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell *matHeaderCellDef scope="col">{{ 'alerts.createdAt' | translate }}</th>
-        <td mat-cell *matCellDef="let alert">{{ alert.createdAt | date: 'medium' }}</td>
+        <td mat-cell *matCellDef="let alert">{{ alert.createdAt | date: 'short' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="zone">
@@ -108,7 +124,7 @@
         <td mat-cell *matCellDef="let alert">{{ alert.message }}</td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>

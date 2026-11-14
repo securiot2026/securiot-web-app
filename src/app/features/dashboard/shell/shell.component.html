@@ -1,34 +1,100 @@
 <a class="skip-link" href="#main-content">{{ 'app.skipToContent' | translate }}</a>
 
-<mat-toolbar class="shell-toolbar">
-  <mat-icon aria-hidden="true">shield</mat-icon>
-  <span class="shell-toolbar__brand">{{ 'app.name' | translate }}</span>
-  <span class="shell-toolbar__spacer"></span>
-  <app-language-switcher></app-language-switcher>
-  <button mat-stroked-button type="button" (click)="logout()">
-    <mat-icon aria-hidden="true">logout</mat-icon>
-    {{ 'nav.logout' | translate }}
-  </button>
-</mat-toolbar>
+@if (isMobile()) {
+  <header class="mobile-bar">
+    <button
+      mat-icon-button
+      type="button"
+      class="mobile-bar__menu"
+      aria-controls="app-rail"
+      [attr.aria-expanded]="drawerOpen()"
+      [attr.aria-label]="'nav.openMenu' | translate"
+      (click)="openDrawer()"
+    >
+      <mat-icon aria-hidden="true">menu</mat-icon>
+    </button>
+    <img class="mobile-bar__mark" src="favicon.svg" alt="" width="28" height="28" />
+    <span class="mobile-bar__brand">{{ 'app.name' | translate }}</span>
+  </header>
+}
 
-<mat-sidenav-container class="shell-container">
-  <mat-sidenav mode="side" opened class="shell-sidenav" [attr.aria-label]="'nav.mainNavigation' | translate">
-    <nav [attr.aria-label]="'nav.mainNavigation' | translate">
-      <mat-nav-list>
-        <a mat-list-item routerLink="/zones" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }">
-          <mat-icon matListItemIcon aria-hidden="true">place</mat-icon>
-          <span matListItemTitle>{{ 'nav.zones' | translate }}</span>
-        </a>
-        <a mat-list-item routerLink="/devices" routerLinkActive="active-link">
-          <mat-icon matListItemIcon aria-hidden="true">sensors</mat-icon>
-          <span matListItemTitle>{{ 'nav.devices' | translate }}</span>
-        </a>
-        <a mat-list-item routerLink="/alerts" routerLinkActive="active-link">
-          <mat-icon matListItemIcon aria-hidden="true">notifications_active</mat-icon>
-          <span matListItemTitle>{{ 'nav.alerts' | translate }}</span>
-        </a>
-      </mat-nav-list>
-    </nav>
+<mat-sidenav-container class="shell-container" [class.shell-container--mobile]="isMobile()" autosize>
+  <mat-sidenav
+    #sidenav
+    id="app-rail"
+    class="rail"
+    [class.rail--collapsed]="collapsed()"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="isMobile() ? drawerOpen() : true"
+    [fixedInViewport]="true"
+    [attr.role]="null"
+    (closedStart)="onDrawerClosed()"
+  >
+    <div class="rail__inner">
+      <div class="rail__head">
+        <img class="rail__mark" src="favicon.svg" alt="" width="32" height="32" />
+        <span class="rail__brand" [class.visually-hidden]="collapsed()">{{ 'app.name' | translate }}</span>
+        @if (isMobile()) {
+          <button mat-icon-button type="button" class="rail__close" [attr.aria-label]="'nav.closeMenu' | translate" (click)="sidenav.close()">
+            <mat-icon aria-hidden="true">close</mat-icon>
+          </button>
+        }
+      </div>
+
+      <nav class="rail__nav" [attr.aria-label]="'nav.mainNavigation' | translate">
+        @for (group of groups; track group.labelKey) {
+          <section class="rail__group">
+            <h2 class="rail__group-title" [class.visually-hidden]="collapsed()">{{ group.labelKey | translate }}</h2>
+            <ul class="rail__list">
+              @for (item of group.items; track item.path) {
+                <li>
+                  <a
+                    class="rail__link"
+                    [routerLink]="item.path"
+                    routerLinkActive="rail__link--active"
+                    ariaCurrentWhenActive="page"
+                    [matTooltip]="collapsed() ? (item.labelKey | translate) : ''"
+                    matTooltipPosition="right"
+                  >
+                    <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+                    <span class="rail__label" [class.visually-hidden]="collapsed()">{{ item.labelKey | translate }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </nav>
+
+      <div class="rail__foot">
+        <app-language-switcher [vertical]="collapsed()"></app-language-switcher>
+        <button
+          mat-stroked-button
+          type="button"
+          class="rail__logout"
+          [attr.aria-label]="collapsed() ? ('nav.logout' | translate) : null"
+          [matTooltip]="collapsed() ? ('nav.logout' | translate) : ''"
+          matTooltipPosition="right"
+          (click)="logout()"
+        >
+          <mat-icon aria-hidden="true">logout</mat-icon>
+          <span [class.visually-hidden]="collapsed()">{{ 'nav.logout' | translate }}</span>
+        </button>
+        @if (!isMobile()) {
+          <button
+            mat-icon-button
+            type="button"
+            class="rail__toggle"
+            [attr.aria-expanded]="!collapsed()"
+            aria-controls="app-rail"
+            [attr.aria-label]="(collapsed() ? 'nav.expand' : 'nav.collapse') | translate"
+            (click)="toggleCollapsed()"
+          >
+            <mat-icon aria-hidden="true">{{ collapsed() ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left' }}</mat-icon>
+          </button>
+        }
+      </div>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>

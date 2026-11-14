@@ -1,0 +1,39 @@
+:host {
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+
+  &__search {
+    flex: 1 1 16rem;
+    max-width: 24rem;
+  }
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__clear {
+    min-height: var(--target-size);
+  }
+
+  &__count {
+    min-height: 1.5rem;
+    margin: var(--space-sm) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--type-label-size);
+    color: var(--texto-mute);
+  }
+}

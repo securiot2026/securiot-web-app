@@ -1,0 +1,47 @@
+:host { display: block; }
+
+$surface: var(--superficie);
+$line: var(--linea);
+
+.mono { font-family: var(--font-mono); font-size: var(--type-mono-size); }
+.muted { color: var(--texto-mute); margin: 0; }
+
+.sim-banner {
+  background: $surface;
+  border: 2px solid var(--marca);
+  border-radius: 12px;
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-xl);
+
+  p { margin: 0 0 var(--space-md); }
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
+    font-size: var(--type-heading-size);
+    mat-icon { color: var(--marca); }
+  }
+  &__hint { margin: var(--space-md) 0 0; color: var(--texto-mute); font-size: var(--type-label-size); }
+}
+
+.sub-card {
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: 12px;
+  padding: var(--space-md) var(--space-lg);
+  max-width: 32rem;
+  .sub-status { margin: 0 0 var(--space-md); }
+}
+
+.inline-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0 0;
+  color: var(--alerta);
+}
+
+.cameras-field { min-width: 12rem; }
+

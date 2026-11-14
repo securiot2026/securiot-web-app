@@ -1,0 +1,166 @@
+<h2 mat-dialog-title id="checkout-title">{{ 'billing.checkout.title' | translate }}</h2>
+
+<mat-dialog-content>
+  <ol class="steps" [attr.aria-label]="'billing.steps.label' | translate">
+    @for (item of stepItems(); track item.key; let i = $index) {
+      <li class="steps__item" [class]="'steps__item steps__item--' + item.state" [attr.aria-current]="item.state === 'current' ? 'step' : null">
+        <span class="steps__badge" aria-hidden="true">
+          @if (item.state === 'done') { <mat-icon>check</mat-icon> }
+          @else if (item.state === 'failed') { <mat-icon>priority_high</mat-icon> }
+          @else { {{ i + 1 }} }
+        </span>
+        <span class="steps__label">{{ 'billing.steps.' + item.key | translate }}</span>
+        <span class="visually-hidden">({{ 'billing.steps.' + (item.state === 'done' ? 'done' : item.state) | translate }})</span>
+      </li>
+    }
+  </ol>
+
+  <p class="sim-note">
+    <mat-icon aria-hidden="true">science</mat-icon>
+    <span>{{ 'billing.simulation.short' | translate }}</span>
+  </p>
+
+  <div class="visually-hidden" role="status" aria-live="polite">
+    @switch (step()) {
+      @case ('processing') { {{ 'billing.checkout.processing' | translate }} }
+      @case ('approved') { {{ 'billing.checkout.approvedAnnounce' | translate }} }
+      @case ('declined') { {{ failureKey() | translate }} }
+      @case ('error') { {{ failureKey() | translate }} }
+    }
+  </div>
+
+  <div class="checkout">
+  <div class="checkout__main">
+  @switch (step()) {
+    @case ('form') {
+      <form id="checkout-form" [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'billing.checkout.cardNumber' | translate }}</mat-label>
+          <input matInput formControlName="number" inputmode="numeric" autocomplete="cc-number" maxlength="23"
+                 placeholder="4242 4242 4242 4242" required (input)="onNumberInput()" />
+          @if (form.controls.number.hasError('required')) {
+            <mat-error>{{ 'billing.checkout.cardNumberRequired' | translate }}</mat-error>
+          } @else if (form.controls.number.hasError('pattern')) {
+            <mat-error>{{ 'billing.checkout.cardNumberInvalid' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'billing.checkout.holder' | translate }}</mat-label>
+          <input matInput formControlName="holder" autocomplete="cc-name" required />
+          @if (form.controls.holder.hasError('required')) {
+            <mat-error>{{ 'billing.checkout.holderRequired' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'billing.checkout.expiry' | translate }}</mat-label>
+            <input matInput formControlName="expiry" inputmode="numeric" autocomplete="cc-exp" maxlength="5"
+                   placeholder="MM/AA" required (input)="onExpiryInput()" />
+            @if (form.controls.expiry.hasError('required')) {
+              <mat-error>{{ 'billing.checkout.expiryRequired' | translate }}</mat-error>
+            } @else if (form.controls.expiry.hasError('expiryFormat')) {
+              <mat-error>{{ 'billing.checkout.expiryInvalid' | translate }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'billing.checkout.cvc' | translate }}</mat-label>
+            <input matInput formControlName="cvc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" required
+                   (input)="onCvcInput()" />
+            @if (form.controls.cvc.hasError('required')) {
+              <mat-error>{{ 'billing.checkout.cvcRequired' | translate }}</mat-error>
+            } @else if (form.controls.cvc.hasError('pattern')) {
+              <mat-error>{{ 'billing.checkout.cvcInvalid' | translate }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </form>
+    }
+    @case ('processing') {
+      <div class="processing" aria-busy="true">
+        <mat-progress-spinner diameter="32" mode="indeterminate" aria-hidden="true"></mat-progress-spinner>
+        <p>{{ 'billing.checkout.processing' | translate }}</p>
+      </div>
+    }
+    @case ('approved') {
+      <div class="result result--ok">
+        <h3 #resultHeading tabindex="-1" class="result__title">
+          <mat-icon aria-hidden="true">check_circle</mat-icon>
+          {{ 'billing.checkout.approvedTitle' | translate }}
+        </h3>
+        @if (payment(); as p) {
+          <dl class="receipt">
+            <dt>{{ 'billing.receipt.paymentId' | translate }}</dt><dd>{{ p.id }}</dd>
+            <dt>{{ 'billing.receipt.plan' | translate }}</dt><dd>{{ data.plan.name }}</dd>
+            <dt>{{ 'billing.receipt.cameras' | translate }}</dt><dd>{{ data.cameras }}</dd>
+            <dt>{{ 'billing.totals.subtotal' | translate }}</dt><dd>{{ p.subtotal | currency: p.currency : 'S/ ' }}</dd>
+            <dt>{{ 'billing.totals.igv' | translate }}</dt><dd>{{ p.igv | currency: p.currency : 'S/ ' }}</dd>
+            <dt>{{ 'billing.totals.total' | translate }}</dt><dd>{{ p.total | currency: p.currency : 'S/ ' }}</dd>
+            <dt>{{ 'billing.receipt.card' | translate }}</dt><dd>{{ p.cardBrand }} **** {{ p.last4 }}</dd>
+            <dt>{{ 'billing.receipt.date' | translate }}</dt><dd>{{ p.createdAt | date: 'medium' }}</dd>
+          </dl>
+        }
+        <p class="sim-note">{{ 'billing.receipt.simulated' | translate }}</p>
+      </div>
+    }
+    @case ('declined') {
+      <div class="result result--fail">
+        <h3 #resultHeading tabindex="-1" class="result__title">
+          <mat-icon aria-hidden="true">cancel</mat-icon>
+          {{ 'billing.checkout.declinedTitle' | translate }}
+        </h3>
+        <p>{{ failureKey() | translate }}</p>
+      </div>
+    }
+    @case ('error') {
+      <div class="result result--fail">
+        <h3 #resultHeading tabindex="-1" class="result__title">
+          <mat-icon aria-hidden="true">error_outline</mat-icon>
+          {{ 'billing.checkout.errorTitle' | translate }}
+        </h3>
+        <p>{{ failureKey() | translate }}</p>
+      </div>
+    }
+  }
+  </div>
+
+  <aside class="checkout__summary" aria-labelledby="checkout-summary-title">
+    <h3 id="checkout-summary-title" class="checkout__summary-title">{{ 'billing.summary.title' | translate }}</h3>
+    <dl class="order-totals">
+      <dt>{{ data.plan.name }} x {{ data.cameras }}</dt><dd>{{ data.totals.subtotal | currency: data.currency : 'S/ ' }}</dd>
+      <dt>{{ 'billing.totals.igv' | translate }}</dt><dd>{{ data.totals.igv | currency: data.currency : 'S/ ' }}</dd>
+      <dt class="order-totals__total">{{ 'billing.totals.total' | translate }}</dt>
+      <dd class="order-totals__total">{{ data.totals.total | currency: data.currency : 'S/ ' }}</dd>
+    </dl>
+    <p class="checkout__state" [class]="'checkout__state checkout__state--' + summaryState().tone">
+      <mat-icon aria-hidden="true">{{ summaryState().icon }}</mat-icon>
+      <span>{{ summaryState().key | translate }}</span>
+    </p>
+  </aside>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @switch (step()) {
+    @case ('form') {
+      <button mat-stroked-button type="button" (click)="close()">{{ 'common.cancel' | translate }}</button>
+      <button mat-flat-button type="submit" form="checkout-form">
+        {{ 'billing.checkout.pay' | translate: { total: (data.totals.total | currency: data.currency : 'S/ ') } }}
+      </button>
+    }
+    @case ('processing') {
+      <button mat-stroked-button type="button" disabled>{{ 'billing.checkout.processingShort' | translate }}</button>
+    }
+    @case ('approved') {
+      <button mat-flat-button type="button" (click)="close()">{{ 'billing.checkout.done' | translate }}</button>
+    }
+    @default {
+      <button mat-stroked-button type="button" (click)="close()">{{ 'common.close' | translate }}</button>
+      @if (step() === 'declined') {
+        <button mat-flat-button type="button" (click)="retry()">{{ 'billing.checkout.retry' | translate }}</button>
+      }
+    }
+  }
+</mat-dialog-actions>

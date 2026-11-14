@@ -1,3 +1,16 @@
 :host {
   display: block;
 }
+
+.tiles {
+  list-style: none;
+  margin: 0 0 var(--space-lg);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-md);
+}
+
+.filters-bar--zone {
+  margin-bottom: var(--space-sm);
+}
